@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -19,8 +20,11 @@ public class EnemyWaveManager : MonoBehaviour
     }
 
     public WaveState State { get; private set; }
+
     [HideInInspector] public float stateTimer;
-    [HideInInspector] public int waveIndex;
+
+    //当前正在进行的波次编号
+    public int waveIndex;
 
     [SerializeField] public EnemySpawnSystem spawnSystem;
     [SerializeField] public EnemyPool enemyPool;
@@ -28,7 +32,7 @@ public class EnemyWaveManager : MonoBehaviour
     [SerializeField] public float firstWaveTimer = 15f;
     [SerializeField] private WaveRuleSo waveRuleSo;
     [SerializeField] private Transform enemyContainer;
-    
+    [FormerlySerializedAs("baseTransform")] [SerializeField] private Transform homeTransform;
     public event Action OnWaveStarted;
     public event Action OnAliveEnemyCountChanged;
 
@@ -36,7 +40,7 @@ public class EnemyWaveManager : MonoBehaviour
     private readonly WaveRuleSystem _ruleSystem = new();
     [HideInInspector] public int aliveEnemyCount;
     public bool IsFirstWave => waveIndex <= 0;
-    
+
     private void Awake()
     {
         Instance = this;
@@ -95,7 +99,7 @@ public class EnemyWaveManager : MonoBehaviour
         OnAliveEnemyCountChanged?.Invoke();
     }
 
-    
+
     private void UpdatePreparing()
     {
         stateTimer -= Time.deltaTime;
@@ -162,7 +166,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         State = WaveState.Spawning;
         waveIndex++;
-        
+
         OnWaveStarted?.Invoke();
         WaveRuleSystem.WavePlan plan = _ruleSystem.BuildPlan(waveIndex, _difficulty);
         StartCoroutine(SpawnWave(plan));
@@ -209,18 +213,18 @@ public class EnemyWaveManager : MonoBehaviour
     /// <summary>
     /// 实例化敌人并初始化敌人数据。
     /// </summary>
-    private void SpawnEnemy(EnemySo data, Transform point)
+    private void SpawnEnemy( EnemySo data, Transform point)
     {
         aliveEnemyCount++;
         OnAliveEnemyCountChanged?.Invoke();
 
         Vector2 offset = Random.insideUnitCircle * 2.0f;
+            
         GameObject enemy = Instantiate(
             data.prefab,
             (Vector2)point.position + offset,
             Quaternion.identity
         );
-        enemy.transform.SetParent(enemyContainer);
         enemy.GetComponent<Enemy>().Init(data);
     }
 
