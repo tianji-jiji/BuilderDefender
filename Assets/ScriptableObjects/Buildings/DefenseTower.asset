@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64464ecd6dc9314085040a051b36bf7, type: 3}
+  m_Name: DefenseTower
+  m_EditorClassIdentifier: 
+  assetName: DefenseTower
+  buildingType: 1
+  maxHealth: 150
+  prefab: {fileID: 6109679250636911347, guid: 648da26c83c002c47bc6a84129a2bd21, type: 3}
+  constructionTime: 6
+  demolishRefundMultiplier: 0.5
+  resourceCost:
+  - resourceSo: {fileID: 11400000, guid: f489fea6d82836a4ebd8e3de9c2ca696, type: 2}
+    amount: 50
+  - resourceSo: {fileID: 11400000, guid: a9645d929e0505c4c84eb9e9872ad72e, type: 2}
+    amount: 50
+  - resourceSo: {fileID: 11400000, guid: 04f70056081d48641831b688d0179858, type: 2}
+    amount: 20
+  harvestSpeed: 0
+  harvestRadius: 0
+  maxHarvestAmount: 0
+  resourceSo: {fileID: 0}
+  size: {x: 4.5, y: 6}
+  popupUIPrefab: {fileID: 0}
