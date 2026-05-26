@@ -12,18 +12,20 @@ public class EnemyWaveManager : MonoBehaviour
 
     public enum WaveState
     {
+        Preparing, //第一波之前的准备
         Spawning,
         Fighting,
-        Waiting
+        WaitingNextWave
     }
 
     public WaveState State { get; private set; }
     [HideInInspector] public float stateTimer;
-    [HideInInspector] public int waveIndex = 1;
+    [HideInInspector] public int waveIndex;
 
     [SerializeField] public EnemySpawnSystem spawnSystem;
     [SerializeField] public EnemyPool enemyPool;
     [SerializeField] public float nextWaveTimer;
+    [SerializeField] public float firstWaveTimer = 15f;
     [SerializeField] private WaveRuleSo waveRuleSo;
     [SerializeField] private Transform enemyContainer;
     
@@ -32,24 +34,51 @@ public class EnemyWaveManager : MonoBehaviour
 
     private readonly DifficultySystem _difficulty = new();
     private readonly WaveRuleSystem _ruleSystem = new();
-
     [HideInInspector] public int aliveEnemyCount;
-
+    public bool IsFirstWave => waveIndex <= 0;
+    
     private void Awake()
     {
         Instance = this;
         _ruleSystem.SetConfig(waveRuleSo);
     }
 
+    private void Update()
+    {
+        switch (State)
+        {
+            case WaveState.Preparing:
+                UpdatePreparing();
+                break;
+
+            case WaveState.WaitingNextWave:
+                UpdateWaitingNextWave();
+                break;
+
+            case WaveState.Fighting:
+                UpdateFighting();
+                break;
+
+            case WaveState.Spawning:
+                break;
+        }
+    }
+
     /// <summary>
-    /// 开始第一波刷怪。
+    /// 第一波之前的准备状态
     /// </summary>
     public void Begin()
     {
-        EnterSpawningState();
+        EnterPreparingState();
     }
 
-    
+    private void EnterPreparingState()
+    {
+        State = WaveState.Preparing;
+        stateTimer = firstWaveTimer;
+    }
+
+
     private void OnEnable()
     {
         Enemy.OnEnemyDead += HandleEnemyDead;
@@ -63,38 +92,33 @@ public class EnemyWaveManager : MonoBehaviour
     private void HandleEnemyDead()
     {
         aliveEnemyCount--;
+        OnAliveEnemyCountChanged?.Invoke();
     }
 
-    private void Update()
+    
+    private void UpdatePreparing()
     {
-        switch (State)
+        stateTimer -= Time.deltaTime;
+
+        if (stateTimer <= 0f)
         {
-            case WaveState.Waiting:
-                UpdateWaiting();
-                break;
-
-            case WaveState.Fighting:
-                UpdateFighting();
-                break;
-
-            case WaveState.Spawning:
-                break;
+            StartNextWave();
         }
     }
 
     /// <summary>
     /// 进入等待下一波状态。
     /// </summary>
-    private void EnterWaitingState()
+    private void EnterWaitingNextWaveState()
     {
-        State = WaveState.Waiting;
+        State = WaveState.WaitingNextWave;
         stateTimer = nextWaveTimer;
     }
 
     /// <summary>
     /// 倒计时结束后开启下一波。
     /// </summary>
-    private void UpdateWaiting()
+    private void UpdateWaitingNextWave()
     {
         stateTimer -= Time.deltaTime;
 
@@ -119,7 +143,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if (aliveEnemyCount <= 0)
         {
-            EnterWaitingState();
+            EnterWaitingNextWaveState();
         }
     }
 
@@ -137,9 +161,9 @@ public class EnemyWaveManager : MonoBehaviour
     private void EnterSpawningState()
     {
         State = WaveState.Spawning;
-
+        waveIndex++;
+        
         OnWaveStarted?.Invoke();
-
         WaveRuleSystem.WavePlan plan = _ruleSystem.BuildPlan(waveIndex, _difficulty);
         StartCoroutine(SpawnWave(plan));
     }
@@ -166,8 +190,6 @@ public class EnemyWaveManager : MonoBehaviour
 
             yield return new WaitForSeconds(plan.SpawnInterval);
         }
-
-        waveIndex++;
 
         EnterFightingState();
     }

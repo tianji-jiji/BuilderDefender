@@ -12,15 +12,12 @@ public class EnemyWaveUI : MonoBehaviour
 
     private void Start()
     {
-        Enemy.OnEnemyDead += UpdateCurrentEnemyCountUI;
         EnemyWaveManager.Instance.OnAliveEnemyCountChanged += UpdateCurrentEnemyCountUI;
         EnemyWaveManager.Instance.OnWaveStarted += UpdateCurrentWaveUI;
     }
 
     private void OnDisable()
     {
-        Enemy.OnEnemyDead -= UpdateCurrentEnemyCountUI;
-
         if (EnemyWaveManager.Instance != null)
         {
             EnemyWaveManager.Instance.OnAliveEnemyCountChanged -= UpdateCurrentEnemyCountUI;
@@ -47,16 +44,23 @@ public class EnemyWaveUI : MonoBehaviour
     {
         var manager = EnemyWaveManager.Instance;
 
-        // 没怪显示倒计时
-        if (manager.aliveEnemyCount <= 0)
+        switch (manager.State)
         {
-            nextWaveTimeText.gameObject.SetActive(true);
+            case EnemyWaveManager.WaveState.Preparing:
+                nextWaveTimeText.gameObject.SetActive(true);
+                nextWaveTimeText.text =
+                    $"First Wave In: {manager.stateTimer:F1}s";
+                break;
 
-            nextWaveTimeText.text = $"Next Wave: {manager.stateTimer:F1}s";
-        }
-        else
-        {
-            nextWaveTimeText.gameObject.SetActive(false);
+            case EnemyWaveManager.WaveState.WaitingNextWave:
+                nextWaveTimeText.gameObject.SetActive(true);
+                nextWaveTimeText.text =
+                    $"Next Wave In: {manager.stateTimer:F1}s";
+                break;
+
+            default:
+                nextWaveTimeText.gameObject.SetActive(false);
+                break;
         }
     }
 }

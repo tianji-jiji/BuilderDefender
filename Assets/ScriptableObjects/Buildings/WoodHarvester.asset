@@ -20,7 +20,7 @@ MonoBehaviour:
   demolishRefundMultiplier: 0.2
   resourceCost:
   - resourceSo: {fileID: 11400000, guid: f489fea6d82836a4ebd8e3de9c2ca696, type: 2}
-    amount: 100
+    amount: 150
   harvestSpeed: 0.5
   harvestRadius: 7
   maxHarvestAmount: 5

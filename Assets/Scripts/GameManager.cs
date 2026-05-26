@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
 
     public enum GameState
     {
-        Intro,      // 开局准备
         Playing,    
         Paused,     
         GameOver
@@ -15,10 +14,7 @@ public class GameManager : MonoBehaviour
 
     public GameState State { get; private set; }
 
-    [Header("Intro Settings")]
-    [SerializeField] private float introDuration = 3f;
-
-    private float _introTimer;
+    private float _timer;
 
     public event Action OnGameStart;
     public event Action OnGameOver;
@@ -32,17 +28,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        EnterIntro();
+        StartGame();
     }
 
     private void Update()
     {
         switch (State)
         {
-            case GameState.Intro:
-                UpdateIntro();
-                break;
-
             case GameState.Playing:
                 if (Input.GetKeyDown(KeyCode.Escape))
                     PauseGame();
@@ -52,22 +44,6 @@ public class GameManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Escape))
                     ResumeGame();
                 break;
-        }
-    }
-
-    private void EnterIntro()
-    {
-        State = GameState.Intro;
-        _introTimer = introDuration;
-    }
-
-    private void UpdateIntro()
-    {
-        _introTimer -= Time.deltaTime;
-
-        if (_introTimer <= 0f)
-        {
-            StartGame();
         }
     }
 

@@ -21,7 +21,7 @@ MonoBehaviour:
   resourceCost: []
   harvestSpeed: 0.5
   harvestRadius: 7
-  maxHarvestAmount: 7
+  maxHarvestAmount: 5
   resourceSo: {fileID: 11400000, guid: f489fea6d82836a4ebd8e3de9c2ca696, type: 2}
   size: {x: 0, y: 0}
   popupUIPrefab: {fileID: 7229861339150195600, guid: 13186c6467f14424693e8414cf84cb9e, type: 3}

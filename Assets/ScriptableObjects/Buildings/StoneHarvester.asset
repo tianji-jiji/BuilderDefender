@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: StoneHarvester
   m_EditorClassIdentifier: 
   assetName: StoneHarvester
+  buildingType: 0
   maxHealth: 100
   prefab: {fileID: 6109679250636911347, guid: 0eca9e27d4e8eb4408fb356ec4003041, type: 3}
   constructionTime: 5
   demolishRefundMultiplier: 0.4
   resourceCost:
   - resourceSo: {fileID: 11400000, guid: f489fea6d82836a4ebd8e3de9c2ca696, type: 2}
-    amount: 200
+    amount: 300
   harvestSpeed: 1
   harvestRadius: 7
   maxHarvestAmount: 3
