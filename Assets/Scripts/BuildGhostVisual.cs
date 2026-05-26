@@ -44,10 +44,12 @@ public class BuildGhostVisual : MonoBehaviour
         // 更新位置
         transform.position = Utils.GetMousePosition();
 
-        bool canBuild = BuildManager.Instance.CanBuild(
+        bool isAuthorizedConstructionZone = BuildManager.Instance.IsAuthorizedConstructionZone(
             _currentBuildingSo,
             transform.position
         );
+
+        bool canAfford = BuildManager.Instance.CanAfford(_currentBuildingSo);
 
         if (_currentBuildingSo.buildingType == BuildingSo.BuildingType.Harvester)
         {
@@ -66,17 +68,19 @@ public class BuildGhostVisual : MonoBehaviour
         {
             TooltipManager.Instance.HideEfficiencyTooltip();
         }
-        
+
         // 显示对应幽灵
-        ShowGhost(_currentBuildingSo, canBuild);
+        ShowGhost(_currentBuildingSo, isAuthorizedConstructionZone, canAfford);
     }
 
-    private void ShowGhost(BuildingSo buildSo, bool canBuild)
+    private void ShowGhost(BuildingSo buildSo, bool isAuthorizedConstructionZone, bool canAfford)
     {
         foreach (var building in buildingSprite)
         {
             building.gameObject.SetActive(building.sprite.name == buildSo.assetName);
-            building.color = canBuild ? new Color(0, 1, 0, 0.5f) : new Color(1, 0, 0, 0.5f);
+            building.color = isAuthorizedConstructionZone && canAfford
+                ? new Color(0, 1, 0, 0.5f)
+                : new Color(1, 0, 0, 0.5f);
         }
     }
 

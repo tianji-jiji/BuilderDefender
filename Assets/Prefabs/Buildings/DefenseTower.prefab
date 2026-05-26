@@ -206,13 +206,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cf7d7bfef61aa14e88ad35a1b291111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRadius: 20
+  detectRadius: 15
   arrowSpawnPoint: {fileID: 2097849540624389479}
   detectPoint: {fileID: 5929180389517248698}
   detectLayer:
     serializedVersion: 2
     m_Bits: 1024
-  arrowGenerateRate: 0.2
+  arrowGenerateRate: 0.3
   arrowPrefab: {fileID: 5012835431581906492, guid: 9f0971bf8b2cc2444aa2008bd1b8e22b, type: 3}
 --- !u!1 &6308788567327719057
 GameObject:

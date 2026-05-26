@@ -5,6 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 提示工具
+/// </summary>
 public class TooltipManager : MonoBehaviour
 {
     public static TooltipManager Instance;
@@ -44,16 +47,6 @@ public class TooltipManager : MonoBehaviour
         if (efficiencyTooltip.gameObject.activeSelf)
             efficiencyTooltip.position = mousePos + new Vector3(0f, 65f);
     }
-    
-    public void HidePriceTooltip()
-    {
-        priceTooltip.gameObject.SetActive(false);
-    }
-
-    public void HidePlacementTooltip()
-    {
-        placementTooltip.gameObject.SetActive(false);
-    }
 
     public void ShowPriceTooltip(BuildingSo buildingSo)
     {
@@ -71,10 +64,20 @@ public class TooltipManager : MonoBehaviour
         priceTooltipText.text = text;
     }
 
+    public void HidePriceTooltip()
+    {
+        priceTooltip.gameObject.SetActive(false);
+    }
+
     public void ShowPlacementTooltip(string info)
     {
         placementTooltip.gameObject.SetActive(true);
         placementTooltipText.text = info;
+    }
+
+    public void HidePlacementTooltip()
+    {
+        placementTooltip.gameObject.SetActive(false);
     }
 
     public void ShowEfficiencyTooltip(float efficiency, Sprite icon)
@@ -85,7 +88,7 @@ public class TooltipManager : MonoBehaviour
         efficiencyTooltipIcon.sprite = icon;
         efficiencyTooltipText.text = $"Efficiency : {percent}%";
     }
-    
+
     public void HideEfficiencyTooltip()
     {
         efficiencyTooltip.gameObject.SetActive(false);

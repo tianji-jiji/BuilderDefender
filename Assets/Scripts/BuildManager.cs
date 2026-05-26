@@ -45,37 +45,60 @@ public class BuildManager : MonoBehaviour
 
     private void Update()
     {
-        if (!EventSystem.current.IsPointerOverGameObject() && _currentBuildingSo &&
-            CanBuild(_currentBuildingSo, Utils.GetMousePosition()))
+        if (!_currentBuildingSo)
         {
-            // 显示 tooltip(效率 = Physics2D.OverlapCircleNonAlloc的数量 / _currentBuildingSo.maxHarvestAmount)
-            
-            // 点击建造
-            if (Input.GetMouseButtonDown(0))
+            TooltipManager.Instance.HidePlacementTooltip();
+            TooltipManager.Instance.HideEfficiencyTooltip();
+            TooltipManager.Instance.HidePriceTooltip();;
+        }
+        
+        // 鼠标在正确位置并且点击建筑按钮
+        if (!EventSystem.current.IsPointerOverGameObject() && _currentBuildingSo)
+
+            // 是合法建造区域
+            if (IsAuthorizedConstructionZone(_currentBuildingSo, Utils.GetMousePosition()))
             {
-                // 建造过程动画
-                bool constructionStarted = StartConstruction(_currentBuildingSo, Utils.GetMousePosition());
-                // 花费资源
-                if (constructionStarted)
+                TooltipManager.Instance.HidePlacementTooltip();
+                // 钱足够
+                if (CanAfford(_currentBuildingSo))
                 {
-                    ResourceManager.Instance.Spend(_currentBuildingSo);
+                    TooltipManager.Instance.HidePlacementTooltip();
+                    // 点击建造
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        // 建造过程动画
+                        bool constructionStarted = StartConstruction(_currentBuildingSo, Utils.GetMousePosition());
+                        // 花费资源
+                        if (constructionStarted)
+                        {
+                            ResourceManager.Instance.Spend(_currentBuildingSo);
+                        }
+                    }
+                }
+                else
+                {
+                    TooltipManager.Instance.ShowPlacementTooltip("Can not afford this building!!!");
                 }
             }
-        }
+            else
+            {
+                TooltipManager.Instance.ShowPlacementTooltip("Too Close to Construction or ResourceNode!!!");
+            }
     }
 
     public void SetCurrentBuilding(BuildingSo buildingSo)
     {
         _currentBuildingSo = buildingSo;
         OnSelectedBuildingChanged?.Invoke(buildingSo);
-        
+
         if (!_currentBuildingSo)
         {
             TooltipManager.Instance.HideEfficiencyTooltip();
         }
     }
 
-    public bool CanBuild(BuildingSo buildingSo, Vector3 position)
+    // 是否是合法建造区域
+    public bool IsAuthorizedConstructionZone(BuildingSo buildingSo, Vector3 position)
     {
         // 离一些物体太近不能建造（资源、建筑）
         if (IsTooCloseToOthers(buildingSo, position))
@@ -83,10 +106,6 @@ public class BuildManager : MonoBehaviour
 
         //离正在建造的建筑太近不能建筑
         if (IsTooCloseToConstructionSite(buildingSo, position))
-            return false;
-
-        // 钱不够不能建造
-        if (!CanAfford(buildingSo))
             return false;
 
         return true;
@@ -123,7 +142,7 @@ public class BuildManager : MonoBehaviour
 
         return false;
     }
-    
+
     /// <summary>
     /// 计算建造在此处的效率
     /// </summary>
@@ -155,11 +174,12 @@ public class BuildManager : MonoBehaviour
                 validCount++;
             }
         }
+
         return Mathf.Clamp01(
             (float)validCount / buildingSo.maxHarvestAmount
         );
     }
-    
+
     private bool StartConstruction(BuildingSo buildingSo, Vector3 position)
     {
         if (!buildingConstructorPrefab)
@@ -176,7 +196,7 @@ public class BuildManager : MonoBehaviour
         return true;
     }
 
-    private bool CanAfford(BuildingSo buildingSo)
+    public bool CanAfford(BuildingSo buildingSo)
     {
         foreach (var resourceCost in buildingSo.resourceCost)
         {
