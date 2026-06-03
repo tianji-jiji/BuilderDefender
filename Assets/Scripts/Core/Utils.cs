@@ -4,11 +4,12 @@ using UnityEngine;
 
 public static class Utils
 {
-    private static Camera _mainCamera = Camera.main;
+    private static readonly Camera MainCamera = Camera.main;
+
     public static Vector3 GetMousePosition()
     {
-        if (!_mainCamera) return Vector3.zero;
-        Vector3 pos =_mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        if (!MainCamera) return Vector3.zero;
+        Vector3 pos = MainCamera.ScreenToWorldPoint(Input.mousePosition);
         pos.z = 0;
         return pos;
     }

@@ -4,6 +4,7 @@ public class Arrow : MonoBehaviour, IPoolable
 {
     [SerializeField] private float flySpeed;
     [SerializeField] private float lifetime = 5f;
+    [SerializeField] private int defaultDamage = 10;
     [SerializeField] private SpriteRenderer[] spriteRenderers;
     [SerializeField] private TrailRenderer[] trailRenderers;
 
@@ -17,6 +18,7 @@ public class Arrow : MonoBehaviour, IPoolable
     // 飞行方向
     private Vector2 _moveDirection;
     private float _lifeTimer;
+    private int _damage;
     private bool _isReturning;
 
     // 初始化箭头需要缓存的组件引用。
@@ -37,6 +39,7 @@ public class Arrow : MonoBehaviour, IPoolable
         _targetTransform = null;
         _moveDirection = Vector2.zero;
         _lifeTimer = 0f;
+        _damage = defaultDamage;
         _isReturning = false;
 
         if (_rb2)
@@ -92,6 +95,12 @@ public class Arrow : MonoBehaviour, IPoolable
         _moveDirection = (_targetTransform.position - transform.position).normalized;
     }
 
+    // 设置本次发射的箭头伤害。
+    public void SetDamage(int damage)
+    {
+        _damage = Mathf.Max(1, damage);
+    }
+
     // 让箭头飞向当前目标。
     private void FlyToEnemy()
     {
@@ -126,7 +135,7 @@ public class Arrow : MonoBehaviour, IPoolable
             // 有血条
             if (enemy.gameObject.TryGetComponent<HealthSystem>(out var healthSystem))
             {
-                healthSystem.TakeDamage(10);
+                healthSystem.TakeDamage(_damage);
                 ReturnArrow();
             }
         }

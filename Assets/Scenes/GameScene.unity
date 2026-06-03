@@ -4221,7 +4221,7 @@ MonoBehaviour:
     m_ImpulseType: 3
     m_DissipationRate: 0.25
     m_RawSignal: {fileID: 11400000, guid: 9bc87e218f03c544a8e0f35875ccf380, type: 2}
-    m_AmplitudeGain: 0.5
+    m_AmplitudeGain: 0.3
     m_FrequencyGain: 1
     m_RepeatMode: 0
     m_Randomize: 0
@@ -7398,9 +7398,9 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
+  m_XDamping: 0.18
+  m_YDamping: 0.18
+  m_ZDamping: 0.18
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
@@ -7409,8 +7409,8 @@ MonoBehaviour:
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
-  m_SoftZoneWidth: 0.8
-  m_SoftZoneHeight: 0.8
+  m_SoftZoneWidth: 0
+  m_SoftZoneHeight: 0
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
@@ -8952,16 +8952,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PoolManager
   poolConfigs:
   - prefab: {fileID: 8267456965921251620, guid: 5cc88883157f2924896240f334d82dbe, type: 3}
-    initialSize: 30
-    maxSize: 90
+    initialSize: 80
+    maxSize: 120
     parent: {fileID: 2099843922}
   - prefab: {fileID: 8267456965921251620, guid: c88fa6313517172499bc399e33c10c80, type: 3}
-    initialSize: 15
+    initialSize: 20
     maxSize: 45
     parent: {fileID: 2099843922}
   - prefab: {fileID: 8267456965921251620, guid: 4be80151d5e8a6642829e915156ade2e, type: 3}
-    initialSize: 3
-    maxSize: 9
+    initialSize: 10
+    maxSize: 20
     parent: {fileID: 2099843922}
   - prefab: {fileID: 4085518841194330122, guid: 9f0971bf8b2cc2444aa2008bd1b8e22b, type: 3}
     initialSize: 80
@@ -13810,7 +13810,7 @@ MonoBehaviour:
     m_AmplitudeGain: 1
     m_FrequencyGain: 1
     m_Duration: 1
-    m_NoiseOffsets: {x: 0, y: 0, z: 0}
+    m_NoiseOffsets: {x: 396.16013, y: -18.262512, z: 965.56116}
 --- !u!1001 &1325415324
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14688,6 +14688,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2068395890}
   - {fileID: 228984146}
   - {fileID: 1867853066}
   - {fileID: 1078864660}
@@ -16871,6 +16872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragSensitivity: 1
+  dragFollowDamping: 0.18
   virtualCamera: {fileID: 1318802764}
   zoomSpeed: 30
   zoomAmount: 6
@@ -20513,7 +20515,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2068395885}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -20521,7 +20523,7 @@ Transform:
   - {fileID: 378834620}
   - {fileID: 1071268044}
   - {fileID: 1218245241}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1418555217}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2071526903 stripped
 Transform:
@@ -21050,4 +21052,3 @@ SceneRoots:
   - {fileID: 1090090030}
   - {fileID: 1733350903}
   - {fileID: 1327171766}
-  - {fileID: 2068395890}

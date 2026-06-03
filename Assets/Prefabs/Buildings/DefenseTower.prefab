@@ -91,6 +91,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &4349007259375075972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7314689735752429805}
+  m_Layer: 6
+  m_Name: ArrowSpawnPoint (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7314689735752429805
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4349007259375075972}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.5, y: 1.01, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2265173989202265033}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4657661411607343476
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +395,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &5041518685938173411
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4887409854451060579}
+  m_Layer: 6
+  m_Name: ArrowSpawnPoint (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4887409854451060579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5041518685938173411}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.45, y: 0.97, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2265173989202265033}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6109679250636911347
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +463,8 @@ Transform:
   - {fileID: 3037711184485002070}
   - {fileID: 4903192033957542079}
   - {fileID: 2097849540624389479}
+  - {fileID: 7314689735752429805}
+  - {fileID: 4887409854451060579}
   - {fileID: 722476982127729706}
   - {fileID: 7655372539730685517}
   - {fileID: 461229794917655940}
@@ -491,11 +555,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detectRadius: 15
   arrowSpawnPoint: {fileID: 2097849540624389479}
+  superArrowSpawnPoints:
+  - {fileID: 7314689735752429805}
+  - {fileID: 4887409854451060579}
   detectPoint: {fileID: 5929180389517248698}
   detectLayer:
     serializedVersion: 2
     m_Bits: 1024
   arrowGenerateRate: 0.3
+  attackDamage: 10
   arrowPrefab: {fileID: 5012835431581906492, guid: 9f0971bf8b2cc2444aa2008bd1b8e22b, type: 3}
 --- !u!1 &6308788567327719057
 GameObject:
@@ -734,6 +802,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUpgradeButton
   button: {fileID: 7733800537604926262}
   upgradeConfig: {fileID: 11400000, guid: f0e113b9086a9d7479dc4ad6d89adb3b, type: 2}
+  building: {fileID: -4361568172942058784}
+  defenseSystem: {fileID: -5391085893718665421}
   starVisuals:
   - {fileID: 6532041335953361993}
   - {fileID: 7949154670481991903}

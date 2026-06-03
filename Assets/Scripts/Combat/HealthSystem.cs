@@ -24,6 +24,14 @@ public class HealthSystem : MonoBehaviour
         OnHealthChanged?.Invoke();
     }
 
+    // 调整最大生命值，并按需要将当前生命恢复到新的上限。
+    public void SetMaxHealth(int maxHealth, bool healToFull)
+    {
+        MaxHealth = Mathf.Max(1, maxHealth);
+        CurrentHealth = healToFull ? MaxHealth : Mathf.Clamp(CurrentHealth, 0, MaxHealth);
+        OnHealthChanged?.Invoke();
+    }
+
     // 扣除生命值并在死亡时派发死亡事件。
     public void TakeDamage(int damage)
     {

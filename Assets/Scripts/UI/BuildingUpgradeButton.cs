@@ -10,6 +10,8 @@ public class BuildingUpgradeButton : MonoBehaviour
 
     [SerializeField] private Button button;
     [SerializeField] private BuildingUpgradeConfigSo upgradeConfig;
+    [SerializeField] private Building building;
+    [SerializeField] private DefenseSystem defenseSystem;
     [SerializeField] private Transform[] starVisuals;
     [SerializeField] private float starSpacing = 1.5f;
     [SerializeField] private int currentStarLevel = MIN_STAR_LEVEL;
@@ -18,6 +20,8 @@ public class BuildingUpgradeButton : MonoBehaviour
     // 初始化按钮监听并刷新默认星级视觉。
     private void Start()
     {
+        CacheUpgradeTargets();
+
         if (button)
         {
             button.onClick.AddListener(TryUpgrade);
@@ -49,8 +53,37 @@ public class BuildingUpgradeButton : MonoBehaviour
 
         ResourceManager.Instance.Spend(upgradeLevel.UpgradeCost);
         currentStarLevel++;
+        ApplyUpgradeLevel(upgradeLevel);
         RefreshStarVisuals();
         RefreshButtonState();
+    }
+
+    // 缓存当前升级按钮控制的建筑和防御组件。
+    private void CacheUpgradeTargets()
+    {
+        if (!building)
+        {
+            building = GetComponentInParent<Building>();
+        }
+
+        if (!defenseSystem)
+        {
+            defenseSystem = GetComponentInParent<DefenseSystem>();
+        }
+    }
+
+    // 将当前星级配置应用到建筑生命和战斗系统。
+    private void ApplyUpgradeLevel(BuildingUpgradeLevel upgradeLevel)
+    {
+        if (building)
+        {
+            building.ApplyUpgradeLevel(upgradeLevel);
+        }
+
+        if (defenseSystem)
+        {
+            defenseSystem.ApplyUpgradeLevel(upgradeLevel);
+        }
     }
 
     // 显示资源不足的升星提示。
