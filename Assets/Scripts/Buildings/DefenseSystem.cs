@@ -72,6 +72,17 @@ public class DefenseSystem : MonoBehaviour
             hasFired |= FireSuperArrowSpawnPoint(1, TargetLane.Lower);
         }
 
+        if (!hasFired && TryRefreshTargetsForImmediateShot())
+        {
+            hasFired = FireFromSpawnPoint(arrowSpawnPoint, TargetLane.Any);
+
+            if (_superArrowUnlocked)
+            {
+                hasFired |= FireSuperArrowSpawnPoint(0, TargetLane.Upper);
+                hasFired |= FireSuperArrowSpawnPoint(1, TargetLane.Lower);
+            }
+        }
+
         if (!hasFired)
         {
             _hasEnemy = false;
@@ -98,6 +109,13 @@ public class DefenseSystem : MonoBehaviour
     private void Update()
     {
         if(!_hasEnemy) return;
+
+        RefreshCurrentTargetIfNeeded();
+
+        if (!_hasEnemy)
+        {
+            return;
+        }
         
         _timer -= Time.deltaTime;
         if (_timer <= 0f)
@@ -154,6 +172,13 @@ public class DefenseSystem : MonoBehaviour
         return true;
     }
 
+    // 发射缓存过期时立即重新检测一次，避免本次攻击 tick 因旧目标失效而空等。
+    private bool TryRefreshTargetsForImmediateShot()
+    {
+        DetectEnemy();
+        return _hasEnemy;
+    }
+
     // 使用三星解锁的额外发射点进行分区射击。
     private bool FireSuperArrowSpawnPoint(int index, TargetLane targetLane)
     {
@@ -175,6 +200,24 @@ public class DefenseSystem : MonoBehaviour
         }
 
         return FindClosestTarget(TargetLane.Any);
+    }
+
+    // 当前攻击目标失效时立即从缓存中重锁，缓存无效时再做一次实时检测。
+    private void RefreshCurrentTargetIfNeeded()
+    {
+        if (IsTargetValid(_currentTargetEnemy))
+        {
+            return;
+        }
+
+        _currentTargetEnemy = FindClosestTarget(TargetLane.Any);
+        if (IsTargetValid(_currentTargetEnemy))
+        {
+            _hasEnemy = true;
+            return;
+        }
+
+        DetectEnemy();
     }
 
     // 根据当前星级获取箭头应该使用的视觉材质。

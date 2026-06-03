@@ -120,7 +120,7 @@ public class Arrow : MonoBehaviour, IPoolable
     {
         if (!IsTargetValid(_targetEnemy) || !_targetTransform)
         {
-            ReturnArrow();
+            ContinueFlyingForward();
             return;
         }
 
@@ -142,7 +142,6 @@ public class Arrow : MonoBehaviour, IPoolable
         {
             if (!IsTargetValid(enemy))
             {
-                ReturnArrow();
                 return;
             }
 
@@ -153,6 +152,26 @@ public class Arrow : MonoBehaviour, IPoolable
                 ReturnArrow();
             }
         }
+    }
+
+    // 目标失效后保持当前方向继续飞行，避免多余箭矢被提前回收。
+    private void ContinueFlyingForward()
+    {
+        _targetEnemy = null;
+        _targetTransform = null;
+
+        if (_moveDirection == Vector2.zero)
+        {
+            ReturnArrow();
+            return;
+        }
+
+        if (_rb2)
+        {
+            _rb2.linearVelocity = _moveDirection * flySpeed;
+        }
+
+        transform.right = _moveDirection;
     }
 
     // 将箭头回收到对象池，缺少对象池时销毁对象。
