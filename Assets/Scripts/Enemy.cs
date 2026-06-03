@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
         }
 
         Vector3 moveDir = (_currentTarget.position - transform.position).normalized;
-        _rb2.velocity = moveDir * _randomMoveSpeed;
+        _rb2.linearVelocity = moveDir * _randomMoveSpeed;
     }
 
     // 查找检测范围内的建筑目标，没有建筑时攻击默认基地目标。

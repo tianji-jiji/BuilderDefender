@@ -48,7 +48,7 @@ public class Arrow : MonoBehaviour
             _moveDirection = (_target.position - transform.position).normalized;
         }
 
-        _rb2.velocity = _moveDirection * flySpeed;
+        _rb2.linearVelocity = _moveDirection * flySpeed;
         transform.right = _moveDirection;
     }
 
