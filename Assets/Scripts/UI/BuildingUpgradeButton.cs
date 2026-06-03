@@ -12,6 +12,7 @@ public class BuildingUpgradeButton : MonoBehaviour
     [SerializeField] private BuildingUpgradeConfigSo upgradeConfig;
     [SerializeField] private Building building;
     [SerializeField] private DefenseSystem defenseSystem;
+    [SerializeField] private BuildingUpgradeVisual upgradeVisual;
     [SerializeField] private Transform[] starVisuals;
     [SerializeField] private float starSpacing = 1.5f;
     [SerializeField] private int currentStarLevel = MIN_STAR_LEVEL;
@@ -33,6 +34,7 @@ public class BuildingUpgradeButton : MonoBehaviour
         }
 
         RefreshStarVisuals();
+        RefreshUpgradeVisual();
         RefreshButtonState();
     }
 
@@ -55,6 +57,7 @@ public class BuildingUpgradeButton : MonoBehaviour
         currentStarLevel++;
         ApplyUpgradeLevel(upgradeLevel);
         RefreshStarVisuals();
+        RefreshUpgradeVisual();
         RefreshButtonState();
     }
 
@@ -69,6 +72,11 @@ public class BuildingUpgradeButton : MonoBehaviour
         if (!defenseSystem)
         {
             defenseSystem = GetComponentInParent<DefenseSystem>();
+        }
+
+        if (!upgradeVisual)
+        {
+            upgradeVisual = GetComponentInParent<BuildingUpgradeVisual>();
         }
     }
 
@@ -121,6 +129,15 @@ public class BuildingUpgradeButton : MonoBehaviour
             {
                 starVisual.localPosition = new Vector3(startX + i * starSpacing, 0f, 0f);
             }
+        }
+    }
+
+    // 刷新建筑本体的升星材质表现。
+    private void RefreshUpgradeVisual()
+    {
+        if (upgradeVisual)
+        {
+            upgradeVisual.ApplyStarLevel(currentStarLevel);
         }
     }
 

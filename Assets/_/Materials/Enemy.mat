@@ -126,9 +126,13 @@ Material:
     - _DrawOrder: 0
     - _EMISSION_WEIGHT: 1
     - _EnableExternalAlpha: 0
+    - _GlowIntensity: 0.5
     - _METALNESS: 0
     - _OutlineThickness: 0.005
+    - _OutlineWidth: 0
     - _Progress: 0.11
+    - _PulseAmount: 0
+    - _PulseSpeed: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _REFLECTIONS_IOR: 1.52
@@ -138,14 +142,17 @@ Material:
     - _SPECULAR_ROUGHNESS: 0
     - _Segments: 10
     - _TRANSPARENCY: 0
+    - _ZWrite: 0
     m_Colors:
     - _BASE_COLOR: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EMISSION_COLOR: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 2, g: 0, b: 0.11764706, a: 0}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _GlowColor: {r: 0.1, g: 1.2, b: 3, a: 1}
     - _OutlineColor: {r: 0, g: 2.729412, b: 4, a: 0}
     - _REFLECTIONS_COLOR: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SPECULAR_COLOR: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

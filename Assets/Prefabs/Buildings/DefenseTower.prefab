@@ -439,6 +439,7 @@ GameObject:
   - component: {fileID: 2617271069661579903}
   - component: {fileID: -4361568172942058784}
   - component: {fileID: -5391085893718665421}
+  - component: {fileID: 1300448753316764029}
   m_Layer: 6
   m_Name: DefenseTower
   m_TagString: Untagged
@@ -565,6 +566,25 @@ MonoBehaviour:
   arrowGenerateRate: 0.3
   attackDamage: 10
   arrowPrefab: {fileID: 5012835431581906492, guid: 9f0971bf8b2cc2444aa2008bd1b8e22b, type: 3}
+  starOneArrowMaterial: {fileID: 2100000, guid: 015b10d665e638b4db822336e456f491, type: 2}
+  starTwoArrowMaterial: {fileID: 2100000, guid: f37bfdcf51f270c4fa639e1ccf7f086d, type: 2}
+  starThreeArrowMaterial: {fileID: 2100000, guid: d7f27a638790d324a97c66cff8878111, type: 2}
+--- !u!114 &1300448753316764029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6109679250636911347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0e862103a88b0147869c118167e1086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingUpgradeVisual
+  targetRenderer: {fileID: 4647298962796246751}
+  starOneMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  starTwoMaterial: {fileID: 2100000, guid: 1874367f717dedb4d9f98188b2d28933, type: 2}
+  starThreeMaterial: {fileID: 2100000, guid: 4b3d361aecd81c744b7e22130125944b, type: 2}
 --- !u!1 &6308788567327719057
 GameObject:
   m_ObjectHideFlags: 0
@@ -804,6 +824,7 @@ MonoBehaviour:
   upgradeConfig: {fileID: 11400000, guid: f0e113b9086a9d7479dc4ad6d89adb3b, type: 2}
   building: {fileID: -4361568172942058784}
   defenseSystem: {fileID: -5391085893718665421}
+  upgradeVisual: {fileID: 1300448753316764029}
   starVisuals:
   - {fileID: 6532041335953361993}
   - {fileID: 7949154670481991903}
@@ -1026,6 +1047,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be38c585b36f6194a8bb08b68a0c4302, type: 3}
+--- !u!212 &4647298962796246751 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1141679802845842686, guid: be38c585b36f6194a8bb08b68a0c4302, type: 3}
+  m_PrefabInstance: {fileID: 5739427004162226721}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5929180389517248698 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2156701223262941851, guid: be38c585b36f6194a8bb08b68a0c4302, type: 3}

@@ -6,6 +6,9 @@ public class DefenseSystem : MonoBehaviour
     private const int MAX_DETECTED_ENEMIES = 10;
     private const float DETECT_INTERVAL = 0.2f;
     private const float MIN_ARROW_GENERATE_RATE = 0.05f;
+    private const int DEFAULT_STAR_LEVEL = 1;
+    private const int STAR_LEVEL_TWO = 2;
+    private const int STAR_LEVEL_THREE = 3;
 
     [SerializeField] private float detectRadius = 15f;
     [SerializeField] private Transform arrowSpawnPoint;
@@ -15,6 +18,9 @@ public class DefenseSystem : MonoBehaviour
     [SerializeField] private float arrowGenerateRate = 0.3f;
     [SerializeField] private int attackDamage = 10;
     [SerializeField] private Arrow arrowPrefab;
+    [SerializeField] private Material starOneArrowMaterial;
+    [SerializeField] private Material starTwoArrowMaterial;
+    [SerializeField] private Material starThreeArrowMaterial;
     
     private readonly Collider2D[] _detectResults = new Collider2D[MAX_DETECTED_ENEMIES];
     private float _baseDetectRadius;
@@ -24,6 +30,7 @@ public class DefenseSystem : MonoBehaviour
     private int _detectedEnemyCount;
     private bool _hasEnemy; 
     private bool _superArrowUnlocked;
+    private int _currentStarLevel = DEFAULT_STAR_LEVEL;
     private Enemy _currentTargetEnemy;
 
     private enum TargetLane
@@ -84,6 +91,7 @@ public class DefenseSystem : MonoBehaviour
         arrowGenerateRate = Mathf.Max(MIN_ARROW_GENERATE_RATE, _baseArrowGenerateRate * upgradeLevel.AttackIntervalMultiplier);
         detectRadius = Mathf.Max(0.01f, _baseDetectRadius * upgradeLevel.DetectRadiusMultiplier);
         _superArrowUnlocked = upgradeLevel.UnlockSuperArrow;
+        _currentStarLevel = upgradeLevel.StarLevel;
     }
 
     // 根据攻击间隔持续向当前目标发射箭头。
@@ -140,6 +148,7 @@ public class DefenseSystem : MonoBehaviour
             return false;
         }
 
+        arrow.SetVisualEffect(GetArrowMaterialForCurrentStarLevel(), ShouldEnableArrowTrail());
         arrow.SetDamage(attackDamage);
         arrow.SetTarget(target);
         return true;
@@ -166,6 +175,28 @@ public class DefenseSystem : MonoBehaviour
         }
 
         return FindClosestTarget(TargetLane.Any);
+    }
+
+    // 根据当前星级获取箭头应该使用的视觉材质。
+    private Material GetArrowMaterialForCurrentStarLevel()
+    {
+        if (_currentStarLevel >= STAR_LEVEL_THREE && starThreeArrowMaterial)
+        {
+            return starThreeArrowMaterial;
+        }
+
+        if (_currentStarLevel >= STAR_LEVEL_TWO && starTwoArrowMaterial)
+        {
+            return starTwoArrowMaterial;
+        }
+
+        return starOneArrowMaterial;
+    }
+
+    // 判断当前星级是否启用箭头拖尾效果。
+    private bool ShouldEnableArrowTrail()
+    {
+        return _currentStarLevel >= STAR_LEVEL_TWO;
     }
 
     // 查找指定区域内距离防御塔最近的有效敌人。

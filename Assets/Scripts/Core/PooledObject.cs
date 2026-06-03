@@ -39,7 +39,6 @@ public class PooledObject : MonoBehaviour
         _poolManager = poolManager;
         SourcePrefab = sourcePrefab;
         IsInPool = false;
-        CachePoolables();
 
         foreach (IPoolable poolable in _poolables)
         {
@@ -54,8 +53,6 @@ public class PooledObject : MonoBehaviour
         {
             return;
         }
-
-        CachePoolables();
 
         foreach (IPoolable poolable in _poolables)
         {

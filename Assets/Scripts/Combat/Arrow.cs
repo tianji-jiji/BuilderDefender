@@ -7,6 +7,7 @@ public class Arrow : MonoBehaviour, IPoolable
     [SerializeField] private int defaultDamage = 10;
     [SerializeField] private SpriteRenderer[] spriteRenderers;
     [SerializeField] private TrailRenderer[] trailRenderers;
+    [SerializeField] private Material defaultVisualMaterial;
 
     private Rigidbody2D _rb2;
     private Collider2D _collider;
@@ -27,6 +28,7 @@ public class Arrow : MonoBehaviour, IPoolable
         TryGetComponent(out _rb2);
         TryGetComponent(out _collider);
         TryGetComponent(out _pooledObject);
+        CacheDefaultVisualMaterial();
     }
 
     // 重置箭头从对象池取出后的运行状态。
@@ -34,6 +36,8 @@ public class Arrow : MonoBehaviour, IPoolable
     {
         TryGetComponent(out _pooledObject);
         SetVisualsActive(true);
+        ApplyVisualMaterial(defaultVisualMaterial);
+        SetTrailsActive(false);
         ClearTrails();
         _targetEnemy = null;
         _targetTransform = null;
@@ -56,6 +60,8 @@ public class Arrow : MonoBehaviour, IPoolable
         _moveDirection = Vector2.zero;
         _isReturning = true;
         SetVisualsActive(false);
+        ApplyVisualMaterial(defaultVisualMaterial);
+        SetTrailsActive(false);
         ClearTrails();
 
         if (_rb2)
@@ -99,6 +105,14 @@ public class Arrow : MonoBehaviour, IPoolable
     public void SetDamage(int damage)
     {
         _damage = Mathf.Max(1, damage);
+    }
+
+    // 设置本次发射使用的箭头视觉材质和拖尾状态。
+    public void SetVisualEffect(Material visualMaterial, bool enableTrail)
+    {
+        ApplyVisualMaterial(visualMaterial ? visualMaterial : defaultVisualMaterial);
+        SetTrailsActive(enableTrail);
+        ClearTrails();
     }
 
     // 让箭头飞向当前目标。
@@ -185,6 +199,61 @@ public class Arrow : MonoBehaviour, IPoolable
             {
                 spriteRenderer.enabled = active;
             }
+        }
+    }
+
+    // 缓存箭头默认材质，一星箭头使用该材质保持无额外 shader 效果。
+    private void CacheDefaultVisualMaterial()
+    {
+        if (defaultVisualMaterial || spriteRenderers == null)
+        {
+            return;
+        }
+
+        foreach (SpriteRenderer spriteRenderer in spriteRenderers)
+        {
+            if (spriteRenderer && spriteRenderer.sharedMaterial)
+            {
+                defaultVisualMaterial = spriteRenderer.sharedMaterial;
+                return;
+            }
+        }
+    }
+
+    // 将指定材质应用到所有箭头 SpriteRenderer。
+    private void ApplyVisualMaterial(Material visualMaterial)
+    {
+        if (!visualMaterial || spriteRenderers == null)
+        {
+            return;
+        }
+
+        foreach (SpriteRenderer spriteRenderer in spriteRenderers)
+        {
+            if (spriteRenderer)
+            {
+                spriteRenderer.sharedMaterial = visualMaterial;
+            }
+        }
+    }
+
+    // 开关箭头拖尾渲染器，避免一星和回池状态残留拖尾。
+    private void SetTrailsActive(bool active)
+    {
+        if (trailRenderers == null)
+        {
+            return;
+        }
+
+        foreach (TrailRenderer trailRenderer in trailRenderers)
+        {
+            if (!trailRenderer)
+            {
+                continue;
+            }
+
+            trailRenderer.emitting = active;
+            trailRenderer.enabled = active;
         }
     }
 

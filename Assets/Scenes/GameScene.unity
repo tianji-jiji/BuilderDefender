@@ -8953,19 +8953,19 @@ MonoBehaviour:
   poolConfigs:
   - prefab: {fileID: 8267456965921251620, guid: 5cc88883157f2924896240f334d82dbe, type: 3}
     initialSize: 80
-    maxSize: 120
+    maxSize: 500
     parent: {fileID: 2099843922}
   - prefab: {fileID: 8267456965921251620, guid: c88fa6313517172499bc399e33c10c80, type: 3}
     initialSize: 20
-    maxSize: 45
+    maxSize: 100
     parent: {fileID: 2099843922}
   - prefab: {fileID: 8267456965921251620, guid: 4be80151d5e8a6642829e915156ade2e, type: 3}
     initialSize: 10
-    maxSize: 20
+    maxSize: 50
     parent: {fileID: 2099843922}
   - prefab: {fileID: 4085518841194330122, guid: 9f0971bf8b2cc2444aa2008bd1b8e22b, type: 3}
-    initialSize: 80
-    maxSize: 240
+    initialSize: 100
+    maxSize: 1000
     parent: {fileID: 2099843922}
   - prefab: {fileID: 9003008805474572738, guid: 6c0bce4d64fa41848ba24487196245b4, type: 3}
     initialSize: 15
@@ -8995,6 +8995,10 @@ MonoBehaviour:
     initialSize: 10
     maxSize: 30
     parent: {fileID: 2099843922}
+  - prefab: {fileID: 9094029841739368010, guid: 133c51a5bec78f74ead45ddfdf47bee9, type: 3}
+    initialSize: 80
+    maxSize: 240
+    parent: {fileID: 0}
   defaultPoolRoot: {fileID: 2099843922}
 --- !u!1 &821311788
 GameObject:

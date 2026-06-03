@@ -156,7 +156,7 @@ public class PoolManager : MonoBehaviour
         }
 
         PoolConfig config = _configs.GetValueOrDefault(prefab);
-        int maxSize = config != null ? config.MaxSize : DEFAULT_MAX_SIZE;
+        int maxSize = config?.MaxSize ?? DEFAULT_MAX_SIZE;
         ObjectPool<GameObject> pool = new ObjectPool<GameObject>(
             () => CreateInstance(prefab),
             null,
