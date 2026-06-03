@@ -143,7 +143,7 @@ public class DirectionIndicatorManager : MonoBehaviour
     // 更新单个敌人批次箭头。
     private void UpdateEnemyBatchIndicator(EnemyBatchIndicator batchIndicator)
     {
-        batchIndicator.Enemies.RemoveAll(enemy => !enemy);
+        RemoveInvalidEnemies(batchIndicator.Enemies);
 
         if (batchIndicator.Enemies.Count <= 0)
         {
@@ -159,6 +159,24 @@ public class DirectionIndicatorManager : MonoBehaviour
 
         Vector3 targetPosition = GetEnemyBatchCenter(batchIndicator.Enemies);
         UpdateOffScreenIndicator(targetPosition, batchIndicator.Indicator);
+    }
+
+    // 移除一批敌人中已经失效的敌人引用。
+    private void RemoveInvalidEnemies(List<Enemy> enemies)
+    {
+        for (int i = enemies.Count - 1; i >= 0; i--)
+        {
+            if (!IsEnemyTrackable(enemies[i]))
+            {
+                enemies.RemoveAt(i);
+            }
+        }
+    }
+
+    // 判断敌人是否仍然适合被箭头追踪。
+    private bool IsEnemyTrackable(Enemy enemy)
+    {
+        return enemy && enemy.gameObject.activeInHierarchy && enemy.IsAlive;
     }
 
     // 移除已经没有存活敌人的批次箭头。

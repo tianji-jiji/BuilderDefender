@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   building: {fileID: 0}
+  buildingSo: {fileID: 0}
   button: {fileID: 8744007154618004046}
 --- !u!1 &1155616657366065560
 GameObject:

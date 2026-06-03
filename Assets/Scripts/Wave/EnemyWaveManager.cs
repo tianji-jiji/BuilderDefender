@@ -207,21 +207,23 @@ public class EnemyWaveManager : MonoBehaviour
         }
     }
 
-    // 实例化敌人并初始化敌人数据。
+    // 从对象池生成敌人并初始化敌人数据。
     private Enemy SpawnEnemy(EnemySo data, Transform point)
     {
+        Vector2 offset = Random.insideUnitCircle * SPAWN_OFFSET_RADIUS;
+        Vector3 spawnPosition = (Vector2)point.position + offset;
+        GameObject enemyObject = PoolManager.Instance
+            ? PoolManager.Instance.Spawn(data.prefab, spawnPosition, Quaternion.identity, enemyContainer)
+            : Instantiate(data.prefab, spawnPosition, Quaternion.identity, enemyContainer);
+
+        if (!enemyObject || !enemyObject.TryGetComponent(out Enemy enemy))
+        {
+            return null;
+        }
+
+        enemy.Init(data);
         aliveEnemyCount++;
         OnAliveEnemyCountChanged?.Invoke();
-
-        Vector2 offset = Random.insideUnitCircle * SPAWN_OFFSET_RADIUS;
-        GameObject enemyObject = Instantiate(
-            data.prefab,
-            (Vector2)point.position + offset,
-            Quaternion.identity
-        );
-
-        Enemy enemy = enemyObject.GetComponent<Enemy>();
-        enemy.Init(data);
         return enemy;
     }
 
