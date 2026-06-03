@@ -76,7 +76,7 @@ public class Building : MonoBehaviour
     // 隐藏当前建筑的拆除按钮。
     private void HideBuildingDemolitionButton()
     {
-        if (_buildingDemolitionButton)
+        if (_buildingDemolitionButton && !_buildingDemolitionButton.IsAwaitingConfirmation)
         {
             _buildingDemolitionButton.gameObject.SetActive(false);
         }

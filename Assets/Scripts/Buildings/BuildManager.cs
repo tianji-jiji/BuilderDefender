@@ -8,6 +8,8 @@ using UnityEngine.Serialization;
 
 public class BuildManager : MonoBehaviour
 {
+    private const float RIGHT_CLICK_CANCEL_MAX_SQR_DISTANCE = 64f;
+
     public static BuildManager Instance;
 
     /// <summary>
@@ -34,6 +36,8 @@ public class BuildManager : MonoBehaviour
     // 当前选择的建筑
     private BuildingSo _currentBuildingSo;
     private readonly List<ConstructionSite> _constructionSites = new();
+    private Vector3 _rightClickStartMousePosition;
+    private bool _isWaitingForRightClickCancel;
 
     public event Action<BuildingSo> OnSelectedBuildingChanged;
 
@@ -45,6 +49,11 @@ public class BuildManager : MonoBehaviour
 
     private void Update()
     {
+        if (TryCancelCurrentBuildingSelection())
+        {
+            return;
+        }
+
         if (!_currentBuildingSo)
         {
             TooltipManager.Instance.HidePlacementTooltip();
@@ -83,7 +92,53 @@ public class BuildManager : MonoBehaviour
             else
             {
                 TooltipManager.Instance.ShowPlacementTooltip("Too Close to Construction or ResourceNode!!!");
-            }
+        }
+    }
+
+    // 右键短点击取消当前已选择的待建造建筑，右键拖拽镜头时不取消。
+    private bool TryCancelCurrentBuildingSelection()
+    {
+        if (!_currentBuildingSo)
+        {
+            _isWaitingForRightClickCancel = false;
+            return false;
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            _rightClickStartMousePosition = Input.mousePosition;
+            _isWaitingForRightClickCancel = true;
+            return false;
+        }
+
+        if (!_isWaitingForRightClickCancel)
+        {
+            return false;
+        }
+
+        float sqrDistance = (Input.mousePosition - _rightClickStartMousePosition).sqrMagnitude;
+        if (Input.GetMouseButton(1) && sqrDistance > RIGHT_CLICK_CANCEL_MAX_SQR_DISTANCE)
+        {
+            _isWaitingForRightClickCancel = false;
+            return false;
+        }
+
+        if (!Input.GetMouseButtonUp(1))
+        {
+            return false;
+        }
+
+        _isWaitingForRightClickCancel = false;
+        if (sqrDistance > RIGHT_CLICK_CANCEL_MAX_SQR_DISTANCE)
+        {
+            return false;
+        }
+
+        SetCurrentBuilding(null);
+        TooltipManager.Instance.HidePlacementTooltip();
+        TooltipManager.Instance.HideEfficiencyTooltip();
+        TooltipManager.Instance.HidePriceTooltip();
+        return true;
     }
 
     public void SetCurrentBuilding(BuildingSo buildingSo)

@@ -16790,9 +16790,9 @@ MonoBehaviour:
   enemyIndicatorPrefab: {fileID: 8032237253981634673, guid: 7042f3972d73e0c47b5e9aafdc9963f6, type: 3}
   homeIndicatorPrefab: {fileID: 4387125511023291337, guid: 49eda78a39c99074b8bf76efb4f24383, type: 3}
   homeTransform: {fileID: 1106715688}
-  worldCamera: {fileID: 0}
+  worldCamera: {fileID: 519420031}
   showWhenTargetOnScreen: 0
-  edgePadding: 100
+  edgePadding: 200
   rotationOffset: 0
 --- !u!1 &1721746374
 GameObject:

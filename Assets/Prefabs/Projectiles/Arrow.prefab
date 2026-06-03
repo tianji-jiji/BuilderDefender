@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flySpeed: 30
-  lifetime: 5
+  lifetime: 3
   defaultDamage: 10
   spriteRenderers:
   - {fileID: 7090830185295996579}
