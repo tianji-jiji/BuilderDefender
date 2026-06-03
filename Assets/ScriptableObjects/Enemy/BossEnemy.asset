@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BossEnemy
   m_EditorClassIdentifier: 
   prefab: {fileID: 8267456965921251620, guid: 4be80151d5e8a6642829e915156ade2e, type: 3}
-  maxHealth: 100
+  maxHealth: 160
   moveSpeed: 5
-  atk: 50
+  atk: 40
   detectRadius: 50
