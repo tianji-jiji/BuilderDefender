@@ -20,6 +20,10 @@ MonoBehaviour:
   category: 0
   effectConfigList:
   - effectDefinition: {fileID: 11400000, guid: 31c13270d79645c8a5b728d29700a8e6, type: 2}
+    parameterConfigList:
+    - parameterKey: 0
+      value: 0.15
+      displayImpactOverride: 0
     effectType: 2
     value: 0.15
     displayImpact: 0

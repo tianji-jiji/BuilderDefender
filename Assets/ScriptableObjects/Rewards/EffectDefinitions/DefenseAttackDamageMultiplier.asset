@@ -16,3 +16,9 @@ MonoBehaviour:
   displayName: "\u6240\u6709\u9632\u5FA1\u5854\u653B\u51FB\u529B"
   descriptionTemplate: '{displayName} {value}'
   autoImpactRule: 0
+  parameterDisplayDefinitionList:
+  - parameterKey: 0
+    displayName: "\u6570\u503C"
+    templateToken: '{value}'
+    valueFormat: 0
+    autoImpactRule: 0

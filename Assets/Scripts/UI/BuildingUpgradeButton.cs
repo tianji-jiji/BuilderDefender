@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 建筑升级
+/// 建筑升星按钮，负责消耗资源升星和对外提供无消耗升星能力。
 /// </summary>
 public class BuildingUpgradeButton : MonoBehaviour
 {
@@ -18,10 +18,17 @@ public class BuildingUpgradeButton : MonoBehaviour
     [SerializeField] private int currentStarLevel = MIN_STAR_LEVEL;
     [SerializeField] private bool hideButtonAtMaxStar = true;
 
-    // 初始化按钮监听并刷新默认星级视觉。
+    public int CurrentStarLevel => currentStarLevel;
+    public int MaxStarLevel => upgradeConfig ? upgradeConfig.MaxStarLevel : currentStarLevel;
+    public bool IsMaxStar => currentStarLevel >= MaxStarLevel;
+    public DefenseSystem DefenseSystem => defenseSystem;
+
+    // 初始化按钮监听、初始星级和视觉状态。
     private void Start()
     {
         CacheUpgradeTargets();
+        ApplyInitialStarBonusFromReward();
+        DefenseTowerRegistry.RegisterUpgradeButton(this);
 
         if (button)
         {
@@ -38,7 +45,7 @@ public class BuildingUpgradeButton : MonoBehaviour
         RefreshButtonState();
     }
 
-    // 尝试升级建筑星级。
+    // 尝试消耗资源升级建筑星级。
     private void TryUpgrade()
     {
         if (!TryGetNextUpgradeLevel(out BuildingUpgradeLevel upgradeLevel))
@@ -54,11 +61,41 @@ public class BuildingUpgradeButton : MonoBehaviour
         }
 
         ResourceManager.Instance.Spend(upgradeLevel.UpgradeCost);
-        currentStarLevel++;
-        ApplyUpgradeLevel(upgradeLevel);
-        RefreshStarVisuals();
-        RefreshUpgradeVisual();
-        RefreshButtonState();
+        ApplyStarLevelWithoutCost(currentStarLevel + 1);
+    }
+
+    // 无消耗提升一星。
+    public bool UpgradeOneLevelWithoutCost()
+    {
+        if (IsMaxStar)
+        {
+            return false;
+        }
+
+        return ApplyStarLevelWithoutCost(currentStarLevel + 1);
+    }
+
+    // 无消耗升到满星。
+    public bool UpgradeToMaxStarWithoutCost()
+    {
+        if (IsMaxStar)
+        {
+            return false;
+        }
+
+        return ApplyStarLevelWithoutCost(MaxStarLevel);
+    }
+
+    // 按奖励配置应用新建防御塔初始星级。
+    public bool ApplyInitialStarBonus(int initialStarBonus)
+    {
+        if (initialStarBonus <= 0 || IsMaxStar)
+        {
+            return false;
+        }
+
+        int targetStarLevel = Mathf.Clamp(currentStarLevel + initialStarBonus, MIN_STAR_LEVEL, MaxStarLevel);
+        return ApplyStarLevelWithoutCost(targetStarLevel);
     }
 
     // 缓存当前升级按钮控制的建筑和防御组件。
@@ -78,6 +115,45 @@ public class BuildingUpgradeButton : MonoBehaviour
         {
             upgradeVisual = GetComponentInParent<BuildingUpgradeVisual>();
         }
+    }
+
+    // 应用奖励提供的新建防御塔初始星级。
+    private void ApplyInitialStarBonusFromReward()
+    {
+        if (!RewardBonusManager.Instance || !defenseSystem)
+        {
+            return;
+        }
+
+        ApplyInitialStarBonus(RewardBonusManager.Instance.DefenseNewTowerInitialStarBonus);
+    }
+
+    // 将目标星级配置应用到建筑生命和战斗系统。
+    private bool ApplyStarLevelWithoutCost(int targetStarLevel)
+    {
+        if (!upgradeConfig)
+        {
+            return false;
+        }
+
+        targetStarLevel = Mathf.Clamp(targetStarLevel, MIN_STAR_LEVEL, MaxStarLevel);
+        if (targetStarLevel <= currentStarLevel)
+        {
+            return false;
+        }
+
+        BuildingUpgradeLevel upgradeLevel = upgradeConfig.GetUpgradeLevel(targetStarLevel);
+        if (upgradeLevel == null)
+        {
+            return false;
+        }
+
+        currentStarLevel = targetStarLevel;
+        ApplyUpgradeLevel(upgradeLevel);
+        RefreshStarVisuals();
+        RefreshUpgradeVisual();
+        RefreshButtonState();
+        return true;
     }
 
     // 将当前星级配置应用到建筑生命和战斗系统。
@@ -174,6 +250,8 @@ public class BuildingUpgradeButton : MonoBehaviour
     // 取消按钮监听，避免对象销毁后继续持有回调。
     private void OnDestroy()
     {
+        DefenseTowerRegistry.UnregisterUpgradeButton(this);
+
         if (button)
         {
             button.onClick.RemoveListener(TryUpgrade);

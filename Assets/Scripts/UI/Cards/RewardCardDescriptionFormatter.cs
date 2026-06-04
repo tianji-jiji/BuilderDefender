@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
@@ -40,15 +41,52 @@ public static class RewardCardDescriptionFormatter
     // 构建单个奖励效果的描述文本。
     private static string BuildEffectDescription(RewardEffectConfig effectConfig)
     {
-        string valueText = BuildColoredValueText(effectConfig);
-        return effectConfig.BuildDescription(valueText);
+        Dictionary<RewardEffectParameterKey, string> parameterTextDic = BuildParameterTextDic(effectConfig);
+        return effectConfig.BuildDescription(parameterTextDic);
     }
 
-    // 构建带颜色的奖励数值文本。
-    private static string BuildColoredValueText(RewardEffectConfig effectConfig)
+    // 构建当前效果全部参数的富文本字典。
+    private static Dictionary<RewardEffectParameterKey, string> BuildParameterTextDic(RewardEffectConfig effectConfig)
     {
-        string valueText = FormatPercent(effectConfig.Value);
-        string colorHex = GetImpactColorHex(effectConfig.ResolveDisplayImpact());
+        Dictionary<RewardEffectParameterKey, string> parameterTextDic = new Dictionary<RewardEffectParameterKey, string>();
+        bool hasParameterList = effectConfig.HasParameterList();
+
+        if (hasParameterList)
+        {
+            foreach (RewardEffectParameterConfig parameterConfig in effectConfig.ParameterConfigList)
+            {
+                if (parameterConfig == null)
+                {
+                    continue;
+                }
+
+                parameterTextDic[parameterConfig.ParameterKey] = BuildColoredParameterText(effectConfig, parameterConfig);
+            }
+
+            return parameterTextDic;
+        }
+
+        string valueText = BuildColoredParameterText(effectConfig, RewardEffectParameterKey.Value, effectConfig.LegacyValue, effectConfig.LegacyDisplayImpact);
+        parameterTextDic[RewardEffectParameterKey.Value] = valueText;
+        return parameterTextDic;
+    }
+
+    // 构建单个参数的富文本。
+    private static string BuildColoredParameterText(RewardEffectConfig effectConfig, RewardEffectParameterConfig parameterConfig)
+    {
+        return BuildColoredParameterText(effectConfig, parameterConfig.ParameterKey, parameterConfig.Value, parameterConfig.DisplayImpactOverride);
+    }
+
+    // 构建指定参数键和值的富文本。
+    private static string BuildColoredParameterText(RewardEffectConfig effectConfig, RewardEffectParameterKey parameterKey, float value, RewardEffectDisplayImpact displayImpactOverride)
+    {
+        RewardEffectDefinitionSo effectDefinition = effectConfig.EffectDefinition;
+        RewardEffectValueFormat valueFormat = effectDefinition ? effectDefinition.GetValueFormat(parameterKey) : RewardEffectValueFormat.PercentWithSign;
+        RewardEffectDisplayImpact displayImpact = effectDefinition
+            ? effectDefinition.ResolveDisplayImpact(parameterKey, value, displayImpactOverride)
+            : displayImpactOverride;
+        string valueText = FormatValue(value, valueFormat);
+        string colorHex = GetImpactColorHex(displayImpact);
         return $"<color={colorHex}>{valueText}</color>";
     }
 
@@ -68,10 +106,43 @@ public static class RewardCardDescriptionFormatter
         }
     }
 
+    // 按定义格式化参数数值。
+    private static string FormatValue(float value, RewardEffectValueFormat valueFormat)
+    {
+        switch (valueFormat)
+        {
+            case RewardEffectValueFormat.PercentWithSign:
+                return FormatPercent(value, true);
+            case RewardEffectValueFormat.PercentWithoutSign:
+                return FormatPercent(value, false);
+            case RewardEffectValueFormat.IntegerWithSign:
+                return FormatInteger(value, true);
+            case RewardEffectValueFormat.IntegerWithoutSign:
+                return FormatInteger(value, false);
+            case RewardEffectValueFormat.NumberOnly:
+                return FormatNumber(value);
+            default:
+                return FormatNumber(value);
+        }
+    }
+
     // 把倍率增量格式化成百分比文本。
-    private static string FormatPercent(float value)
+    private static string FormatPercent(float value, bool includePositiveSign)
     {
         int percent = Mathf.RoundToInt(value * 100f);
-        return percent > 0 ? $"+{percent}%" : $"{percent}%";
+        return includePositiveSign && percent > 0 ? $"+{percent}%" : $"{percent}%";
+    }
+
+    // 把数值格式化成整数文本。
+    private static string FormatInteger(float value, bool includePositiveSign)
+    {
+        int integerValue = Mathf.RoundToInt(value);
+        return includePositiveSign && integerValue > 0 ? $"+{integerValue}" : integerValue.ToString();
+    }
+
+    // 把数值格式化成普通数字文本。
+    private static string FormatNumber(float value)
+    {
+        return value.ToString("0.##");
     }
 }

@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour, IPoolable
     private bool _isSubscribed;
 
     public bool IsAlive { get; private set; }
+    public int Armor => enemySo ? Mathf.Max(0, enemySo.armor) : 0;
 
     // 初始化敌人需要缓存的组件和默认攻击目标。
     private void Awake()
