@@ -47,8 +47,9 @@ public class PoolManager : MonoBehaviour
         ObjectPool<GameObject> pool = GetOrCreatePool(prefab);
         GameObject instance = pool.Get();
         Transform instanceTransform = instance.transform;
+        Transform spawnParent = GetSpawnParent(prefab, parent);
 
-        instanceTransform.SetParent(parent, false);
+        instanceTransform.SetParent(spawnParent, false);
         instanceTransform.SetPositionAndRotation(position, rotation);
         instance.SetActive(true);
 
@@ -224,6 +225,12 @@ public class PoolManager : MonoBehaviour
     {
         PoolConfig config = _configs.GetValueOrDefault(prefab);
         return config != null && config.Parent ? config.Parent : defaultPoolRoot;
+    }
+
+    // 获取对象取出时使用的父节点，未指定时保持在对象池根节点下。
+    private Transform GetSpawnParent(GameObject prefab, Transform requestedParent)
+    {
+        return requestedParent ? requestedParent : GetPoolParent(prefab);
     }
 
     // 判断当前对象是否适合自动添加粒子回池组件。

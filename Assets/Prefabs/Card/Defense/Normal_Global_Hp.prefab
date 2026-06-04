@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2124716354034765845, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_Name
-      value: Defense_Global_Hp
+      value: Normal_Global_Hp
       objectReference: {fileID: 0}
     - target: {fileID: 3288689950369848633, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_text
@@ -100,6 +100,10 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u7A33\u56FA\u5854\u57FA"
       objectReference: {fileID: 0}
+    - target: {fileID: 5682491161258273739, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8cd9e8fa8e769d5468b5652ba4daa3fe, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
