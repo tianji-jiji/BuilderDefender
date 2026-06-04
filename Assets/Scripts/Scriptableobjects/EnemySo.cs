@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "Enemy/EnemySo")]
+[CreateAssetMenu(menuName = "ScriptableObjects/EnemySo")]
 public class EnemySo : ScriptableObject
 {
     public GameObject prefab;

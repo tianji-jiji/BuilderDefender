@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
-  m_Name: Defense_Global_Hp
+  m_Name: Normal_Global_AtkSpeed
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
-  cardId: Defense_Global_Hp
-  cardPrefab: {fileID: 27244437810418193, guid: e549ace408f6d84449c9a5a41da944b5, type: 3}
+  cardId: Defense_Global_AtkSpeed
+  cardName: "\u5FEB\u901F\u88C5\u586B"
+  cardPrefab: {fileID: 253624232006611687, guid: 897c7dbc6dbd05f4ca003bebb37e7d4c, type: 3}
   weight: 1
   rarity: 0
   category: 0
   effectConfigList:
-  - effectType: 3
-    value: 0.2
+  - effectDefinition: {fileID: 11400000, guid: 84d3664b1b504eb5a3775fb1cfb24775, type: 2}
+    effectType: 1
+    value: 0.15
+    displayImpact: 0

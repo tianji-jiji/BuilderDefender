@@ -10,13 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
-  m_Name: Defense_Global_AtkAmount
+  m_Name: Normal_Global_AtkAmount
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: Defense_Global_AtkAmount
+  cardName: "\u7CBE\u51C6\u6821\u51C6"
   cardPrefab: {fileID: 2124716354034765845, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
   weight: 1
   rarity: 0
   category: 0
   effectConfigList:
-  - effectType: 0
+  - effectDefinition: {fileID: 11400000, guid: 6fb7a66701004c4fb8e2f677b88af4bd, type: 2}
+    effectType: 0
     value: 0.1
+    displayImpact: 0
+  - effectDefinition: {fileID: 11400000, guid: 84d3664b1b504eb5a3775fb1cfb24775, type: 2}
+    effectType: 0
+    value: 0.1
+    displayImpact: 0

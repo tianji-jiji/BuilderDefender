@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
-  m_Name: Defense_Global_Cheap
+  m_Name: Normal_Global_Hp
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
-  cardId: Defense_Global_Cheap
-  cardPrefab: {fileID: 7252607492880261518, guid: c42152f0d9709944aa933e815477fb95, type: 3}
+  cardId: Defense_Global_Hp
+  cardName: "\u7A33\u56FA\u5854\u57FA"
+  cardPrefab: {fileID: 27244437810418193, guid: e549ace408f6d84449c9a5a41da944b5, type: 3}
   weight: 1
   rarity: 0
   category: 0
   effectConfigList:
-  - effectType: 4
-    value: -0.1
+  - effectDefinition: {fileID: 11400000, guid: 08a843f04f754b62848f38e91e542d58, type: 2}
+    effectType: 3
+    value: 0.2
+    displayImpact: 0

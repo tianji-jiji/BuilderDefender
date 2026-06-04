@@ -600,6 +600,7 @@ GameObject:
   - component: {fileID: 7038235489989006931}
   - component: {fileID: 2786617724550045872}
   - component: {fileID: 7752985299500909859}
+  - component: {fileID: 8625149637442101261}
   - component: {fileID: 4194189618573558525}
   m_Layer: 0
   m_Name: RewardCardBase
@@ -733,6 +734,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &8625149637442101261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124716354034765845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7530ec80a1bc4b3bbbf567fce13db17d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RewardCardView
+  cardNameText: {fileID: 4569189041600005469}
+  descriptionText: {fileID: 3288689950369848633}
 --- !u!114 &4194189618573558525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,7 +761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardOption
   selectButton: {fileID: 2786617724550045872}
-  descriptionText: {fileID: 3288689950369848633}
+  cardView: {fileID: 8625149637442101261}
   pointerEnterFeedbacks: {fileID: 2876409361084191662}
   pointerExitFeedbacks: {fileID: 3420695511666653616}
 --- !u!1 &4114145171568150381

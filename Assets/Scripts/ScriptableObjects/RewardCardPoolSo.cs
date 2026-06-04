@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCardPoolSo")]
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/RewardCardPoolSo")]
 public class RewardCardPoolSo : ScriptableObject
 {
     private const int DEFAULT_CHOICE_COUNT = 3;

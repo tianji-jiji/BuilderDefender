@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(menuName = "Scriptablebojects/BuildingSo")]
+[CreateAssetMenu(menuName = "ScriptableObjects/Building/BuildingSo")]
 public class BuildingSo : ScriptableObject
 {
     // 建筑名

@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 /// <summary>
 /// 全局波次规则配置。
 /// </summary>
-[CreateAssetMenu(menuName = "Wave/Wave Rule Config")]
+[CreateAssetMenu(menuName = "ScriptableObjects/Wave Rule Config")]
 public class WaveRuleSo : ScriptableObject
 {
     // 每隔多少波出现一次 Boss 波

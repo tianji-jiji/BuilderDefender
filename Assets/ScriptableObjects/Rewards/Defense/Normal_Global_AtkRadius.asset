@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
-  m_Name: Defense_Global_AtkSpeed
+  m_Name: Normal_Global_AtkRadius
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
-  cardId: Defense_Global_AtkSpeed
-  cardPrefab: {fileID: 253624232006611687, guid: 897c7dbc6dbd05f4ca003bebb37e7d4c, type: 3}
+  cardId: Defense_Global_AtkRadius
+  cardName: "\u52A0\u957F\u7784\u51C6"
+  cardPrefab: {fileID: 8302846766138733513, guid: 405f01b9002a5d24783b170d35f7b860, type: 3}
   weight: 1
   rarity: 0
   category: 0
   effectConfigList:
-  - effectType: 1
+  - effectDefinition: {fileID: 11400000, guid: 31c13270d79645c8a5b728d29700a8e6, type: 2}
+    effectType: 2
     value: 0.15
+    displayImpact: 0
