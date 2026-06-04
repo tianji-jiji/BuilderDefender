@@ -11,6 +11,7 @@ public class Building : MonoBehaviour
     private HealthSystem _healthSystem;
     private GameObject _buildingDestroyedParticles;
     private int _baseMaxHealth;
+    private float _upgradeMaxHealthMultiplier = 1f;
 
     // 初始化建筑需要缓存的组件和生命值。
     private void Awake()
@@ -21,8 +22,14 @@ public class Building : MonoBehaviour
         _baseMaxHealth = buildingSo ? buildingSo.maxHealth : 1;
         if (_healthSystem)
         {
-            _healthSystem.Init(_baseMaxHealth);
+            _healthSystem.Init(CalculateMaxHealth());
         }
+    }
+
+    // 订阅全局奖励变化事件。
+    private void OnEnable()
+    {
+        RewardBonusManager.OnRewardBonusChanged += RefreshRewardBonuses;
     }
 
     // 根据升星配置提升建筑生命值。
@@ -33,14 +40,18 @@ public class Building : MonoBehaviour
             return;
         }
 
-        int upgradedMaxHealth = Mathf.Max(1, Mathf.RoundToInt(_baseMaxHealth * upgradeLevel.MaxHealthMultiplier));
-        _healthSystem.SetMaxHealth(upgradedMaxHealth, true);
+        _upgradeMaxHealthMultiplier = upgradeLevel.MaxHealthMultiplier;
+        RefreshRewardBonuses();
     }
 
     // 订阅建筑生命值死亡事件并隐藏拆除按钮。
     private void Start()
     {
-        _healthSystem.OnDied += Death;
+        if (_healthSystem)
+        {
+            _healthSystem.OnDied += Death;
+        }
+
         HideBuildingDemolitionButton();
     }
 
@@ -99,9 +110,37 @@ public class Building : MonoBehaviour
         Instantiate(_buildingDestroyedParticles, transform.position, Quaternion.identity);
     }
 
+    // 根据升星倍率和全局奖励倍率刷新建筑生命值。
+    private void RefreshRewardBonuses()
+    {
+        if (!_healthSystem)
+        {
+            return;
+        }
+
+        _healthSystem.SetMaxHealth(CalculateMaxHealth(), true);
+    }
+
+    // 计算当前建筑应该拥有的最大生命值。
+    private int CalculateMaxHealth()
+    {
+        float rewardMaxHealthMultiplier = RewardBonusManager.Instance
+            ? RewardBonusManager.Instance.DefenseMaxHealthMultiplier
+            : 1f;
+
+        if (!buildingSo || buildingSo.buildingType != BuildingSo.BuildingType.Defense)
+        {
+            rewardMaxHealthMultiplier = 1f;
+        }
+
+        return Mathf.Max(1, Mathf.RoundToInt(_baseMaxHealth * _upgradeMaxHealthMultiplier * rewardMaxHealthMultiplier));
+    }
+
     // 取消订阅建筑生命值死亡事件。
     private void OnDisable()
     {
+        RewardBonusManager.OnRewardBonusChanged -= RefreshRewardBonuses;
+
         if (_healthSystem)
         {
             _healthSystem.OnDied -= Death;

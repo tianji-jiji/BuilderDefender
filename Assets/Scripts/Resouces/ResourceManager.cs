@@ -72,6 +72,36 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
+    // 判断当前资源是否足够支付建筑经过奖励修正后的建造消耗。
+    public bool CanAfford(BuildingSo buildingSo)
+    {
+        if (!buildingSo)
+        {
+            return false;
+        }
+
+        foreach (ResourceCost resourceCost in buildingSo.resourceCost)
+        {
+            if (resourceCost == null || !resourceCost.resourceSo)
+            {
+                return false;
+            }
+
+            if (!_resourcesDic.TryGetValue(resourceCost.resourceSo, out int currentAmount))
+            {
+                return false;
+            }
+
+            int adjustedAmount = RewardBonusManager.GetAdjustedBuildCostAmount(buildingSo, resourceCost);
+            if (currentAmount < adjustedAmount)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // 扣除一组资源消耗。
     public void Spend(IEnumerable<ResourceCost> resourceCosts)
     {
@@ -91,6 +121,21 @@ public class ResourceManager : MonoBehaviour
     // 扣除建造建筑时需要的资源。
     public void Spend(BuildingSo buildingSo)
     {
-        Spend(buildingSo.resourceCost);
+        if (!buildingSo)
+        {
+            return;
+        }
+
+        foreach (ResourceCost resourceCost in buildingSo.resourceCost)
+        {
+            if (resourceCost == null || !resourceCost.resourceSo)
+            {
+                continue;
+            }
+
+            _resourcesDic[resourceCost.resourceSo] -= RewardBonusManager.GetAdjustedBuildCostAmount(buildingSo, resourceCost);
+        }
+
+        OnResourceAmountChanged?.Invoke();
     }
 }

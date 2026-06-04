@@ -253,15 +253,6 @@ public class BuildManager : MonoBehaviour
 
     public bool CanAfford(BuildingSo buildingSo)
     {
-        foreach (var resourceCost in buildingSo.resourceCost)
-        {
-            if (resourceCost.amount >
-                ResourceManager.Instance.GetResourceAmount(resourceCost.resourceSo))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return ResourceManager.Instance && ResourceManager.Instance.CanAfford(buildingSo);
     }
 }

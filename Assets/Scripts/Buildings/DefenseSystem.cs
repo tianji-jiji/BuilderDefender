@@ -31,6 +31,9 @@ public class DefenseSystem : MonoBehaviour
     private bool _hasEnemy; 
     private bool _superArrowUnlocked;
     private int _currentStarLevel = DEFAULT_STAR_LEVEL;
+    private float _upgradeAttackDamageMultiplier = 1f;
+    private float _upgradeAttackIntervalMultiplier = 1f;
+    private float _upgradeDetectRadiusMultiplier = 1f;
     private Enemy _currentTargetEnemy;
 
     private enum TargetLane
@@ -47,10 +50,17 @@ public class DefenseSystem : MonoBehaviour
         _baseArrowGenerateRate = arrowGenerateRate;
         _baseAttackDamage = attackDamage;
     }
+
+    // 订阅全局奖励变化事件。
+    private void OnEnable()
+    {
+        RewardBonusManager.OnRewardBonusChanged += RefreshRewardBonuses;
+    }
     
     // 启动防御塔的周期性敌人侦测。
     private void Start()
     {
+        RefreshRewardBonuses();
         InvokeRepeating(nameof(DetectEnemy),0f,DETECT_INTERVAL);
     }
 
@@ -98,11 +108,12 @@ public class DefenseSystem : MonoBehaviour
             return;
         }
 
-        attackDamage = Mathf.Max(1, Mathf.RoundToInt(_baseAttackDamage * upgradeLevel.AttackDamageMultiplier));
-        arrowGenerateRate = Mathf.Max(MIN_ARROW_GENERATE_RATE, _baseArrowGenerateRate * upgradeLevel.AttackIntervalMultiplier);
-        detectRadius = Mathf.Max(0.01f, _baseDetectRadius * upgradeLevel.DetectRadiusMultiplier);
+        _upgradeAttackDamageMultiplier = upgradeLevel.AttackDamageMultiplier;
+        _upgradeAttackIntervalMultiplier = upgradeLevel.AttackIntervalMultiplier;
+        _upgradeDetectRadiusMultiplier = upgradeLevel.DetectRadiusMultiplier;
         _superArrowUnlocked = upgradeLevel.UnlockSuperArrow;
         _currentStarLevel = upgradeLevel.StarLevel;
+        RefreshRewardBonuses();
     }
 
     // 根据攻击间隔持续向当前目标发射箭头。
@@ -287,9 +298,28 @@ public class DefenseSystem : MonoBehaviour
     // 禁用防御塔时停止周期侦测。
     private void OnDisable()
     {
+        RewardBonusManager.OnRewardBonusChanged -= RefreshRewardBonuses;
         CancelInvoke();
         _hasEnemy = false;
         _currentTargetEnemy = null;
+    }
+
+    // 根据升星倍率和全局奖励倍率刷新防御塔战斗属性。
+    private void RefreshRewardBonuses()
+    {
+        float rewardAttackDamageMultiplier = RewardBonusManager.Instance
+            ? RewardBonusManager.Instance.DefenseAttackDamageMultiplier
+            : 1f;
+        float rewardAttackIntervalMultiplier = RewardBonusManager.Instance
+            ? RewardBonusManager.Instance.DefenseAttackIntervalMultiplier
+            : 1f;
+        float rewardDetectRadiusMultiplier = RewardBonusManager.Instance
+            ? RewardBonusManager.Instance.DefenseDetectRadiusMultiplier
+            : 1f;
+
+        attackDamage = Mathf.Max(1, Mathf.RoundToInt(_baseAttackDamage * _upgradeAttackDamageMultiplier * rewardAttackDamageMultiplier));
+        arrowGenerateRate = Mathf.Max(MIN_ARROW_GENERATE_RATE, _baseArrowGenerateRate * _upgradeAttackIntervalMultiplier * rewardAttackIntervalMultiplier);
+        detectRadius = Mathf.Max(0.01f, _baseDetectRadius * _upgradeDetectRadiusMultiplier * rewardDetectRadiusMultiplier);
     }
 
     // 判断敌人是否仍然可被防御塔攻击。

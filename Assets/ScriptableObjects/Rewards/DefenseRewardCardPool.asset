@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd061b28e0e05924382a75ff64dbeef8, type: 3}
+  m_Name: DefenseRewardCardPool
+  m_EditorClassIdentifier: Assembly-CSharp::RewardCardPoolSo
+  rewardCardList:
+  - {fileID: 11400000, guid: 93828d1aa8c73cc47a4adc3a4fe58dda, type: 2}
+  - {fileID: 11400000, guid: 05f37f456baefdc49b38bc6b20cb5dfb, type: 2}
+  - {fileID: 11400000, guid: 82e0d94ccf165cb48b5fc4038e1b596d, type: 2}
+  - {fileID: 11400000, guid: 9d7e6fa4cd740374587660f1193c63a8, type: 2}
+  - {fileID: 11400000, guid: bb95c3c8871c5ff4bbfaf50e2c0c3117, type: 2}
+  choiceCount: 3
+  allowDuplicate: 0

@@ -36,6 +36,8 @@ public class EnemyWaveManager : MonoBehaviour
     [FormerlySerializedAs("baseTransform")] [SerializeField] private Transform homeTransform;
 
     public event Action OnWaveStarted;
+    // 当前波次所有敌人被清空时触发。
+    public event Action<int> OnWaveCompleted;
     public event Action OnAliveEnemyCountChanged;
     public event Action<IReadOnlyList<Enemy>> OnEnemyBatchSpawned;
 
@@ -143,6 +145,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if (aliveEnemyCount <= 0)
         {
+            OnWaveCompleted?.Invoke(waveIndex);
             EnterWaitingNextWaveState();
         }
     }
