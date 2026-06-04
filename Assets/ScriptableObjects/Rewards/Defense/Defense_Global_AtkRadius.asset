@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Defense_Global_AtkRadius
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: Defense_Global_AtkRadius
-  cardPrefab: {fileID: 2124716354034765845, guid: daa5e776f2751ba4ca60ff5f8bb593b8, type: 3}
+  cardPrefab: {fileID: 8302846766138733513, guid: 405f01b9002a5d24783b170d35f7b860, type: 3}
   weight: 1
   rarity: 0
   category: 0
   effectConfigList:
   - effectType: 2
-    value: 0.1
+    value: 0.15

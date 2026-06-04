@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
     // 根据当前游戏状态处理暂停和恢复输入。
     private void Update()
     {
+        HandleHealthBarVisibilityInput();
+
         switch (State)
         {
             case GameState.Playing:
@@ -60,6 +62,17 @@ public class GameManager : MonoBehaviour
                     ResumeGame();
                 break;
         }
+    }
+
+    // 处理全局血条显示隐藏快捷键。
+    private void HandleHealthBarVisibilityInput()
+    {
+        if (!Input.GetKeyDown(KeyCode.Alpha1) && !Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            return;
+        }
+
+        HealthBar.ToggleAllHealthBarsVisibility();
     }
 
     // 开始游戏并启动敌人波次系统。

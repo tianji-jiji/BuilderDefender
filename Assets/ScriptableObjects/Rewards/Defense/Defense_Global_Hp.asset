@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Defense_Global_Hp
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: Defense_Global_Hp
-  cardPrefab: {fileID: 2124716354034765845, guid: cc024093f06925f43ba1164e81b07c7d, type: 3}
+  cardPrefab: {fileID: 27244437810418193, guid: e549ace408f6d84449c9a5a41da944b5, type: 3}
   weight: 1
   rarity: 0
   category: 0

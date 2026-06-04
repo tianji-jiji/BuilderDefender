@@ -6,6 +6,16 @@ public class HealthBar : MonoBehaviour
     private const int MIN_HEALTH_PER_SEGMENT = 1;
     private const float DEFAULT_FULL_BAR_WIDTH = 4f;
 
+    private enum HealthBarVisibilityMode
+    {
+        Default,
+        ForceVisible,
+        ForceHidden
+    }
+
+    private static readonly List<HealthBar> HealthBarList = new();
+    private static HealthBarVisibilityMode CurrentVisibilityMode = HealthBarVisibilityMode.Default;
+
     [SerializeField] private HealthSystem healthSystem;
     [SerializeField] private GameObject bar;
     [SerializeField] private SpriteRenderer[] renderers;
@@ -24,6 +34,7 @@ public class HealthBar : MonoBehaviour
     // 启用血条时订阅生命变化，并立即同步血量和刻度显示。
     private void OnEnable()
     {
+        RegisterHealthBar(this);
         SubscribeHealthSystem();
         UpdateBarSize();
     }
@@ -32,6 +43,51 @@ public class HealthBar : MonoBehaviour
     private void OnDisable()
     {
         UnsubscribeHealthSystem();
+        UnregisterHealthBar(this);
+    }
+
+    // 切换所有血条的强制显示或强制隐藏状态。
+    public static void ToggleAllHealthBarsVisibility()
+    {
+        CurrentVisibilityMode = CurrentVisibilityMode == HealthBarVisibilityMode.ForceVisible
+            ? HealthBarVisibilityMode.ForceHidden
+            : HealthBarVisibilityMode.ForceVisible;
+
+        RefreshAllHealthBarsVisibility();
+    }
+
+    // 注册当前启用中的血条。
+    private static void RegisterHealthBar(HealthBar healthBar)
+    {
+        if (!healthBar || HealthBarList.Contains(healthBar))
+        {
+            return;
+        }
+
+        HealthBarList.Add(healthBar);
+    }
+
+    // 取消注册已经禁用或销毁的血条。
+    private static void UnregisterHealthBar(HealthBar healthBar)
+    {
+        HealthBarList.Remove(healthBar);
+    }
+
+    // 刷新所有启用中血条的可见性。
+    private static void RefreshAllHealthBarsVisibility()
+    {
+        for (int i = HealthBarList.Count - 1; i >= 0; i--)
+        {
+            HealthBar healthBar = HealthBarList[i];
+
+            if (!healthBar)
+            {
+                HealthBarList.RemoveAt(i);
+                continue;
+            }
+
+            healthBar.UpdateBarVisible();
+        }
     }
 
     // 订阅生命系统的变化事件。
@@ -184,9 +240,20 @@ public class HealthBar : MonoBehaviour
             return;
         }
 
-        bool visible = healthSystem.CurrentHealth < healthSystem.MaxHealth;
+        bool visible = ShouldShowHealthBar();
         SetRenderersVisible(visible);
         SetTickRenderersVisible(visible);
+    }
+
+    // 根据全局显示模式和当前血量判断血条是否应该显示。
+    private bool ShouldShowHealthBar()
+    {
+        return CurrentVisibilityMode switch
+        {
+            HealthBarVisibilityMode.ForceVisible => true,
+            HealthBarVisibilityMode.ForceHidden => false,
+            _ => healthSystem.CurrentHealth < healthSystem.MaxHealth
+        };
     }
 
     // 设置血条相关渲染器的显示状态。

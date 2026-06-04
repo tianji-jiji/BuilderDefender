@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
 public class CardRewardController : MonoBehaviour
@@ -6,6 +7,7 @@ public class CardRewardController : MonoBehaviour
     [SerializeField] private RewardCardPoolSo rewardCardPool;
     [SerializeField] private CanvasGroup cardRewardCanvasGroup;
     [SerializeField] private Transform cardOptionRoot;
+    [SerializeField] private MMF_Player showFeedbacks;
     [SerializeField] private bool pauseGameDuringSelection = true;
 
     private readonly List<GameObject> _spawnedCardObjectList = new List<GameObject>();
@@ -59,6 +61,11 @@ public class CardRewardController : MonoBehaviour
         if (!cardRewardCanvasGroup)
         {
             TryGetComponent(out cardRewardCanvasGroup);
+        }
+
+        if (!showFeedbacks)
+        {
+            TryGetComponent(out showFeedbacks);
         }
     }
 
@@ -176,9 +183,10 @@ public class CardRewardController : MonoBehaviour
         }
 
         cardRewardCanvasGroup.transform.localScale = Vector3.one;
-        cardRewardCanvasGroup.alpha = 1f;
         cardRewardCanvasGroup.interactable = true;
         cardRewardCanvasGroup.blocksRaycasts = true;
+
+        PlayShowFeedback();
     }
 
     // 隐藏奖励选卡画布。
@@ -192,6 +200,19 @@ public class CardRewardController : MonoBehaviour
         cardRewardCanvasGroup.alpha = 0f;
         cardRewardCanvasGroup.interactable = false;
         cardRewardCanvasGroup.blocksRaycasts = false;
+    }
+
+    // 播放奖励弹窗显示反馈，没有配置 Feel 时直接显示画布。
+    private void PlayShowFeedback()
+    {
+        if (showFeedbacks)
+        {
+            cardRewardCanvasGroup.alpha = 0f;
+            showFeedbacks.PlayFeedbacks();
+            return;
+        }
+
+        cardRewardCanvasGroup.alpha = 1f;
     }
 
     // 暂停游戏时间以等待玩家选择奖励。

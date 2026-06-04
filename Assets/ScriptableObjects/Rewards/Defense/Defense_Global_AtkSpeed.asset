@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Defense_Global_AtkSpeed
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: Defense_Global_AtkSpeed
-  cardPrefab: {fileID: 2124716354034765845, guid: 3ddd8cfe2a1b0454391654c670438ac9, type: 3}
+  cardPrefab: {fileID: 253624232006611687, guid: 897c7dbc6dbd05f4ca003bebb37e7d4c, type: 3}
   weight: 1
   rarity: 0
   category: 0
   effectConfigList:
   - effectType: 1
-    value: 0.1
+    value: 0.15
