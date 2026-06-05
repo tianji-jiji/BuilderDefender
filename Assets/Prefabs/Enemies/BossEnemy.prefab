@@ -222,6 +222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4f465b6285e4047965a9ad29583f2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
 --- !u!114 &1694917015672800383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,7 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpriteAfterimageTrail
   sourceRenderer: {fileID: 2514648965845981358}
   afterimagePrefab: {fileID: 2119531614038092727, guid: 133c51a5bec78f74ead45ddfdf47bee9, type: 3}
-  spawnInterval: 0.02
+  spawnInterval: 0.1
   minMoveDistance: 0.01
   afterimageColor: {r: 0.62, g: 0.72, b: 0.88, a: 1}
 --- !u!1001 &1406358135850058927

@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 public enum RewardCardRarity
@@ -23,7 +26,9 @@ public enum RewardCardCategory
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/RewardCardSo")]
 public class RewardCardSo : ScriptableObject
 {
-    [SerializeField] private string cardId;
+    private const string CARD_ID_PREFIX = "RewardCard_";
+
+    [HideInInspector] [SerializeField] private string cardId;
     [SerializeField] private string cardName;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private int weight = 1;
@@ -38,4 +43,38 @@ public class RewardCardSo : ScriptableObject
     public RewardCardRarity Rarity => rarity;
     public RewardCardCategory Category => category;
     public IReadOnlyList<RewardEffectConfig> EffectConfigList => effectConfigList;
+
+#if UNITY_EDITOR
+    // 在编辑器中根据资产 GUID 自动刷新卡牌 ID。
+    private void OnValidate()
+    {
+        RefreshGeneratedCardIdInEditor();
+    }
+
+    // 根据 Unity 资产 GUID 生成稳定卡牌 ID。
+    public bool RefreshGeneratedCardIdInEditor()
+    {
+        string assetPath = AssetDatabase.GetAssetPath(this);
+        if (string.IsNullOrWhiteSpace(assetPath))
+        {
+            return false;
+        }
+
+        string assetGuid = AssetDatabase.AssetPathToGUID(assetPath);
+        if (string.IsNullOrWhiteSpace(assetGuid))
+        {
+            return false;
+        }
+
+        string generatedCardId = $"{CARD_ID_PREFIX}{assetGuid}";
+        if (cardId == generatedCardId)
+        {
+            return false;
+        }
+
+        cardId = generatedCardId;
+        EditorUtility.SetDirty(this);
+        return true;
+    }
+#endif
 }
