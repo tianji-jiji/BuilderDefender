@@ -13,8 +13,8 @@ public class HealthSystem : MonoBehaviour
 
     // 生命归零时触发。
     public event Action OnDied;
-    // 受到伤害时触发。
-    public event Action OnDamaged;
+    // 受到伤害并产生实际扣血时触发，参数为实际扣除的生命值。
+    public event Action<int> OnDamaged;
     // 生命值或最大生命值变化时触发。
     public event Action OnHealthChanged;
 
@@ -46,31 +46,40 @@ public class HealthSystem : MonoBehaviour
         _damageTakenMultiplier = Mathf.Max(0f, multiplier);
     }
 
-    // 扣除生命值并在死亡时派发死亡事件。
-    public void TakeDamage(int damage)
+    // 扣除生命值并返回实际造成的伤害。
+    public int TakeDamage(int damage)
     {
         int adjustedDamage = Mathf.Max(1, Mathf.RoundToInt(Mathf.Max(0, damage) * _damageTakenMultiplier));
-        LoseHealth(adjustedDamage);
+        return LoseHealth(adjustedDamage);
     }
 
-    // 直接扣除生命值，不经过受伤倍率。
-    public void LoseHealth(int amount)
+    // 直接扣除生命值，不经过受伤倍率，并返回实际扣除值。
+    public int LoseHealth(int amount)
     {
         int healthLoss = Mathf.Max(0, amount);
         if (healthLoss <= 0)
         {
-            return;
+            return 0;
         }
 
+        int previousHealth = currentHealth;
         currentHealth -= healthLoss;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        int actualHealthLoss = previousHealth - currentHealth;
+        if (actualHealthLoss <= 0)
+        {
+            return 0;
+        }
+
         OnHealthChanged?.Invoke();
-        OnDamaged?.Invoke();
+        OnDamaged?.Invoke(actualHealthLoss);
 
         if (currentHealth <= 0)
         {
             OnDied?.Invoke();
         }
+
+        return actualHealthLoss;
     }
 
     // 按最大生命值百分比治疗。

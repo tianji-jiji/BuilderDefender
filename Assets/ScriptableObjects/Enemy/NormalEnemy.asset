@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 8267456965921251620, guid: 5cc88883157f2924896240f334d82dbe, type: 3}
   maxHealth: 20
+  armor: 0
   moveSpeed: 4
   atk: 10
   detectRadius: 6

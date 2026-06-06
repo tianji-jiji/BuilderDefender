@@ -212,8 +212,35 @@ public class RewardCardSoEditor : Editor
                 : displaySnapshot.displayName;
             string valueLabel = GetValueFieldLabel(effectDefinition, parameterKeyProp, label);
 
-            EditorGUILayout.PropertyField(valueProp, new GUIContent(valueLabel));
+            DrawParameterValueField(valueProp, displaySnapshot, (RewardEffectParameterKey)parameterKeyProp.enumValueIndex, valueLabel);
             displayImpactOverrideProp.enumValueIndex = (int)RewardEffectDisplayImpact.Auto;
+        }
+    }
+
+    // 根据参数显示格式绘制整数或小数输入框。
+    private void DrawParameterValueField(SerializedProperty valueProp, ParameterDisplaySnapshot displaySnapshot, RewardEffectParameterKey parameterKey, string valueLabel)
+    {
+        RewardEffectValueFormat valueFormat = displaySnapshot.isValid
+            ? displaySnapshot.valueFormat
+            : RewardEffectAuthoringPresets.GetDefaultValueFormat(parameterKey);
+
+        if (!IsIntegerValueFormat(valueFormat))
+        {
+            EditorGUILayout.PropertyField(valueProp, new GUIContent(valueLabel));
+            return;
+        }
+
+        int intValue = Mathf.RoundToInt(valueProp.floatValue);
+        if (!Mathf.Approximately(valueProp.floatValue, intValue))
+        {
+            valueProp.floatValue = intValue;
+        }
+
+        EditorGUI.BeginChangeCheck();
+        int newIntValue = EditorGUILayout.IntField(new GUIContent(valueLabel), intValue);
+        if (EditorGUI.EndChangeCheck())
+        {
+            valueProp.floatValue = newIntValue;
         }
     }
 
@@ -349,6 +376,11 @@ public class RewardCardSoEditor : Editor
             validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的 {parameterName} 使用无符号百分比显示，通常不应填写负数。", MessageType.Warning));
         }
 
+        if (IsIntegerValueFormat(valueFormat) && !Mathf.Approximately(value, Mathf.RoundToInt(value)))
+        {
+            validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的 {parameterName} 应填写整数，当前小数会在面板中自动取整。", MessageType.Warning));
+        }
+
         if (IsPositiveIntegerParameter(parameterKey) && value <= 0f)
         {
             validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的 {parameterName} 应大于 0。", MessageType.Warning));
@@ -407,6 +439,12 @@ public class RewardCardSoEditor : Editor
     private bool IsPercentValueFormat(RewardEffectValueFormat valueFormat)
     {
         return valueFormat == RewardEffectValueFormat.PercentWithSign || valueFormat == RewardEffectValueFormat.PercentWithoutSign;
+    }
+
+    // 判断显示格式是否为整数。
+    private bool IsIntegerValueFormat(RewardEffectValueFormat valueFormat)
+    {
+        return valueFormat == RewardEffectValueFormat.IntegerWithSign || valueFormat == RewardEffectValueFormat.IntegerWithoutSign;
     }
 
     // 判断参数是否应该填写正整数。

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: HardEnemy
   m_EditorClassIdentifier: 
   prefab: {fileID: 8267456965921251620, guid: c88fa6313517172499bc399e33c10c80, type: 3}
-  maxHealth: 60
+  maxHealth: 40
+  armor: 5
   moveSpeed: 4
   atk: 15
   detectRadius: 10

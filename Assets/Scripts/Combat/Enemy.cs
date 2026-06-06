@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour, IPoolable
     [SerializeField] private EnemySo enemySo;
     [FormerlySerializedAs("buildingLayer")] [SerializeField] private LayerMask detectLayer;
     [SerializeField] private HealthSystem healthSystem;
+    [SerializeField] private Transform damageFloatingTextPoint;
 
     public static event Action OnEnemyDead;
 
@@ -23,6 +24,7 @@ public class Enemy : MonoBehaviour, IPoolable
 
     public bool IsAlive { get; private set; }
     public int Armor => enemySo ? Mathf.Max(0, enemySo.armor) : 0;
+    public Vector3 DamageFloatingTextPosition => damageFloatingTextPoint ? damageFloatingTextPoint.position : transform.position;
 
     // 初始化敌人需要缓存的组件和默认攻击目标。
     private void Awake()
@@ -148,7 +150,12 @@ public class Enemy : MonoBehaviour, IPoolable
             return;
         }
 
-        other.gameObject.GetComponent<HealthSystem>().TakeDamage(enemySo.atk);
+        if (other.gameObject.TryGetComponent(out HealthSystem targetHealthSystem))
+        {
+            int actualDamage = targetHealthSystem.TakeDamage(enemySo.atk);
+            DamageFloatingTextService.ShowBuildingDamage(other.transform.position, actualDamage);
+        }
+
         Death();
     }
 

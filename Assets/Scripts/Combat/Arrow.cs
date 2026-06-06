@@ -181,7 +181,8 @@ public class Arrow : MonoBehaviour, IPoolable
 
         bool wasAlive = enemy.IsAlive;
         int adjustedDamage = CalculateArmorAdjustedDamage(enemy, rawDamage);
-        healthSystem.TakeDamage(adjustedDamage);
+        int actualDamage = healthSystem.TakeDamage(adjustedDamage);
+        DamageFloatingTextService.ShowEnemyDamage(enemy.DamageFloatingTextPosition, actualDamage);
 
         if (wasAlive && !enemy.IsAlive && _sourceDefenseSystem)
         {

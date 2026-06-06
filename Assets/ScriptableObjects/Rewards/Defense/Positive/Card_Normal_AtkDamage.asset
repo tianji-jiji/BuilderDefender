@@ -25,5 +25,5 @@ MonoBehaviour:
       value: 0.1
       displayImpactOverride: 0
     effectType: 0
-    value: 0.1
+    value: 0
     displayImpact: 0

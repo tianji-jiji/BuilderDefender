@@ -51,7 +51,7 @@ public class Building : MonoBehaviour
         }
 
         _upgradeMaxHealthMultiplier = upgradeLevel.MaxHealthMultiplier;
-        RefreshRewardBonuses();
+        RefreshRewardBonuses(true);
     }
 
     // 按最大生命值百分比治疗当前建筑。
@@ -131,15 +131,21 @@ public class Building : MonoBehaviour
         Instantiate(_buildingDestroyedParticles, transform.position, Quaternion.identity);
     }
 
-    // 根据升星倍率和全局奖励倍率刷新建筑生命值。
+    // 刷新全局奖励带来的建筑属性变化，保留当前生命值。
     private void RefreshRewardBonuses()
+    {
+        RefreshRewardBonuses(false);
+    }
+
+    // 按指定回血策略刷新建筑生命上限和受伤倍率。
+    private void RefreshRewardBonuses(bool healToFull)
     {
         if (!_healthSystem)
         {
             return;
         }
 
-        _healthSystem.SetMaxHealth(CalculateMaxHealth(), true);
+        _healthSystem.SetMaxHealth(CalculateMaxHealth(), healToFull);
         _healthSystem.SetDamageTakenMultiplier(CalculateDamageTakenMultiplier());
     }
 
