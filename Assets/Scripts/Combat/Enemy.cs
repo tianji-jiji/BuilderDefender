@@ -21,9 +21,10 @@ public class Enemy : MonoBehaviour, IPoolable
     private float _randomMoveSpeed;
     private GameObject _enemyDiedParticles;
     private bool _isSubscribed;
+    private EnemyRuntimeStats _runtimeStats;
 
     public bool IsAlive { get; private set; }
-    public int Armor => enemySo ? Mathf.Max(0, enemySo.armor) : 0;
+    public int Armor => _runtimeStats.Armor;
     public Vector3 DamageFloatingTextPosition => damageFloatingTextPoint ? damageFloatingTextPoint.position : transform.position;
 
     // 初始化敌人需要缓存的组件和默认攻击目标。
@@ -46,12 +47,23 @@ public class Enemy : MonoBehaviour, IPoolable
     // 初始化敌人的运行时配置。
     public void Init(EnemySo so)
     {
+        Init(so, EnemyRuntimeStats.FromEnemySo(so));
+    }
+
+    // 使用成长后的运行时属性初始化敌人。
+    public void Init(EnemySo so, EnemyRuntimeStats runtimeStats)
+    {
         enemySo = so;
+        _runtimeStats = runtimeStats;
         IsAlive = true;
         _timer = 0f;
         _currentTarget = _defaultTarget;
-        _randomMoveSpeed = enemySo.moveSpeed * UnityEngine.Random.Range(0.9f, 1.1f);
-        healthSystem.Init(enemySo.maxHealth);
+        _randomMoveSpeed = _runtimeStats.MoveSpeed * UnityEngine.Random.Range(0.9f, 1.1f);
+
+        if (healthSystem)
+        {
+            healthSystem.Init(_runtimeStats.MaxHealth);
+        }
 
         if (_rb2)
         {
@@ -130,7 +142,7 @@ public class Enemy : MonoBehaviour, IPoolable
 
         Collider2D c2D = Physics2D.OverlapCircle(
             transform.position,
-            enemySo.detectRadius,
+            _runtimeStats.DetectRadius,
             detectLayer
         );
 
@@ -152,7 +164,7 @@ public class Enemy : MonoBehaviour, IPoolable
 
         if (other.gameObject.TryGetComponent(out HealthSystem targetHealthSystem))
         {
-            int actualDamage = targetHealthSystem.TakeDamage(enemySo.atk);
+            int actualDamage = targetHealthSystem.TakeDamage(_runtimeStats.AttackDamage);
             DamageFloatingTextService.ShowBuildingDamage(other.transform.position, actualDamage);
         }
 

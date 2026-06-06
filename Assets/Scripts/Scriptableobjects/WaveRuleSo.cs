@@ -7,6 +7,9 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(menuName = "ScriptableObjects/Wave Rule Config")]
 public class WaveRuleSo : ScriptableObject
 {
+    private const float MIN_PLAYER_POWER_RESPONSE = 0f;
+    private const float MAX_PLAYER_POWER_RESPONSE = 1f;
+
     // 每隔多少波出现一次 Boss 波
     public int bossInterval = 10;
     // 每隔多少波出现一次精英波
@@ -44,4 +47,51 @@ public class WaveRuleSo : ScriptableObject
     public AnimationCurve spawnCountMultiplier = AnimationCurve.Linear(1, 1f, 30, 3f);
     // 每批刷怪间隔曲线
     public AnimationCurve spawnInterval = AnimationCurve.Linear(1, 0.6f, 30, 0.05f);
+
+    [Header("Roguelike Growth")]
+    [SerializeField] private AnimationCurve enemyCountByWave = new AnimationCurve(
+        new Keyframe(1, 10),
+        new Keyframe(10, 18),
+        new Keyframe(20, 40),
+        new Keyframe(30, 65),
+        new Keyframe(40, 80));
+    [SerializeField] private AnimationCurve spawnIntervalByWave = new AnimationCurve(
+        new Keyframe(1, 1.0f),
+        new Keyframe(10, 0.65f),
+        new Keyframe(20, 0.45f),
+        new Keyframe(30, 0.32f),
+        new Keyframe(40, 0.25f));
+    [SerializeField] private AnimationCurve healthMultiplierByWave = new AnimationCurve(
+        new Keyframe(1, 1f),
+        new Keyframe(10, 1.8f),
+        new Keyframe(20, 3.6f),
+        new Keyframe(30, 6.5f),
+        new Keyframe(40, 9f));
+    [SerializeField] private AnimationCurve armorBonusByWave = new AnimationCurve(
+        new Keyframe(1, 0),
+        new Keyframe(10, 3),
+        new Keyframe(20, 12),
+        new Keyframe(30, 28),
+        new Keyframe(40, 40));
+    [SerializeField] private AnimationCurve attackMultiplierByWave = new AnimationCurve(
+        new Keyframe(1, 1f),
+        new Keyframe(10, 1.2f),
+        new Keyframe(20, 1.6f),
+        new Keyframe(30, 2.2f),
+        new Keyframe(40, 2.8f));
+    [SerializeField] private AnimationCurve moveSpeedMultiplierByWave = new AnimationCurve(
+        new Keyframe(1, 1f),
+        new Keyframe(10, 1.05f),
+        new Keyframe(20, 1.15f),
+        new Keyframe(30, 1.25f),
+        new Keyframe(40, 1.25f));
+    [SerializeField] private float playerPowerResponseStrength = 0.35f;
+
+    public AnimationCurve EnemyCountByWave => enemyCountByWave;
+    public AnimationCurve SpawnIntervalByWave => spawnIntervalByWave;
+    public AnimationCurve HealthMultiplierByWave => healthMultiplierByWave;
+    public AnimationCurve ArmorBonusByWave => armorBonusByWave;
+    public AnimationCurve AttackMultiplierByWave => attackMultiplierByWave;
+    public AnimationCurve MoveSpeedMultiplierByWave => moveSpeedMultiplierByWave;
+    public float PlayerPowerResponseStrength => Mathf.Clamp(playerPowerResponseStrength, MIN_PLAYER_POWER_RESPONSE, MAX_PLAYER_POWER_RESPONSE);
 }

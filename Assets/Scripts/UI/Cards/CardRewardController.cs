@@ -122,7 +122,10 @@ public class CardRewardController : MonoBehaviour
         }
 
         ClearOptions();
-        List<RewardCardSo> rewardCardList = rewardCardPool.DrawCards();
+        RewardOfferContext offerContext = RewardSelectionHistory.Instance
+            ? RewardSelectionHistory.Instance.BuildOfferContext()
+            : RewardOfferContext.Default(_waveManager ? _waveManager.waveIndex : 0);
+        List<RewardCardSo> rewardCardList = rewardCardPool.DrawCards(offerContext);
         if (rewardCardList.Count <= 0)
         {
             return;

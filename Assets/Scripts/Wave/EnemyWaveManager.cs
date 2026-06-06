@@ -43,6 +43,7 @@ public class EnemyWaveManager : MonoBehaviour
 
     private readonly DifficultySystem _difficulty = new();
     private readonly WaveRuleSystem _ruleSystem = new();
+    private readonly EnemyGrowthSystem _growthSystem = new();
 
     [HideInInspector] public int aliveEnemyCount;
     public bool IsFirstWave => waveIndex <= 0;
@@ -52,6 +53,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         Instance = this;
         _ruleSystem.SetConfig(waveRuleSo);
+        _growthSystem.SetConfig(waveRuleSo);
     }
 
     // 根据当前波次状态更新计时和状态流转。
@@ -175,7 +177,7 @@ public class EnemyWaveManager : MonoBehaviour
 
         while (spawned < plan.EnemyCount)
         {
-            int batchSize = Random.Range(plan.MinBatchSize, plan.MaxBatchSize);
+            int batchSize = Random.Range(plan.MinBatchSize, plan.MaxBatchSize + 1);
             batchSize = Mathf.Min(batchSize, plan.EnemyCount - spawned);
 
             SpawnBatch(plan, spawnPoint, batchSize);
@@ -195,8 +197,9 @@ public class EnemyWaveManager : MonoBehaviour
 
         for (int i = 0; i < batchSize; i++)
         {
-            EnemySo enemy = PickEnemy(plan);
-            Enemy spawnedEnemy = SpawnEnemy(enemy, spawnPoint);
+            WaveRuleSystem.EnemyKind enemyKind = _ruleSystem.PickEnemyKind(plan, Random.value);
+            EnemySo enemy = PickEnemy(enemyKind);
+            Enemy spawnedEnemy = SpawnEnemy(enemy, enemyKind, spawnPoint);
 
             if (spawnedEnemy)
             {
@@ -211,8 +214,13 @@ public class EnemyWaveManager : MonoBehaviour
     }
 
     // 从对象池生成敌人并初始化敌人数据。
-    private Enemy SpawnEnemy(EnemySo data, Transform point)
+    private Enemy SpawnEnemy(EnemySo data, WaveRuleSystem.EnemyKind enemyKind, Transform point)
     {
+        if (!data || !point)
+        {
+            return null;
+        }
+
         Vector2 offset = Random.insideUnitCircle * SPAWN_OFFSET_RADIUS;
         Vector3 spawnPosition = (Vector2)point.position + offset;
         GameObject enemyObject = PoolManager.Instance
@@ -224,16 +232,17 @@ public class EnemyWaveManager : MonoBehaviour
             return null;
         }
 
-        enemy.Init(data);
+        EnemyRuntimeStats runtimeStats = _growthSystem.BuildStats(data, waveIndex, enemyKind, GetPlayerPowerSnapshot());
+        enemy.Init(data, runtimeStats);
         aliveEnemyCount++;
         OnAliveEnemyCountChanged?.Invoke();
         return enemy;
     }
 
-    // 根据波次权重从敌人池中选择敌人类型。
-    private EnemySo PickEnemy(WaveRuleSystem.WavePlan plan)
+    // 根据敌人类型从敌人池中取得配置资产。
+    private EnemySo PickEnemy(WaveRuleSystem.EnemyKind enemyKind)
     {
-        switch (_ruleSystem.PickEnemyKind(plan, Random.value))
+        switch (enemyKind)
         {
             case WaveRuleSystem.EnemyKind.Boss:
                 return enemyPool.GetBoss();
@@ -244,5 +253,13 @@ public class EnemyWaveManager : MonoBehaviour
             default:
                 return enemyPool.GetNormal();
         }
+    }
+
+    // 获取当前玩家防御体系战力快照。
+    private DefensePowerSnapshot GetPlayerPowerSnapshot()
+    {
+        return RewardBonusManager.Instance
+            ? RewardBonusManager.Instance.GetDefensePowerSnapshot()
+            : DefensePowerSnapshot.Default();
     }
 }

@@ -34,6 +34,9 @@ public class RewardCardSo : ScriptableObject
     [SerializeField] private int weight = 1;
     [SerializeField] private RewardCardRarity rarity = RewardCardRarity.Normal;
     [SerializeField] private RewardCardCategory category = RewardCardCategory.Defense;
+    [SerializeField] private int minWaveIndex;
+    [SerializeField] private int maxPickCount;
+    [SerializeField] private bool isUnique;
     [SerializeField] private List<RewardEffectConfig> effectConfigList = new List<RewardEffectConfig>();
 
     public string CardId => cardId;
@@ -42,6 +45,9 @@ public class RewardCardSo : ScriptableObject
     public int Weight => Mathf.Max(0, weight);
     public RewardCardRarity Rarity => rarity;
     public RewardCardCategory Category => category;
+    public int MinWaveIndex => Mathf.Max(0, minWaveIndex);
+    public int MaxPickCount => isUnique ? 1 : maxPickCount <= 0 ? int.MaxValue : maxPickCount;
+    public bool IsUnique => isUnique;
     public IReadOnlyList<RewardEffectConfig> EffectConfigList => effectConfigList;
 
 #if UNITY_EDITOR

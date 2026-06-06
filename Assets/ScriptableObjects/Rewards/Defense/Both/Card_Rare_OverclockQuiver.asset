@@ -10,23 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
-  m_Name: Card_Normal_AtkSpeed
+  m_Name: Card_Rare_OverclockQuiver
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
-  cardId: RewardCard_05f37f456baefdc49b38bc6b20cb5dfb
-  cardName: "\u5FEB\u901F\u88C5\u586B"
-  cardPrefab: {fileID: 253624232006611687, guid: 897c7dbc6dbd05f4ca003bebb37e7d4c, type: 3}
+  cardId: RewardCard_4f5cfa49f7874d8ca427f2d0b9427511
+  cardName: "\u8D85\u8F7D\u7BAD\u888B"
+  cardPrefab: {fileID: 2152048384221396196, guid: 997f74c83e92b88469ef7c9cd0837dc4, type: 3}
   weight: 1
-  rarity: 0
-  category: 0
-  minWaveIndex: 0
-  maxPickCount: 0
+  rarity: 1
+  category: 3
+  minWaveIndex: 6
+  maxPickCount: 2
   isUnique: 0
   effectConfigList:
   - effectDefinition: {fileID: 11400000, guid: 84d3664b1b504eb5a3775fb1cfb24775, type: 2}
     parameterConfigList:
     - parameterKey: 0
-      value: 0.15
+      value: 0.35
       displayImpactOverride: 0
     effectType: 1
-    value: 0.15
+    value: 0.35
+    displayImpact: 0
+  - effectDefinition: {fileID: 11400000, guid: fbadf42043384e66a779c1b642af38cf, type: 2}
+    parameterConfigList:
+    - parameterKey: 1
+      value: 5
+      displayImpactOverride: 0
+    - parameterKey: 8
+      value: 5
+      displayImpactOverride: 0
+    effectType: 11
+    value: 5
     displayImpact: 0

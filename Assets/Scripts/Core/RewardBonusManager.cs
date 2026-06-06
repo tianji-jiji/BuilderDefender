@@ -122,10 +122,36 @@ public class RewardBonusManager : MonoBehaviour
         return _defenseRewardState.IsFinalDefenseActive();
     }
 
+    // 获取当前防御体系战力快照，供敌人成长系统软响应玩家强度。
+    public DefensePowerSnapshot GetDefensePowerSnapshot()
+    {
+        return new DefensePowerSnapshot(
+            DefenseAttackDamageMultiplier,
+            GetAttackSpeedPowerMultiplier(),
+            DefenseArmorIgnorePercent,
+            _defenseRewardState.GetExtraAttackPowerMultiplier(),
+            _defenseRewardState.GetCriticalPowerMultiplier(),
+            _defenseRewardState.GetExplosivePowerMultiplier());
+    }
+
     // 获取最终防线激活后的攻击力倍率。
     public float GetFinalDefenseAttackDamageMultiplier()
     {
         return _defenseRewardState.GetFinalDefenseAttackDamageMultiplier();
+    }
+
+    // 将攻击间隔倍率转换为战力倍率。
+    private float GetAttackSpeedPowerMultiplier()
+    {
+        float attackIntervalMultiplier = DefenseAttackIntervalMultiplier
+                                         * DefenseOverloadAttackIntervalMultiplier
+                                         * DefenseLinkedAttackIntervalMultiplier;
+        if (attackIntervalMultiplier <= 0f)
+        {
+            return DEFAULT_MULTIPLIER;
+        }
+
+        return Mathf.Max(DEFAULT_MULTIPLIER, DEFAULT_MULTIPLIER / attackIntervalMultiplier);
     }
 
     // 记录本次奖励选择，缺少历史组件时只输出警告而不阻断数值生效。

@@ -55,6 +55,35 @@ public class DefenseRewardState
     public float ExplosionRadius => Mathf.Max(0f, _explosionRadius);
     public float ExplosionDamageMultiplier => Mathf.Max(0f, _explosionDamageMultiplier);
 
+    // 计算额外攻击规则带来的平均输出倍率。
+    public float GetExtraAttackPowerMultiplier()
+    {
+        float extraAttackPower = 0f;
+        foreach (DefenseExtraAttackRule extraAttackRule in _defenseExtraAttackRuleList)
+        {
+            extraAttackPower += (float)extraAttackRule.extraAttackCount / extraAttackRule.triggerAttackCount;
+        }
+
+        return DEFAULT_MULTIPLIER + Mathf.Max(0f, extraAttackPower);
+    }
+
+    // 计算双倍伤害概率带来的平均输出倍率。
+    public float GetCriticalPowerMultiplier()
+    {
+        return DEFAULT_MULTIPLIER + DoubleDamageChance;
+    }
+
+    // 计算爆炸箭带来的粗略范围输出倍率。
+    public float GetExplosivePowerMultiplier()
+    {
+        if (!_threeStarExplosiveArrowEnabled || ExplosionRadius <= 0f || ExplosionDamageMultiplier <= 0f)
+        {
+            return DEFAULT_MULTIPLIER;
+        }
+
+        return DEFAULT_MULTIPLIER + Mathf.Clamp(ExplosionRadius * ExplosionDamageMultiplier * 0.1f, 0f, 1.5f);
+    }
+
     // 累加攻击力奖励。
     public void AddAttackDamageBonus(float bonus)
     {

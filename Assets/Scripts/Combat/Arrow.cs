@@ -193,8 +193,7 @@ public class Arrow : MonoBehaviour, IPoolable
     // 根据敌人护甲和本次护甲穿透计算最终伤害。
     private int CalculateArmorAdjustedDamage(Enemy enemy, int rawDamage)
     {
-        float effectiveArmor = enemy.Armor * (1f - _armorIgnorePercent);
-        return Mathf.Max(1, Mathf.RoundToInt(rawDamage - effectiveArmor));
+        return ArmorDamageCalculator.CalculateDamage(rawDamage, enemy.Armor, _armorIgnorePercent);
     }
 
     // 处理爆裂箭范围伤害。

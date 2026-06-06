@@ -5,6 +5,9 @@ using UnityEngine;
 /// </summary>
 public class WaveRuleSystem
 {
+    private const int DEFAULT_WAVE_COUNT = 10;
+    private const float DEFAULT_SPAWN_INTERVAL = 1f;
+
     private WaveRuleSo _config;
 
     /// <summary>
@@ -114,16 +117,10 @@ public class WaveRuleSystem
     {
         if (!_config)
         {
-            int defaultCount = 10 + wave * 3 + Mathf.FloorToInt(Time.timeSinceLevelLoad * 0.5f);
-            return Mathf.RoundToInt(defaultCount * difficulty.SpawnCountMultiplier);
+            return Mathf.RoundToInt(DEFAULT_WAVE_COUNT * difficulty.SpawnCountMultiplier);
         }
 
-        int baseCount = _config.baseEnemyCount
-                        + wave * _config.enemyCountPerWave
-                        + Mathf.FloorToInt(Time.timeSinceLevelLoad * _config.elapsedTimeCountMultiplier);
-        float countMultiplier = EvaluateCurve(_config.spawnCountMultiplier, wave, 1f);
-
-        return Mathf.Max(0, Mathf.RoundToInt(baseCount * countMultiplier));
+        return Mathf.Max(0, Mathf.RoundToInt(EvaluateCurve(_config.EnemyCountByWave, wave, DEFAULT_WAVE_COUNT)));
     }
 
     /// <summary>
@@ -156,7 +153,7 @@ public class WaveRuleSystem
         if (!_config)
             return difficulty.SpawnInterval;
 
-        return Mathf.Max(0f, EvaluateCurve(_config.spawnInterval, wave, difficulty.SpawnInterval));
+        return Mathf.Max(0.05f, EvaluateCurve(_config.SpawnIntervalByWave, wave, DEFAULT_SPAWN_INTERVAL));
     }
 
     /// <summary>

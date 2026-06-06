@@ -18,6 +18,9 @@ MonoBehaviour:
   weight: 1
   rarity: 0
   category: 0
+  minWaveIndex: 0
+  maxPickCount: 0
+  isUnique: 0
   effectConfigList:
   - effectDefinition: {fileID: 11400000, guid: 31c13270d79645c8a5b728d29700a8e6, type: 2}
     parameterConfigList:

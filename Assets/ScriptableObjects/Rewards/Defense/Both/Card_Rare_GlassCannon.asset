@@ -10,23 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
-  m_Name: Card_Rare_DamageRedution
+  m_Name: Card_Rare_GlassCannon
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
-  cardId: RewardCard_2d14518e6ab83b04597550e74b6a8c42
-  cardName: "\u5854\u8EAB\u52A0\u56FA"
-  cardPrefab: {fileID: 6571483231447153828, guid: c597715b12146b74baa04e794bb6b7d7, type: 3}
+  cardId: RewardCard_e24d4ae5af4f4a7298277df79dd437f6
+  cardName: "\u73BB\u7483\u5F29\u673A"
+  cardPrefab: {fileID: 2152048384221396196, guid: 997f74c83e92b88469ef7c9cd0837dc4, type: 3}
   weight: 1
   rarity: 1
-  category: 0
+  category: 3
   minWaveIndex: 6
-  maxPickCount: 3
+  maxPickCount: 2
   isUnique: 0
   effectConfigList:
+  - effectDefinition: {fileID: 11400000, guid: 6fb7a66701004c4fb8e2f677b88af4bd, type: 2}
+    parameterConfigList:
+    - parameterKey: 0
+      value: 0.45
+      displayImpactOverride: 0
+    effectType: 0
+    value: 0.45
+    displayImpact: 0
   - effectDefinition: {fileID: 11400000, guid: 61a04610d237462681dd6679738e3284, type: 2}
     parameterConfigList:
     - parameterKey: 4
-      value: -0.25
+      value: 0.35
       displayImpactOverride: 0
-    effectType: 3
-    value: 0.2
+    effectType: 7
+    value: 0.35
     displayImpact: 0

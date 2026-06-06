@@ -56,6 +56,12 @@ public class RewardSelectionHistory : MonoBehaviour
         return _rewardRecordList.AsReadOnly();
     }
 
+    // 构建当前波次使用的奖励抽取上下文。
+    public RewardOfferContext BuildOfferContext()
+    {
+        return new RewardOfferContext(GetCurrentWaveIndex(), BuildSelectedCardCountDic());
+    }
+
     // 清空当前全部奖励选择记录。
     public void ClearHistory()
     {
@@ -101,6 +107,23 @@ public class RewardSelectionHistory : MonoBehaviour
     private int GetCurrentWaveIndex()
     {
         return EnemyWaveManager.Instance ? EnemyWaveManager.Instance.waveIndex : 0;
+    }
+
+    // 构建每张卡牌已经被选择过的次数索引。
+    private Dictionary<string, int> BuildSelectedCardCountDic()
+    {
+        Dictionary<string, int> selectedCardCountDic = new Dictionary<string, int>();
+        foreach (RewardSelectionRecord rewardRecord in _rewardRecordList)
+        {
+            if (rewardRecord == null || string.IsNullOrWhiteSpace(rewardRecord.CardId))
+            {
+                continue;
+            }
+
+            selectedCardCountDic[rewardRecord.CardId] = rewardRecord.StackCount;
+        }
+
+        return selectedCardCountDic;
     }
 
     // 统计玩家本局累计选择过的卡牌次数。
