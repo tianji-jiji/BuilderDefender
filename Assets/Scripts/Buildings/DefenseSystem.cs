@@ -28,6 +28,7 @@ public class DefenseSystem : MonoBehaviour
 
     private readonly Collider2D[] _detectResults = new Collider2D[MAX_DETECTED_ENEMIES];
     private readonly List<int> _extraAttackCounterList = new List<int>();
+    private readonly List<int> _attackHealthCostCounterList = new List<int>();
     private HealthSystem _healthSystem;
     private float _baseDetectRadius;
     private float _baseArrowGenerateRate;
@@ -204,13 +205,13 @@ public class DefenseSystem : MonoBehaviour
             DefenseExtraAttackRule extraAttackRule = extraAttackRuleList[i];
             _extraAttackCounterList[i]++;
 
-            if (_extraAttackCounterList[i] < extraAttackRule.TriggerAttackCount)
+            if (_extraAttackCounterList[i] < extraAttackRule.triggerAttackCount)
             {
                 continue;
             }
 
             _extraAttackCounterList[i] = 0;
-            FireExtraAttackArrows(extraAttackRule.ExtraAttackCount);
+            FireExtraAttackArrows(extraAttackRule.extraAttackCount);
         }
     }
 
@@ -245,10 +246,35 @@ public class DefenseSystem : MonoBehaviour
             return;
         }
 
-        int healthCost = RewardBonusManager.Instance.DefenseAttackHealthCost;
-        if (healthCost > 0)
+        IReadOnlyList<DefenseAttackHealthCostRule> attackHealthCostRuleList = RewardBonusManager.Instance.DefenseAttackHealthCostRuleList;
+        EnsureAttackHealthCostCounterCount(attackHealthCostRuleList.Count);
+
+        for (int i = 0; i < attackHealthCostRuleList.Count; i++)
         {
-            _healthSystem.LoseHealth(healthCost);
+            DefenseAttackHealthCostRule attackHealthCostRule = attackHealthCostRuleList[i];
+            _attackHealthCostCounterList[i]++;
+
+            if (_attackHealthCostCounterList[i] < attackHealthCostRule.triggerAttackCount)
+            {
+                continue;
+            }
+
+            _attackHealthCostCounterList[i] = 0;
+            _healthSystem.LoseHealth(attackHealthCostRule.healthCost);
+        }
+    }
+
+    // 确保攻击损血计数器数量和规则数量一致。
+    private void EnsureAttackHealthCostCounterCount(int targetCount)
+    {
+        while (_attackHealthCostCounterList.Count < targetCount)
+        {
+            _attackHealthCostCounterList.Add(0);
+        }
+
+        while (_attackHealthCostCounterList.Count > targetCount)
+        {
+            _attackHealthCostCounterList.RemoveAt(_attackHealthCostCounterList.Count - 1);
         }
     }
 
