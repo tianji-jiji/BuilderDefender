@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// 奖励卡牌数据的中文简化检视面板，负责隐藏参数嵌套并按效果定义显示可填写数值。
+/// 奖励卡牌数据的中文简化检视面板，负责隐藏参数嵌套、按效果定义显示数值，并提示常见配置风险。
 /// </summary>
 [CustomEditor(typeof(RewardCardSo))]
 public class RewardCardSoEditor : Editor
@@ -44,6 +44,7 @@ public class RewardCardSoEditor : Editor
         DrawBasicInfo();
         DrawDrawInfo();
         DrawEffectList();
+        DrawCardValidation();
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -183,7 +184,7 @@ public class RewardCardSoEditor : Editor
 
             ParameterSnapshot oldSnapshot = FindOldParameterSnapshot(oldParameterSnapshotList, displaySnapshot.parameterKeyIndex);
             parameterKeyProp.enumValueIndex = displaySnapshot.parameterKeyIndex;
-            valueProp.floatValue = oldSnapshot.HasValue ? oldSnapshot.Value : valueProp.floatValue;
+            valueProp.floatValue = oldSnapshot.hasValue ? oldSnapshot.value : valueProp.floatValue;
             displayImpactOverrideProp.enumValueIndex = (int)RewardEffectDisplayImpact.Auto;
         }
     }
@@ -214,6 +215,252 @@ public class RewardCardSoEditor : Editor
             EditorGUILayout.PropertyField(valueProp, new GUIContent(valueLabel));
             displayImpactOverrideProp.enumValueIndex = (int)RewardEffectDisplayImpact.Auto;
         }
+    }
+
+    // 绘制当前卡牌配置的风险提示。
+    private void DrawCardValidation()
+    {
+        List<ValidationMessage> validationMessageList = BuildValidationMessageList();
+        if (validationMessageList.Count <= 0)
+        {
+            return;
+        }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("配置校验", EditorStyles.boldLabel);
+        foreach (ValidationMessage validationMessage in validationMessageList)
+        {
+            EditorGUILayout.HelpBox(validationMessage.message, validationMessage.messageType);
+        }
+    }
+
+    // 生成当前卡牌的全部配置校验信息。
+    private List<ValidationMessage> BuildValidationMessageList()
+    {
+        List<ValidationMessage> validationMessageList = new();
+        HashSet<RewardEffectType> effectTypeSet = new();
+        bool hasPositiveImpact = false;
+        bool hasNegativeImpact = false;
+
+        for (int i = 0; i < _effectConfigListProp.arraySize; i++)
+        {
+            SerializedProperty effectConfigProp = _effectConfigListProp.GetArrayElementAtIndex(i);
+            SerializedProperty effectDefinitionProp = effectConfigProp.FindPropertyRelative("effectDefinition");
+            RewardEffectDefinitionSo effectDefinition = effectDefinitionProp.objectReferenceValue as RewardEffectDefinitionSo;
+            if (!effectDefinition)
+            {
+                validationMessageList.Add(new ValidationMessage($"效果 {i + 1} 还没有选择效果资产。", MessageType.Warning));
+                continue;
+            }
+
+            if (!effectTypeSet.Add(effectDefinition.EffectType))
+            {
+                validationMessageList.Add(new ValidationMessage($"重复效果：{effectDefinition.DisplayName}。同一张卡里重复添加同一种唯一效果，后期调参时容易产生歧义。", MessageType.Warning));
+            }
+
+            EffectImpactSnapshot impactSnapshot = ValidateEffectParameters(effectConfigProp, effectDefinition, validationMessageList);
+            hasPositiveImpact |= impactSnapshot.hasPositiveImpact;
+            hasNegativeImpact |= impactSnapshot.hasNegativeImpact;
+        }
+
+        bool isRiskCard = _categoryProp.enumValueIndex == (int)RewardCardCategory.Risk;
+        if (isRiskCard && _effectConfigListProp.arraySize > 0 && (!hasPositiveImpact || !hasNegativeImpact))
+        {
+            validationMessageList.Add(new ValidationMessage("风险卡建议同时包含正面和负面效果，避免只是普通增益或普通惩罚。", MessageType.Warning));
+        }
+
+        return validationMessageList;
+    }
+
+    // 校验单个效果的参数完整性、范围和收益倾向。
+    private EffectImpactSnapshot ValidateEffectParameters(SerializedProperty effectConfigProp, RewardEffectDefinitionSo effectDefinition, List<ValidationMessage> validationMessageList)
+    {
+        SerializedProperty parameterConfigListProp = effectConfigProp.FindPropertyRelative("parameterConfigList");
+        List<ParameterDisplaySnapshot> parameterDisplaySnapshotList = BuildParameterDisplaySnapshotList(effectDefinition);
+        HashSet<int> parameterKeyIndexSet = new();
+        bool hasPositiveImpact = false;
+        bool hasNegativeImpact = false;
+
+        foreach (ParameterDisplaySnapshot displaySnapshot in parameterDisplaySnapshotList)
+        {
+            if (!TryFindParameterValue(parameterConfigListProp, displaySnapshot.parameterKeyIndex, out _))
+            {
+                string parameterName = GetParameterDisplayName(displaySnapshot);
+                validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 缺少必填参数：{parameterName}。", MessageType.Error));
+            }
+        }
+
+        for (int i = 0; i < parameterConfigListProp.arraySize; i++)
+        {
+            SerializedProperty parameterConfigProp = parameterConfigListProp.GetArrayElementAtIndex(i);
+            SerializedProperty parameterKeyProp = parameterConfigProp.FindPropertyRelative("parameterKey");
+            SerializedProperty valueProp = parameterConfigProp.FindPropertyRelative("value");
+            int parameterKeyIndex = parameterKeyProp.enumValueIndex;
+            RewardEffectParameterKey parameterKey = (RewardEffectParameterKey)parameterKeyIndex;
+            ParameterDisplaySnapshot displaySnapshot = FindParameterDisplaySnapshot(parameterDisplaySnapshotList, parameterKeyIndex);
+
+            if (!parameterKeyIndexSet.Add(parameterKeyIndex))
+            {
+                validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 重复配置参数：{RewardEffectAuthoringPresets.GetParameterDisplayName(parameterKeyIndex)}。", MessageType.Warning));
+            }
+
+            if (!displaySnapshot.isValid)
+            {
+                validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的参数 {RewardEffectAuthoringPresets.GetParameterDisplayName(parameterKeyIndex)} 不在效果定义资产的参数规则里。", MessageType.Warning));
+            }
+
+            ValidateParameterValue(effectDefinition, displaySnapshot, parameterKey, valueProp.floatValue, validationMessageList);
+
+            RewardEffectAutoImpactRule autoImpactRule = displaySnapshot.isValid
+                ? displaySnapshot.autoImpactRule
+                : RewardEffectAuthoringPresets.GetDefaultAutoImpactRule(parameterKey);
+            RewardEffectDisplayImpact displayImpact = ResolveAutoDisplayImpact(autoImpactRule, valueProp.floatValue);
+            hasPositiveImpact |= displayImpact == RewardEffectDisplayImpact.Positive;
+            hasNegativeImpact |= displayImpact == RewardEffectDisplayImpact.Negative;
+        }
+
+        return new EffectImpactSnapshot(hasPositiveImpact, hasNegativeImpact);
+    }
+
+    // 校验单个参数的数值范围和单位。
+    private void ValidateParameterValue(RewardEffectDefinitionSo effectDefinition, ParameterDisplaySnapshot displaySnapshot, RewardEffectParameterKey parameterKey, float value, List<ValidationMessage> validationMessageList)
+    {
+        RewardEffectValueFormat valueFormat = displaySnapshot.isValid
+            ? displaySnapshot.valueFormat
+            : RewardEffectAuthoringPresets.GetDefaultValueFormat(parameterKey);
+        string parameterName = displaySnapshot.isValid
+            ? GetParameterDisplayName(displaySnapshot)
+            : RewardEffectAuthoringPresets.GetParameterDisplayName((int)parameterKey);
+
+        if (IsRatioLimitedParameter(parameterKey) && (value < 0f || value > 1f))
+        {
+            validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的 {parameterName} 应填写 0~1，小数 0.1 表示 10%。", MessageType.Error));
+            return;
+        }
+
+        if (IsPercentValueFormat(valueFormat) && !IsRatioLimitedParameter(parameterKey) && Mathf.Abs(value) > 1f)
+        {
+            int displayPercent = Mathf.RoundToInt(value * 100f);
+            validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的 {parameterName} 当前会显示为 {displayPercent}%。百分比统一按 0.1=10% 填写。", MessageType.Warning));
+        }
+
+        if (valueFormat == RewardEffectValueFormat.PercentWithoutSign && value < 0f)
+        {
+            validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的 {parameterName} 使用无符号百分比显示，通常不应填写负数。", MessageType.Warning));
+        }
+
+        if (IsPositiveIntegerParameter(parameterKey) && value <= 0f)
+        {
+            validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的 {parameterName} 应大于 0。", MessageType.Warning));
+        }
+
+        if (IsNonNegativeIntegerParameter(parameterKey) && value < 0f)
+        {
+            validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的 {parameterName} 不应小于 0。", MessageType.Warning));
+        }
+
+        if (IsPositiveNumberParameter(parameterKey) && value <= 0f)
+        {
+            validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 的 {parameterName} 应大于 0。", MessageType.Warning));
+        }
+    }
+
+    // 解析自动颜色规则对应的收益倾向。
+    private RewardEffectDisplayImpact ResolveAutoDisplayImpact(RewardEffectAutoImpactRule autoImpactRule, float value)
+    {
+        if (Mathf.Approximately(value, 0f))
+        {
+            return RewardEffectDisplayImpact.Neutral;
+        }
+
+        switch (autoImpactRule)
+        {
+            case RewardEffectAutoImpactRule.GreaterThanZeroIsPositive:
+                return value > 0f ? RewardEffectDisplayImpact.Positive : RewardEffectDisplayImpact.Negative;
+            case RewardEffectAutoImpactRule.LessThanZeroIsPositive:
+                return value < 0f ? RewardEffectDisplayImpact.Positive : RewardEffectDisplayImpact.Negative;
+            case RewardEffectAutoImpactRule.AlwaysPositive:
+                return RewardEffectDisplayImpact.Positive;
+            case RewardEffectAutoImpactRule.AlwaysNegative:
+                return RewardEffectDisplayImpact.Negative;
+            case RewardEffectAutoImpactRule.AlwaysNeutral:
+                return RewardEffectDisplayImpact.Neutral;
+            default:
+                return RewardEffectDisplayImpact.Neutral;
+        }
+    }
+
+    // 判断参数是否必须使用 0~1 的比例值。
+    private bool IsRatioLimitedParameter(RewardEffectParameterKey parameterKey)
+    {
+        switch (parameterKey)
+        {
+            case RewardEffectParameterKey.DoubleDamageChance:
+            case RewardEffectParameterKey.HomeHealthThreshold:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // 判断显示格式是否为百分比。
+    private bool IsPercentValueFormat(RewardEffectValueFormat valueFormat)
+    {
+        return valueFormat == RewardEffectValueFormat.PercentWithSign || valueFormat == RewardEffectValueFormat.PercentWithoutSign;
+    }
+
+    // 判断参数是否应该填写正整数。
+    private bool IsPositiveIntegerParameter(RewardEffectParameterKey parameterKey)
+    {
+        switch (parameterKey)
+        {
+            case RewardEffectParameterKey.TriggerAttackCount:
+            case RewardEffectParameterKey.ExtraAttackCount:
+            case RewardEffectParameterKey.KillCountToUpgrade:
+            case RewardEffectParameterKey.AttackHealthCost:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // 判断参数是否应该填写非负整数。
+    private bool IsNonNegativeIntegerParameter(RewardEffectParameterKey parameterKey)
+    {
+        return parameterKey == RewardEffectParameterKey.InitialStarBonus;
+    }
+
+    // 判断参数是否应该填写正数。
+    private bool IsPositiveNumberParameter(RewardEffectParameterKey parameterKey)
+    {
+        switch (parameterKey)
+        {
+            case RewardEffectParameterKey.LinkRadius:
+            case RewardEffectParameterKey.ExplosionRadius:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // 尝试从参数列表里读取指定参数值。
+    private bool TryFindParameterValue(SerializedProperty parameterConfigListProp, int parameterKeyIndex, out float value)
+    {
+        for (int i = 0; i < parameterConfigListProp.arraySize; i++)
+        {
+            SerializedProperty parameterConfigProp = parameterConfigListProp.GetArrayElementAtIndex(i);
+            SerializedProperty parameterKeyProp = parameterConfigProp.FindPropertyRelative("parameterKey");
+            if (parameterKeyProp.enumValueIndex != parameterKeyIndex)
+            {
+                continue;
+            }
+
+            value = parameterConfigProp.FindPropertyRelative("value").floatValue;
+            return true;
+        }
+
+        value = 0f;
+        return false;
     }
 
     // 获取数值输入框的中文显示名。
@@ -277,7 +524,7 @@ public class RewardCardSoEditor : Editor
         return popupNameArray;
     }
 
-    // 收集旧参数值，方便同步参数列表时保留已有数值。
+    // 收集旧参数值，方便同步参数列表时保留已经填写的数值。
     private List<ParameterSnapshot> BuildParameterSnapshotList(SerializedProperty parameterConfigListProp)
     {
         List<ParameterSnapshot> parameterSnapshotList = new List<ParameterSnapshot>();
@@ -312,21 +559,25 @@ public class RewardCardSoEditor : Editor
             SerializedProperty parameterDisplayDefinitionProp = parameterDisplayDefinitionListProp.GetArrayElementAtIndex(i);
             SerializedProperty parameterKeyProp = parameterDisplayDefinitionProp.FindPropertyRelative("parameterKey");
             SerializedProperty displayNameProp = parameterDisplayDefinitionProp.FindPropertyRelative("displayName");
+            SerializedProperty valueFormatProp = parameterDisplayDefinitionProp.FindPropertyRelative("valueFormat");
+            SerializedProperty autoImpactRuleProp = parameterDisplayDefinitionProp.FindPropertyRelative("autoImpactRule");
 
             parameterDisplaySnapshotList.Add(new ParameterDisplaySnapshot(
                 parameterKeyProp.enumValueIndex,
-                displayNameProp.stringValue));
+                displayNameProp.stringValue,
+                (RewardEffectValueFormat)valueFormatProp.enumValueIndex,
+                (RewardEffectAutoImpactRule)autoImpactRuleProp.enumValueIndex));
         }
 
         return parameterDisplaySnapshotList;
     }
 
-    // 查找旧参数快照。
+    // 查找旧参数值快照。
     private ParameterSnapshot FindOldParameterSnapshot(List<ParameterSnapshot> parameterSnapshotList, int parameterKeyIndex)
     {
         foreach (ParameterSnapshot parameterSnapshot in parameterSnapshotList)
         {
-            if (parameterSnapshot.ParameterKeyIndex == parameterKeyIndex)
+            if (parameterSnapshot.parameterKeyIndex == parameterKeyIndex)
             {
                 return parameterSnapshot;
             }
@@ -349,6 +600,14 @@ public class RewardCardSoEditor : Editor
         return ParameterDisplaySnapshot.Empty;
     }
 
+    // 获取参数显示快照的中文名。
+    private string GetParameterDisplayName(ParameterDisplaySnapshot displaySnapshot)
+    {
+        return string.IsNullOrWhiteSpace(displaySnapshot.displayName)
+            ? RewardEffectAuthoringPresets.GetParameterDisplayName(displaySnapshot.parameterKeyIndex)
+            : displaySnapshot.displayName;
+    }
+
     /// <summary>
     /// 参数旧值快照，用于同步参数列表时保留玩家已经填写的数值。
     /// </summary>
@@ -356,16 +615,16 @@ public class RewardCardSoEditor : Editor
     {
         public static readonly ParameterSnapshot Empty = new ParameterSnapshot(-1, 0f, false);
 
-        public readonly int ParameterKeyIndex;
-        public readonly float Value;
-        public readonly bool HasValue;
+        public readonly int parameterKeyIndex;
+        public readonly float value;
+        public readonly bool hasValue;
 
         // 创建参数旧值快照。
         public ParameterSnapshot(int parameterKeyIndex, float value, bool hasValue = true)
         {
-            ParameterKeyIndex = parameterKeyIndex;
-            Value = value;
-            HasValue = hasValue;
+            this.parameterKeyIndex = parameterKeyIndex;
+            this.value = value;
+            this.hasValue = hasValue;
         }
     }
 
@@ -374,16 +633,54 @@ public class RewardCardSoEditor : Editor
     /// </summary>
     private readonly struct ParameterDisplaySnapshot
     {
-        public static readonly ParameterDisplaySnapshot Empty = new ParameterDisplaySnapshot(-1, string.Empty);
+        public static readonly ParameterDisplaySnapshot Empty = new ParameterDisplaySnapshot(-1, string.Empty, RewardEffectValueFormat.NumberOnly, RewardEffectAutoImpactRule.AlwaysNeutral);
 
         public readonly int parameterKeyIndex;
         public readonly string displayName;
+        public readonly RewardEffectValueFormat valueFormat;
+        public readonly RewardEffectAutoImpactRule autoImpactRule;
+        public readonly bool isValid;
 
         // 创建参数显示快照。
-        public ParameterDisplaySnapshot(int parameterKeyIndex, string displayName)
+        public ParameterDisplaySnapshot(int parameterKeyIndex, string displayName, RewardEffectValueFormat valueFormat, RewardEffectAutoImpactRule autoImpactRule)
         {
             this.parameterKeyIndex = parameterKeyIndex;
             this.displayName = displayName;
+            this.valueFormat = valueFormat;
+            this.autoImpactRule = autoImpactRule;
+            isValid = parameterKeyIndex >= 0;
+        }
+    }
+
+    /// <summary>
+    /// 校验提示快照，用于延迟绘制 HelpBox。
+    /// </summary>
+    private readonly struct ValidationMessage
+    {
+        public readonly string message;
+        public readonly MessageType messageType;
+
+        // 创建校验提示快照。
+        public ValidationMessage(string message, MessageType messageType)
+        {
+            this.message = message;
+            this.messageType = messageType;
+        }
+    }
+
+    /// <summary>
+    /// 效果收益倾向快照，用于判断风险收益卡是否同时包含正负效果。
+    /// </summary>
+    private readonly struct EffectImpactSnapshot
+    {
+        public readonly bool hasPositiveImpact;
+        public readonly bool hasNegativeImpact;
+
+        // 创建效果收益倾向快照。
+        public EffectImpactSnapshot(bool hasPositiveImpact, bool hasNegativeImpact)
+        {
+            this.hasPositiveImpact = hasPositiveImpact;
+            this.hasNegativeImpact = hasNegativeImpact;
         }
     }
 }

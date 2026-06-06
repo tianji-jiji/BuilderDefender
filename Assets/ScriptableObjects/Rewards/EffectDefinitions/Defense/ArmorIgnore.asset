@@ -22,4 +22,4 @@ MonoBehaviour:
     displayName: "\u62A4\u7532\u7A7F\u900F\u767E\u5206\u6BD4"
     templateToken: 
     valueFormat: 1
-    autoImpactRule: 0
+    autoImpactRule: 2
