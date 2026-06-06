@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BuildCost
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
   effectType: 4
-  displayName: "\u6240\u6709\u9632\u5FA1\u5854\u5EFA\u9020\u6210\u672C"
+  displayName: "\u9632\u5FA1\u5854\u5EFA\u9020\u6210\u672C"
   useCustomDescription: 0
   descriptionTemplate: '{displayName} {value}'
   autoImpactRule: 1

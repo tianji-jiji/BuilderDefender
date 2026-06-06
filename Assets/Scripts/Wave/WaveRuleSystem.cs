@@ -40,29 +40,23 @@ public class WaveRuleSystem
         Boss
     }
 
-    /// <summary>
-    /// 设置波次规则配置资产。
-    /// </summary>
+    // 设置波次规则配置资产。
     public void SetConfig(WaveRuleSo config)
     {
         _config = config;
     }
 
-    /// <summary>
-    /// 根据当前波数和难度系统生成刷怪计划。
-    /// </summary>
+    // 根据当前波数和难度系统生成刷怪计划。
     public WavePlan BuildPlan(int wave, DifficultySystem difficulty)
     {
         difficulty.WaveIndex = wave;
 
-        var type = GetWaveType(wave);
-        int enemyCount = GetEnemyCount(wave, difficulty);
-
-        var plan = new WavePlan
+        WaveType type = GetWaveType(wave);
+        WavePlan plan = new WavePlan
         {
             WaveIndex = wave,
             Type = type,
-            EnemyCount = enemyCount,
+            EnemyCount = GetEnemyCount(wave, difficulty),
             MinBatchSize = GetMinBatchSize(),
             MaxBatchSize = GetMaxBatchSize(),
             SpawnInterval = GetSpawnInterval(wave, difficulty)
@@ -72,47 +66,50 @@ public class WaveRuleSystem
         return plan;
     }
 
-    /// <summary>
-    /// 根据计划权重随机选择本次要生成的敌人类型。
-    /// </summary>
+    // 根据计划权重随机选择本次要生成的敌人类型。
     public EnemyKind PickEnemyKind(WavePlan plan, float randomValue)
     {
         float totalWeight = plan.NormalWeight + plan.HardWeight + plan.BossWeight;
         if (totalWeight <= 0f)
+        {
             return EnemyKind.Normal;
+        }
 
         float roll = randomValue * totalWeight;
-
         if (roll < plan.NormalWeight)
+        {
             return EnemyKind.Normal;
+        }
 
         roll -= plan.NormalWeight;
         if (roll < plan.HardWeight)
+        {
             return EnemyKind.Hard;
+        }
 
         return EnemyKind.Boss;
     }
 
-    /// <summary>
-    /// 根据波数判断当前波次类型。
-    /// </summary>
+    // 根据波数判断当前波次类型。
     private WaveType GetWaveType(int wave)
     {
-        int bossInterval = _config ? _config.bossInterval : 10;
-        int hardInterval = _config ? _config.hardInterval : 5;
+        int bossInterval = _config ? _config.BossInterval : 10;
+        int hardInterval = _config ? _config.HardInterval : 5;
 
         if (bossInterval > 0 && wave % bossInterval == 0)
+        {
             return WaveType.Boss;
+        }
 
         if (hardInterval > 0 && wave % hardInterval == 0)
+        {
             return WaveType.Hard;
+        }
 
         return WaveType.Normal;
     }
 
-    /// <summary>
-    /// 计算当前波次的敌人总数。
-    /// </summary>
+    // 计算当前波次敌人总数。
     private int GetEnemyCount(int wave, DifficultySystem difficulty)
     {
         if (!_config)
@@ -123,122 +120,81 @@ public class WaveRuleSystem
         return Mathf.Max(0, Mathf.RoundToInt(EvaluateCurve(_config.EnemyCountByWave, wave, DEFAULT_WAVE_COUNT)));
     }
 
-    /// <summary>
-    /// 获取每批刷怪的最小数量。
-    /// </summary>
+    // 获取每批刷怪的最小数量。
     private int GetMinBatchSize()
     {
-        if (!_config)
-            return 3;
-
-        return Mathf.Max(1, _config.minBatchSize);
+        return _config ? _config.MinBatchSize : 3;
     }
 
-    /// <summary>
-    /// 获取每批刷怪的最大数量。
-    /// </summary>
+    // 获取每批刷怪的最大数量。
     private int GetMaxBatchSize()
     {
-        if (!_config)
-            return 20;
-
-        return Mathf.Max(GetMinBatchSize(), _config.maxBatchSize);
+        return _config ? _config.MaxBatchSize : 20;
     }
 
-    /// <summary>
-    /// 获取当前波次每批刷怪之间的间隔。
-    /// </summary>
+    // 获取当前波次每批刷怪之间的间隔。
     private float GetSpawnInterval(int wave, DifficultySystem difficulty)
     {
         if (!_config)
+        {
             return difficulty.SpawnInterval;
+        }
 
         return Mathf.Max(0.05f, EvaluateCurve(_config.SpawnIntervalByWave, wave, DEFAULT_SPAWN_INTERVAL));
     }
 
-    /// <summary>
-    /// 按波次类型设置敌人生成权重。
-    /// </summary>
+    // 按波次类型设置敌人生成权重。
     private void ApplyEnemyWeights(WavePlan plan)
     {
         switch (plan.Type)
         {
             case WaveType.Boss:
-                SetWeights(plan, GetBossWaveNormalWeight(), GetBossWaveHardWeight(), GetBossWaveBossWeight());
+                SetWeights(plan, GetBossWaveWeights());
                 break;
 
             case WaveType.Hard:
-                SetWeights(plan, GetHardWaveNormalWeight(), GetHardWaveHardWeight(), GetHardWaveBossWeight());
+                SetWeights(plan, GetHardWaveWeights());
                 break;
 
             default:
-                SetWeights(plan, GetNormalWaveNormalWeight(), GetNormalWaveHardWeight(), GetNormalWaveBossWeight());
+                SetWeights(plan, GetNormalWaveWeights());
                 break;
         }
     }
 
-    /// <summary>
-    /// 写入敌人生成权重。
-    /// </summary>
-    private void SetWeights(WavePlan plan, float normalWeight, float hardWeight, float bossWeight)
+    // 写入敌人生成权重。
+    private void SetWeights(WavePlan plan, WaveEnemyWeights weights)
     {
-        plan.NormalWeight = Mathf.Max(0f, normalWeight);
-        plan.HardWeight = Mathf.Max(0f, hardWeight);
-        plan.BossWeight = Mathf.Max(0f, bossWeight);
+        plan.NormalWeight = weights.NormalWeight;
+        plan.HardWeight = weights.HardWeight;
+        plan.BossWeight = weights.BossWeight;
     }
 
-    private float GetNormalWaveNormalWeight()
+    // 获取普通波敌人权重。
+    private WaveEnemyWeights GetNormalWaveWeights()
     {
-        return _config ? _config.normalWaveNormalWeight : 0.8f;
+        return _config ? _config.NormalWaveWeights : new WaveEnemyWeights(0.8f, 0.2f, 0f);
     }
 
-    private float GetNormalWaveHardWeight()
+    // 获取精英波敌人权重。
+    private WaveEnemyWeights GetHardWaveWeights()
     {
-        return _config ? _config.normalWaveHardWeight : 0.2f;
+        return _config ? _config.HardWaveWeights : new WaveEnemyWeights(0.6f, 0.4f, 0f);
     }
 
-    private float GetNormalWaveBossWeight()
+    // 获取 Boss 波敌人权重。
+    private WaveEnemyWeights GetBossWaveWeights()
     {
-        return _config ? _config.normalWaveBossWeight : 0f;
+        return _config ? _config.BossWaveWeights : new WaveEnemyWeights(0.3f, 0.3f, 0.4f);
     }
 
-    private float GetHardWaveNormalWeight()
-    {
-        return _config ? _config.hardWaveNormalWeight : 0.6f;
-    }
-
-    private float GetHardWaveHardWeight()
-    {
-        return _config ? _config.hardWaveHardWeight : 0.4f;
-    }
-
-    private float GetHardWaveBossWeight()
-    {
-        return _config ? _config.hardWaveBossWeight : 0f;
-    }
-
-    private float GetBossWaveNormalWeight()
-    {
-        return _config ? _config.bossWaveNormalWeight : 0.6f;
-    }
-
-    private float GetBossWaveHardWeight()
-    {
-        return _config ? _config.bossWaveHardWeight : 0.25f;
-    }
-
-    private float GetBossWaveBossWeight()
-    {
-        return _config ? _config.bossWaveBossWeight : 0.15f;
-    }
-
-    /// <summary>
-    /// 安全读取曲线值，曲线为空时返回默认值。
-    /// </summary>
+    // 安全读取曲线值，曲线为空时返回默认值。
     private float EvaluateCurve(AnimationCurve curve, float time, float fallback)
     {
         if (curve == null || curve.length == 0)
+        {
             return fallback;
+        }
 
         return curve.Evaluate(time);
     }

@@ -24,7 +24,7 @@ public readonly struct RewardOfferContext
         }
 
         string cardId = !string.IsNullOrWhiteSpace(rewardCard.CardId) ? rewardCard.CardId : rewardCard.name;
-        return _selectedCardCountDic.TryGetValue(cardId, out int count) ? count : 0;
+        return _selectedCardCountDic.GetValueOrDefault(cardId, 0);
     }
 
     // 创建没有历史记录的默认抽卡上下文。

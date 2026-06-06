@@ -15,7 +15,7 @@ MonoBehaviour:
   effectType: 6
   displayName: "\u989D\u5916\u5C04\u51FB"
   useCustomDescription: 1
-  descriptionTemplate: "\u6BCF\u653B\u51FB {TriggerAttackCount}\u6B21\uFF0C\u989D\u5916\u653B\u51FB
+  descriptionTemplate: "\u9632\u5FA1\u5854\u6BCF\u653B\u51FB {TriggerAttackCount}\u6B21\uFF0C\u989D\u5916\u653B\u51FB
     {ExtraAttackCount}\u6B21"
   autoImpactRule: 2
   parameterDisplayDefinitionList:

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   assetName: DefenseTower
   buildingType: 1
-  maxHealth: 100
+  maxHealth: 20
   prefab: {fileID: 6109679250636911347, guid: 648da26c83c002c47bc6a84129a2bd21, type: 3}
   constructionTime: 6
   demolishRefundMultiplier: 0.5
