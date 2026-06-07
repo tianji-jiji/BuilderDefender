@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
-  m_Name: Card_Rare_PiercingContract
+  m_Name: Card_Rare_GlassCannon
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
-  cardId: RewardCard_3465abf6a9304c2e8c65d958f4ddc8e8
-  cardName: "\u7A7F\u7532\u5951\u7EA6"
+  cardId: RewardCard_e24d4ae5af4f4a7298277df79dd437f6
+  cardName: "\u73BB\u7483\u5F29\u673A"
   cardPrefab: {fileID: 2152048384221396196, guid: 997f74c83e92b88469ef7c9cd0837dc4, type: 3}
   weight: 1
   rarity: 1
@@ -22,19 +22,19 @@ MonoBehaviour:
   maxPickCount: 2
   isUnique: 0
   effectConfigList:
-  - effectDefinition: {fileID: 11400000, guid: 9b1d0c1a2f4e4a73b9d0116cc4d15901, type: 2}
-    parameterConfigList:
-    - parameterKey: 3
-      value: 0.35
-      displayImpactOverride: 0
-    effectType: 5
-    value: 0.35
-    displayImpact: 0
-  - effectDefinition: {fileID: 11400000, guid: a53eaf4d8e98439faeec24330f3a1e83, type: 2}
+  - effectDefinition: {fileID: 11400000, guid: 6fb7a66701004c4fb8e2f677b88af4bd, type: 2}
     parameterConfigList:
     - parameterKey: 0
-      value: 0.2
+      value: 0.4
       displayImpactOverride: 0
-    effectType: 4
-    value: 0.2
+    effectType: 0
+    value: 0.45
+    displayImpact: 0
+  - effectDefinition: {fileID: 11400000, guid: 61a04610d237462681dd6679738e3284, type: 2}
+    parameterConfigList:
+    - parameterKey: 4
+      value: 0.4
+      displayImpactOverride: 0
+    effectType: 7
+    value: 0.35
     displayImpact: 0

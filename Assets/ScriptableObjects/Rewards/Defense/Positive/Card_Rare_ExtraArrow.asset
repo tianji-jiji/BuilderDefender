@@ -28,7 +28,7 @@ MonoBehaviour:
       value: 10
       displayImpactOverride: 0
     - parameterKey: 2
-      value: 2
+      value: 3
       displayImpactOverride: 0
     effectType: 3
     value: 0.2

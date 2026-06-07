@@ -19,6 +19,7 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private HealthSystem healthSystem;
     [SerializeField] private GameObject bar;
     [SerializeField] private SpriteRenderer[] renderers;
+    [SerializeField] private bool enableTicks = true;
     [SerializeField] private Transform tickRoot;
     [SerializeField] private SpriteRenderer tickPrefab;
     [SerializeField] private int healthPerSegment = 100;
@@ -29,6 +30,7 @@ public class HealthBar : MonoBehaviour
 
     private readonly List<SpriteRenderer> _tickRendererList = new();
     private bool _isSubscribed;
+    private bool _lastEnableTicks;
     private int _lastMaxHealth = -1;
 
     // 启用血条时订阅生命变化，并立即同步血量和刻度显示。
@@ -44,6 +46,18 @@ public class HealthBar : MonoBehaviour
     {
         UnsubscribeHealthSystem();
         UnregisterHealthBar(this);
+    }
+
+    // 在运行时通过 Inspector 修改刻度开关后立即刷新血条刻度。
+    private void OnValidate()
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        _lastMaxHealth = -1;
+        UpdateBarSize();
     }
 
     // 切换所有血条的强制显示或强制隐藏状态。
@@ -130,13 +144,25 @@ public class HealthBar : MonoBehaviour
     // 最大生命值变化时按配置的每段血量重新生成刻度线。
     private void RebuildTicksIfNeeded()
     {
-        if (!healthSystem || healthSystem.MaxHealth == _lastMaxHealth)
+        if (!healthSystem)
+        {
+            return;
+        }
+
+        bool shouldRebuildTicks = healthSystem.MaxHealth != _lastMaxHealth || enableTicks != _lastEnableTicks;
+        if (!shouldRebuildTicks)
         {
             return;
         }
 
         _lastMaxHealth = healthSystem.MaxHealth;
+        _lastEnableTicks = enableTicks;
         ClearDynamicTicks();
+
+        if (!enableTicks)
+        {
+            return;
+        }
 
         int segmentCount = Mathf.CeilToInt((float)healthSystem.MaxHealth / Mathf.Max(MIN_HEALTH_PER_SEGMENT, healthPerSegment));
         int tickCount = Mathf.Max(0, segmentCount - 1);

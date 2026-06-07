@@ -25,6 +25,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4f5cfa49f7874d8ca427f2d0b9427511, type: 2}
   - {fileID: 11400000, guid: e24d4ae5af4f4a7298277df79dd437f6, type: 2}
   - {fileID: 11400000, guid: 3465abf6a9304c2e8c65d958f4ddc8e8, type: 2}
-  - {fileID: 11400000, guid: d03b73e71f1c45e5a707840857e64d6a, type: 2}
   choiceCount: 3
   allowDuplicate: 0

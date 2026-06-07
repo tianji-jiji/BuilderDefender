@@ -16,24 +16,24 @@ MonoBehaviour:
   - starLevel: 2
     upgradeCost:
     - resourceSo: {fileID: 11400000, guid: f489fea6d82836a4ebd8e3de9c2ca696, type: 2}
-      amount: 0
+      amount: 60
     - resourceSo: {fileID: 11400000, guid: a9645d929e0505c4c84eb9e9872ad72e, type: 2}
-      amount: 0
+      amount: 40
     - resourceSo: {fileID: 11400000, guid: 04f70056081d48641831b688d0179858, type: 2}
-      amount: 0
-    maxHealthMultiplier: 1
-    attackDamageMultiplier: 1.5
+      amount: 40
+    maxHealthMultiplier: 1.2
+    attackDamageMultiplier: 1.2
     attackIntervalMultiplier: 0.8
     detectRadiusMultiplier: 1.2
     unlockSuperArrow: 0
   - starLevel: 3
     upgradeCost:
     - resourceSo: {fileID: 11400000, guid: f489fea6d82836a4ebd8e3de9c2ca696, type: 2}
-      amount: 0
+      amount: 400
     - resourceSo: {fileID: 11400000, guid: a9645d929e0505c4c84eb9e9872ad72e, type: 2}
-      amount: 0
+      amount: 150
     - resourceSo: {fileID: 11400000, guid: 04f70056081d48641831b688d0179858, type: 2}
-      amount: 0
+      amount: 80
     maxHealthMultiplier: 2
     attackDamageMultiplier: 1.75
     attackIntervalMultiplier: 0.6

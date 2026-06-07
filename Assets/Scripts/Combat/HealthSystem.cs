@@ -35,8 +35,11 @@ public class HealthSystem : MonoBehaviour
     // 调整最大生命值，并按需要将当前生命恢复到新的上限。
     public void SetMaxHealth(int maxHealth, bool healToFull)
     {
+        bool wasFullHealth = this.maxHealth > 0 && currentHealth >= this.maxHealth;
         this.maxHealth = Mathf.Max(1, maxHealth);
-        currentHealth = healToFull ? this.maxHealth : Mathf.Clamp(currentHealth, 0, this.maxHealth);
+        currentHealth = healToFull || wasFullHealth
+            ? this.maxHealth
+            : Mathf.Clamp(currentHealth, 0, this.maxHealth);
         OnHealthChanged?.Invoke();
     }
 

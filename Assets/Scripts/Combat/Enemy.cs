@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 public class Enemy : MonoBehaviour, IPoolable
 {
     private const float DETECTION_INTERVAL = 0.2f;
+    private const int TARGET_DETECTION_BUFFER_SIZE = 16;
 
     [SerializeField] private EnemySo enemySo;
     [FormerlySerializedAs("buildingLayer")] [SerializeField] private LayerMask detectLayer;
@@ -17,6 +18,8 @@ public class Enemy : MonoBehaviour, IPoolable
     private PooledObject _pooledObject;
     private Transform _currentTarget;
     private Transform _defaultTarget;
+    private readonly Collider2D[] _targetColliderArray = new Collider2D[TARGET_DETECTION_BUFFER_SIZE];
+    private ContactFilter2D _targetContactFilter;
     private float _timer;
     private float _randomMoveSpeed;
     private GameObject _enemyDiedParticles;
@@ -33,6 +36,12 @@ public class Enemy : MonoBehaviour, IPoolable
         _enemyDiedParticles = Resources.Load<GameObject>("Particles/EnemyDieParticles");
         TryGetComponent(out _rb2);
         TryGetComponent(out _pooledObject);
+        _targetContactFilter = new ContactFilter2D
+        {
+            useLayerMask = true,
+            useTriggers = false,
+            layerMask = detectLayer
+        };
 
         GameObject home = GameObject.FindGameObjectWithTag("Home");
         if (home)
@@ -55,6 +64,7 @@ public class Enemy : MonoBehaviour, IPoolable
     {
         enemySo = so;
         _runtimeStats = runtimeStats;
+        RefreshTargetContactFilter();
         IsAlive = true;
         _timer = 0f;
         _currentTarget = _defaultTarget;
@@ -140,13 +150,69 @@ public class Enemy : MonoBehaviour, IPoolable
             return;
         }
 
-        Collider2D c2D = Physics2D.OverlapCircle(
-            transform.position,
-            _runtimeStats.DetectRadius,
-            detectLayer
-        );
+        if (IsCurrentTargetStillValid())
+        {
+            return;
+        }
 
-        _currentTarget = c2D ? c2D.transform : _defaultTarget;
+        _currentTarget = FindNearestTarget() ?? _defaultTarget;
+    }
+
+    // 判断当前非基地目标是否仍然有效，避免索敌在多个碰撞体之间抖动。
+    private bool IsCurrentTargetStillValid()
+    {
+        if (!_currentTarget || _currentTarget == _defaultTarget)
+        {
+            return false;
+        }
+
+        if (!_currentTarget.gameObject.activeInHierarchy)
+        {
+            return false;
+        }
+
+        float detectRadius = Mathf.Max(0f, _runtimeStats.DetectRadius);
+        return (_currentTarget.position - transform.position).sqrMagnitude <= detectRadius * detectRadius;
+    }
+
+    // 从检测范围内选择距离最近的目标。
+    private Transform FindNearestTarget()
+    {
+        RefreshTargetContactFilter();
+        int hitCount = Physics2D.OverlapCircle(transform.position, _runtimeStats.DetectRadius, _targetContactFilter, _targetColliderArray);
+        Transform nearestTarget = null;
+        float nearestDistanceSqr = float.MaxValue;
+
+        for (int i = 0; i < hitCount; i++)
+        {
+            Collider2D targetCollider = _targetColliderArray[i];
+            _targetColliderArray[i] = null;
+
+            if (!targetCollider || !targetCollider.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            Transform target = targetCollider.transform;
+            float distanceSqr = (target.position - transform.position).sqrMagnitude;
+            if (distanceSqr >= nearestDistanceSqr)
+            {
+                continue;
+            }
+
+            nearestTarget = target;
+            nearestDistanceSqr = distanceSqr;
+        }
+
+        return nearestTarget;
+    }
+
+    // 同步索敌层级过滤器，支持运行时或 Inspector 修改检测层。
+    private void RefreshTargetContactFilter()
+    {
+        _targetContactFilter.useLayerMask = true;
+        _targetContactFilter.useTriggers = false;
+        _targetContactFilter.layerMask = detectLayer;
     }
 
     // 碰到建筑时造成伤害并销毁自身。

@@ -529,6 +529,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4f465b6285e4047965a9ad29583f2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
 --- !u!114 &-4361568172942058784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658,6 +660,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2265173989202265033}
     m_Modifications:
+    - target: {fileID: 471871451456548591, guid: 1fae48e4367ddfc488a55b7d3e070544, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1437061740088351786, guid: 1fae48e4367ddfc488a55b7d3e070544, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5377353293565568895, guid: 1fae48e4367ddfc488a55b7d3e070544, type: 3}
       propertyPath: healthSystem
       value: 
@@ -702,9 +712,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7487695363671155977, guid: 1fae48e4367ddfc488a55b7d3e070544, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8621757994480918100, guid: 1fae48e4367ddfc488a55b7d3e070544, type: 3}
       propertyPath: m_Name
       value: HealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 8698089267506798576, guid: 1fae48e4367ddfc488a55b7d3e070544, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

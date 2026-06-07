@@ -173,7 +173,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 1, g: 0.7254902, b: 0, a: 0.85882354}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.85882354}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -299,6 +299,7 @@ MonoBehaviour:
   - {fileID: 8698089267506798576}
   - {fileID: 7487695363671155977}
   - {fileID: 471871451456548591}
+  enableTicks: 0
   tickRoot: {fileID: 1658573587368632182}
   tickPrefab: {fileID: 4114694202358529161, guid: 30079db06d45d4849a32789cb9cb64f2, type: 3}
   healthPerSegment: 20
