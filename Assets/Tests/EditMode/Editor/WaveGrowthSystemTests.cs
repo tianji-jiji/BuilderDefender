@@ -16,11 +16,11 @@ public class WaveGrowthSystemTests
         WaveRuleSystem.WavePlan waveTwentyPlan = ruleSystem.BuildPlan(20, new DifficultySystem());
         WaveRuleSystem.WavePlan waveThirtyPlan = ruleSystem.BuildPlan(30, new DifficultySystem());
 
-        Assert.AreEqual(10, waveOnePlan.EnemyCount);
-        Assert.AreEqual(18, waveTenPlan.EnemyCount);
-        Assert.AreEqual(40, waveTwentyPlan.EnemyCount);
-        Assert.AreEqual(65, waveThirtyPlan.EnemyCount);
-        Assert.Less(waveThirtyPlan.SpawnInterval, waveOnePlan.SpawnInterval);
+        Assert.AreEqual(10, waveOnePlan.enemyCount);
+        Assert.AreEqual(18, waveTenPlan.enemyCount);
+        Assert.AreEqual(40, waveTwentyPlan.enemyCount);
+        Assert.AreEqual(65, waveThirtyPlan.enemyCount);
+        Assert.Less(waveThirtyPlan.spawnInterval, waveOnePlan.spawnInterval);
 
         Object.DestroyImmediate(config);
     }

@@ -93,7 +93,7 @@ public class HealthSystem : MonoBehaviour
     }
 
     // 恢复指定生命值。
-    public void Heal(int amount)
+    private void Heal(int amount)
     {
         int healAmount = Mathf.Max(0, amount);
         if (healAmount <= 0 || currentHealth <= 0)

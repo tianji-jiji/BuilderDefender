@@ -55,9 +55,9 @@ public class WaveRuleSo : ScriptableObject
     [SerializeField] private int maxBatchSize = 20;
 
     [Header("Enemy Weights")]
-    [SerializeField] private WaveEnemyWeights normalWaveWeights = new WaveEnemyWeights(0.8f, 0.2f, 0f);
-    [SerializeField] private WaveEnemyWeights hardWaveWeights = new WaveEnemyWeights(0.6f, 0.4f, 0f);
-    [SerializeField] private WaveEnemyWeights bossWaveWeights = new WaveEnemyWeights(0.3f, 0.3f, 0.4f);
+    [SerializeField] private WaveEnemyWeights normalWaveWeights = new(0.8f, 0.2f, 0f);
+    [SerializeField] private WaveEnemyWeights hardWaveWeights = new(0.6f, 0.4f, 0f);
+    [SerializeField] private WaveEnemyWeights bossWaveWeights = new(0.3f, 0.3f, 0.4f);
 
     [Header("Roguelike Growth")]
     [SerializeField] private AnimationCurve enemyCountByWave = new AnimationCurve(
@@ -97,10 +97,7 @@ public class WaveRuleSo : ScriptableObject
         new Keyframe(30, 1.25f),
         new Keyframe(40, 1.25f));
     [SerializeField] private float playerPowerResponseStrength = 0.35f;
-
-    [HideInInspector] public int baseEnemyCount = 10;
-    [HideInInspector] public int enemyCountPerWave = 3;
-    [HideInInspector] public float elapsedTimeCountMultiplier = 0.5f;
+    
     [FormerlySerializedAs("normalWeight")] [HideInInspector] public float normalWaveNormalWeight = 0.8f;
     [FormerlySerializedAs("hardWeightInNormalWave")] [HideInInspector] public float normalWaveHardWeight = 0.2f;
     [HideInInspector] public float normalWaveBossWeight;
@@ -110,8 +107,7 @@ public class WaveRuleSo : ScriptableObject
     [HideInInspector] public float bossWaveNormalWeight = 0.3f;
     [HideInInspector] public float bossWaveHardWeight = 0.3f;
     [HideInInspector] public float bossWaveBossWeight = 0.4f;
-    [HideInInspector] public AnimationCurve spawnCountMultiplier = AnimationCurve.Linear(1, 1f, 30, 3f);
-    [HideInInspector] public AnimationCurve spawnInterval = AnimationCurve.Linear(1, 0.6f, 30, 0.05f);
+
     [SerializeField, HideInInspector] private bool hasMigratedLegacyWeights;
 
     public int BossInterval => Mathf.Max(0, bossInterval);

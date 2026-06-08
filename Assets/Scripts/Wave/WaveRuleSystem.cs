@@ -15,15 +15,15 @@ public class WaveRuleSystem
     /// </summary>
     public class WavePlan
     {
-        public int WaveIndex;
-        public WaveType Type;
-        public int EnemyCount;
-        public int MinBatchSize;
-        public int MaxBatchSize;
-        public float SpawnInterval;
-        public float NormalWeight;
-        public float HardWeight;
-        public float BossWeight;
+        public int waveIndex;
+        public WaveType type;
+        public int enemyCount;
+        public int minBatchSize;
+        public int maxBatchSize;
+        public float spawnInterval;
+        public float normalWeight;
+        public float hardWeight;
+        public float bossWeight;
     }
 
     public enum WaveType
@@ -49,17 +49,17 @@ public class WaveRuleSystem
     // 根据当前波数和难度系统生成刷怪计划。
     public WavePlan BuildPlan(int wave, DifficultySystem difficulty)
     {
-        difficulty.WaveIndex = wave;
+        difficulty.waveIndex = wave;
 
         WaveType type = GetWaveType(wave);
         WavePlan plan = new WavePlan
         {
-            WaveIndex = wave,
-            Type = type,
-            EnemyCount = GetEnemyCount(wave, difficulty),
-            MinBatchSize = GetMinBatchSize(),
-            MaxBatchSize = GetMaxBatchSize(),
-            SpawnInterval = GetSpawnInterval(wave, difficulty)
+            waveIndex = wave,
+            type = type,
+            enemyCount = GetEnemyCount(wave, difficulty),
+            minBatchSize = GetMinBatchSize(),
+            maxBatchSize = GetMaxBatchSize(),
+            spawnInterval = GetSpawnInterval(wave, difficulty)
         };
 
         ApplyEnemyWeights(plan);
@@ -69,20 +69,20 @@ public class WaveRuleSystem
     // 根据计划权重随机选择本次要生成的敌人类型。
     public EnemyKind PickEnemyKind(WavePlan plan, float randomValue)
     {
-        float totalWeight = plan.NormalWeight + plan.HardWeight + plan.BossWeight;
+        float totalWeight = plan.normalWeight + plan.hardWeight + plan.bossWeight;
         if (totalWeight <= 0f)
         {
             return EnemyKind.Normal;
         }
 
         float roll = randomValue * totalWeight;
-        if (roll < plan.NormalWeight)
+        if (roll < plan.normalWeight)
         {
             return EnemyKind.Normal;
         }
 
-        roll -= plan.NormalWeight;
-        if (roll < plan.HardWeight)
+        roll -= plan.normalWeight;
+        if (roll < plan.hardWeight)
         {
             return EnemyKind.Hard;
         }
@@ -146,7 +146,7 @@ public class WaveRuleSystem
     // 按波次类型设置敌人生成权重。
     private void ApplyEnemyWeights(WavePlan plan)
     {
-        switch (plan.Type)
+        switch (plan.type)
         {
             case WaveType.Boss:
                 SetWeights(plan, GetBossWaveWeights());
@@ -165,9 +165,9 @@ public class WaveRuleSystem
     // 写入敌人生成权重。
     private void SetWeights(WavePlan plan, WaveEnemyWeights weights)
     {
-        plan.NormalWeight = weights.NormalWeight;
-        plan.HardWeight = weights.HardWeight;
-        plan.BossWeight = weights.BossWeight;
+        plan.normalWeight = weights.NormalWeight;
+        plan.hardWeight = weights.HardWeight;
+        plan.bossWeight = weights.BossWeight;
     }
 
     // 获取普通波敌人权重。

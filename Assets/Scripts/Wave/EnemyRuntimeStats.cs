@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 敌人出生时锁定的运行时属性，避免直接修改 EnemySo 静态配置。
+/// 敌人出生时锁定的运行时属性
 /// </summary>
 public readonly struct EnemyRuntimeStats
 {

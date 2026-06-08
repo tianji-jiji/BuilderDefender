@@ -164,7 +164,7 @@ public class PoolManager : MonoBehaviour
             ReleaseInstance,
             DestroyInstance,
             true,
-            Mathf.Max(1, config != null ? config.InitialSize : 1),
+            Mathf.Max(1, config?.InitialSize ?? 1),
             maxSize
         );
 

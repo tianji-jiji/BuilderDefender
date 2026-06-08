@@ -16,6 +16,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: c6966c74566477e44b0d79960ad9cd9a, type: 3}
+    - target: {fileID: 2077742868749363819, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2077742868749363819, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2077742868749363819, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2124716354034765845, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_Name
       value: Rare_ArmorIgnore_Base
@@ -108,13 +120,29 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u7A7F\u7532\u7BAD\u5934"
       objectReference: {fileID: 0}
+    - target: {fileID: 4569189041600005469, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569189041600005469, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.7276044
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569189041600005469, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569189041600005469, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294949376
+      objectReference: {fileID: 0}
     - target: {fileID: 5682491161258273739, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 63108afd5caf66f41ab5d69955ac7a75, type: 3}
     - target: {fileID: 8315972627106760564, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

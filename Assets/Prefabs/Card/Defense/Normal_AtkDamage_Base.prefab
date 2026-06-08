@@ -31,11 +31,11 @@ Transform:
   m_Children:
   - {fileID: 5937719737721294029}
   - {fileID: 1176179383784886595}
-  - {fileID: 7520253988403210011}
-  - {fileID: 2958801832971869309}
   - {fileID: 6384085734566868357}
   - {fileID: 6031153458488205703}
   - {fileID: 9030158303552815746}
+  - {fileID: 7520253988403210011}
+  - {fileID: 2958801832971869309}
   m_Father: {fileID: 3899811367039833858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &717589356657976113
@@ -524,8 +524,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4285783039
-  m_fontColor: {r: 1, g: 0.86, b: 0.45, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1475,8 +1475,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291290869
-  m_fontColor: {r: 0.96, g: 0.9, b: 0.78, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1555,7 +1555,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6031153458488205703
 RectTransform:
   m_ObjectHideFlags: 0

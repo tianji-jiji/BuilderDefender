@@ -25,27 +25,27 @@ public class EnemyWaveManager : MonoBehaviour
     public WaveState State { get; private set; }
 
     [HideInInspector] public float stateTimer;
+    [HideInInspector] public int aliveEnemyCount;
+    
     public int waveIndex;
-
-    [SerializeField] public EnemySpawnSystem spawnSystem;
-    [SerializeField] public EnemyPool enemyPool;
     [SerializeField] public float nextWaveTimer;
     [SerializeField] public float firstWaveTimer = 15f;
+    
+    [SerializeField] public EnemySpawnSystem spawnSystem;
+    [SerializeField] public EnemyPool enemyPool;
     [SerializeField] private WaveRuleSo waveRuleSo;
     [SerializeField] private Transform enemyContainer;
     [FormerlySerializedAs("baseTransform")] [SerializeField] private Transform homeTransform;
 
     public event Action OnWaveStarted;
-    // 当前波次所有敌人被清空时触发。
     public event Action<int> OnWaveCompleted;
     public event Action OnAliveEnemyCountChanged;
     public event Action<IReadOnlyList<Enemy>> OnEnemyBatchSpawned;
-
+    
     private readonly DifficultySystem _difficulty = new();
     private readonly WaveRuleSystem _ruleSystem = new();
     private readonly EnemyGrowthSystem _growthSystem = new();
-
-    [HideInInspector] public int aliveEnemyCount;
+    
     public bool IsFirstWave => waveIndex <= 0;
 
     // 初始化单例和波次规则系统。
@@ -56,6 +56,18 @@ public class EnemyWaveManager : MonoBehaviour
         _growthSystem.SetConfig(waveRuleSo);
     }
 
+    // 订阅敌人死亡事件来维护存活数量。
+    private void OnEnable()
+    {
+        Enemy.OnEnemyDead += HandleEnemyDead;
+    }
+
+    // 取消订阅敌人死亡事件。
+    private void OnDisable()
+    {
+        Enemy.OnEnemyDead -= HandleEnemyDead;
+    }
+    
     // 根据当前波次状态更新计时和状态流转。
     private void Update()
     {
@@ -86,18 +98,6 @@ public class EnemyWaveManager : MonoBehaviour
     {
         State = WaveState.Preparing;
         stateTimer = firstWaveTimer;
-    }
-
-    // 订阅敌人死亡事件来维护存活数量。
-    private void OnEnable()
-    {
-        Enemy.OnEnemyDead += HandleEnemyDead;
-    }
-
-    // 取消订阅敌人死亡事件。
-    private void OnDisable()
-    {
-        Enemy.OnEnemyDead -= HandleEnemyDead;
     }
 
     // 敌人死亡时减少存活数量并通知 UI。
@@ -175,16 +175,16 @@ public class EnemyWaveManager : MonoBehaviour
         Transform spawnPoint = spawnSystem.GetRandomPoint();
         int spawned = 0;
 
-        while (spawned < plan.EnemyCount)
+        while (spawned < plan.enemyCount)
         {
-            int batchSize = Random.Range(plan.MinBatchSize, plan.MaxBatchSize + 1);
-            batchSize = Mathf.Min(batchSize, plan.EnemyCount - spawned);
+            int batchSize = Random.Range(plan.minBatchSize, plan.maxBatchSize + 1);
+            batchSize = Mathf.Min(batchSize, plan.enemyCount - spawned);
 
             SpawnBatch(plan, spawnPoint, batchSize);
             spawned += batchSize;
             spawnPoint = spawnSystem.GetRandomPoint();
 
-            yield return new WaitForSeconds(plan.SpawnInterval);
+            yield return new WaitForSeconds(plan.spawnInterval);
         }
 
         EnterFightingState();

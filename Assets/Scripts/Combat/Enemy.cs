@@ -36,6 +36,7 @@ public class Enemy : MonoBehaviour, IPoolable
         _enemyDiedParticles = Resources.Load<GameObject>("Particles/EnemyDieParticles");
         TryGetComponent(out _rb2);
         TryGetComponent(out _pooledObject);
+        
         _targetContactFilter = new ContactFilter2D
         {
             useLayerMask = true,

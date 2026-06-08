@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 敌人生成系统，决定敌人的出生点
+/// </summary>
 public class EnemySpawnSystem : MonoBehaviour
 {
     public List<EnemySpawnPoint> spawnPoints;

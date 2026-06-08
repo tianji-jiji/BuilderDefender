@@ -2734,15 +2734,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateTimer: 0
+  aliveEnemyCount: 0
   waveIndex: 0
-  spawnSystem: {fileID: 1541652669}
-  enemyPool: {fileID: 683715060}
   nextWaveTimer: 10
   firstWaveTimer: 2
+  spawnSystem: {fileID: 1541652669}
+  enemyPool: {fileID: 683715060}
   waveRuleSo: {fileID: 11400000, guid: 9e4f42596c05c9b40ae089667d2c6d15, type: 2}
   enemyContainer: {fileID: 1327171766}
   homeTransform: {fileID: 1106715688}
-  aliveEnemyCount: 0
 --- !u!1 &248688265
 GameObject:
   m_ObjectHideFlags: 0
@@ -8298,6 +8298,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalEnemies:
   - {fileID: 11400000, guid: 3486a4af96fef8d4ca3bb3675b44a73c, type: 2}
+  - {fileID: 11400000, guid: d341f4ef7475f9244a7ed881cc164269, type: 2}
+  - {fileID: 11400000, guid: 4c6bb8a0a3810204db2b8cda6349a4c4, type: 2}
+  - {fileID: 11400000, guid: c417acca487766f42be8e61516e781f4, type: 2}
   hardEnemies:
   - {fileID: 11400000, guid: fb0ddffaa7f33b5499bb92e802af80c6, type: 2}
   bossEnemy: {fileID: 11400000, guid: 4f99b4590275c8340888529edc673d76, type: 2}
