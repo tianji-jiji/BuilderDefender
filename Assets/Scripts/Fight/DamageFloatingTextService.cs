@@ -124,15 +124,9 @@ public class DamageFloatingTextService : MonoBehaviour
     // 获取无场景服务时使用的默认伤害颜色渐变。
     private static Gradient GetDefaultGradient(DamageFloatingTextTargetType targetType)
     {
-        if (DefaultEnemyDamageGradient == null)
-        {
-            DefaultEnemyDamageGradient = CreateDefaultGradient(new Color(1f, 0.86f, 0.25f, COLOR_ALPHA));
-        }
+        DefaultEnemyDamageGradient ??= CreateDefaultGradient(new Color(1f, 0.86f, 0.25f, COLOR_ALPHA));
 
-        if (DefaultBuildingDamageGradient == null)
-        {
-            DefaultBuildingDamageGradient = CreateDefaultGradient(new Color(1f, 0.25f, 0.18f, COLOR_ALPHA));
-        }
+        DefaultBuildingDamageGradient ??= CreateDefaultGradient(new Color(1f, 0.25f, 0.18f, COLOR_ALPHA));
 
         return targetType == DamageFloatingTextTargetType.Building
             ? DefaultBuildingDamageGradient

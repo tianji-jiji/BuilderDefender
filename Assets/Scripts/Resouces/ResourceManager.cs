@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
+    [SerializeField] private int startingResourceValue = 100;
     public static ResourceManager Instance;
-    
-    // 所有资源
     private ResourceSoList _resourceSoList;
-    
     public event Action OnResourceAmountChanged;
     
     // 存储资源及其数量
@@ -31,11 +29,11 @@ public class ResourceManager : MonoBehaviour
     {
         foreach (var resourceSo in _resourceSoList.list)
         {
-            _resourcesDic[resourceSo] = 100;
+            _resourcesDic[resourceSo] = startingResourceValue;
         }
     }
 
-   // amount：每次采集该资源能提供多少资源数量
+   // amountGained：每次采集该资源能提供多少资源数量
     public void AddResource(ResourceSo resourceSo, int amountGained)
     {
         _resourcesDic[resourceSo] += amountGained;

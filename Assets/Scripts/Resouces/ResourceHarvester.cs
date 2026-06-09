@@ -17,20 +17,26 @@ public class ResourceHarvester : MonoBehaviour
     [SerializeField] private LayerMask harvestLayerMask;
     [SerializeField] private Transform popupUITransform;
     private readonly Collider2D[] _results = new Collider2D[RESULTS_MAX_COUNT];
-    private readonly Dictionary<Collider2D, ResourceNode> _resourceNodeByColliderDic = new Dictionary<Collider2D, ResourceNode>();
-    private readonly List<ParticleSystem> _harvestParticleSystemList = new List<ParticleSystem>();
+    private ContactFilter2D _harvestContactFilter;
+    private readonly Dictionary<Collider2D, ResourceNode> _resourceNodeByColliderDic = new();
+    private readonly List<ParticleSystem> _harvestParticleSystemList = new();
     private Animator _harvesterAnimator;
     private float _timer;
     private bool _isHarvestAnimationPlaying = true;
 
     // 一次采集行为共获得了多少资源
     public event Action<int, Vector3, BuildingSo> OnResourceHarvestedOneTime;
+
     // 新资源采集器被创建时触发
     public static event Action<ResourceHarvester> OnHarvesterCreated;
 
     // 初始化采集器状态并通知外部系统。
     private void Awake()
     {
+        _harvestContactFilter = new ContactFilter2D();
+        _harvestContactFilter.SetLayerMask(harvestLayerMask);
+        _harvestContactFilter.useTriggers = true;
+
         CacheHarvestVisualComponents();
         SetHarvestAnimation(false);
         OnHarvesterCreated?.Invoke(this);
@@ -61,8 +67,8 @@ public class ResourceHarvester : MonoBehaviour
     // 检查采集范围内是否存在当前建筑对应的资源。
     private bool HasHarvestTarget()
     {
-        int resourceSize = Physics2D.OverlapCircleNonAlloc(transform.position, buildingSo.harvestRadius,
-            _results, harvestLayerMask);
+        int resourceSize = Physics2D.OverlapCircle(transform.position, buildingSo.harvestRadius, _harvestContactFilter,
+            _results);
 
         for (var i = 0; i < resourceSize; i++)
         {
@@ -77,8 +83,8 @@ public class ResourceHarvester : MonoBehaviour
     private void HarvestAllTargets()
     {
         // 检测采集范围内是否有资源
-        int resourceSize = Physics2D.OverlapCircleNonAlloc(transform.position, buildingSo.harvestRadius,
-            _results, harvestLayerMask);
+        int resourceSize = Physics2D.OverlapCircle(transform.position, buildingSo.harvestRadius,_harvestContactFilter,
+            _results);
 
         // 侦测到的资源数量
         int harvestedCount = 0;
@@ -106,17 +112,18 @@ public class ResourceHarvester : MonoBehaviour
     }
 
     // 判断碰撞体是否挂载了当前采集器需要的资源节点。
-    private bool TryGetMatchingResourceNode(Collider2D resource, out ResourceNode node)
+    private bool TryGetMatchingResourceNode(Collider2D detectedCollider, out ResourceNode node)
     {
         node = null;
 
-        if (!resource)
+        if (!detectedCollider)
             return false;
 
-        if (!_resourceNodeByColliderDic.TryGetValue(resource, out node))
+        // 字典中没有
+        if (!_resourceNodeByColliderDic.TryGetValue(detectedCollider, out node))
         {
-            resource.TryGetComponent(out node);
-            _resourceNodeByColliderDic.Add(resource, node);
+            detectedCollider.TryGetComponent(out node);
+            _resourceNodeByColliderDic.Add(detectedCollider, node);
         }
 
         return node && node.resourceSo == buildingSo.resourceSo;
@@ -193,8 +200,8 @@ public class ResourceHarvester : MonoBehaviour
     }
 
     // 采集单个资源。
-    private void Harvest(ResourceNode target, int amountGained)
+    private void Harvest(ResourceNode node, int amountGained)
     {
-        ResourceManager.Instance.AddResource(target.resourceSo, amountGained);
+        ResourceManager.Instance.AddResource(node.resourceSo, amountGained);
     }
 }

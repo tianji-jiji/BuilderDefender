@@ -16,12 +16,12 @@ MonoBehaviour:
   buildingType: 0
   maxHealth: 80
   prefab: {fileID: 6109679250636911347, guid: 02140f78f1e8cff4eb5646611d6e390a, type: 3}
-  constructionTime: 5
+  constructionTime: 3
   demolishRefundMultiplier: 0.2
   resourceCost:
   - resourceSo: {fileID: 11400000, guid: f489fea6d82836a4ebd8e3de9c2ca696, type: 2}
     amount: 150
-  harvestSpeed: 0.5
+  harvestSpeed: 0.6
   harvestRadius: 7
   maxHarvestAmount: 5
   resourceSo: {fileID: 11400000, guid: f489fea6d82836a4ebd8e3de9c2ca696, type: 2}
