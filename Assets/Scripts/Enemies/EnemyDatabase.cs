@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 敌人数据库
 /// </summary>
-public class EnemyPool : MonoBehaviour
+public class EnemyDatabase : MonoBehaviour
 {
     public List<EnemySo> normalEnemies;
     public List<EnemySo> hardEnemies;

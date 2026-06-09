@@ -2739,7 +2739,7 @@ MonoBehaviour:
   nextWaveTimer: 10
   firstWaveTimer: 2
   spawnSystem: {fileID: 1541652669}
-  enemyPool: {fileID: 683715060}
+  enemyDatabase: {fileID: 683715060}
   waveRuleSo: {fileID: 11400000, guid: 9e4f42596c05c9b40ae089667d2c6d15, type: 2}
   enemyContainer: {fileID: 1327171766}
   homeTransform: {fileID: 1106715688}
@@ -6789,7 +6789,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -8263,7 +8263,7 @@ GameObject:
   - component: {fileID: 683715059}
   - component: {fileID: 683715060}
   m_Layer: 0
-  m_Name: EnemyPool
+  m_Name: EnemyDataBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21928,7 +21928,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 2

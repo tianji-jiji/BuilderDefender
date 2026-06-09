@@ -32,7 +32,7 @@ public class EnemyWaveManager : MonoBehaviour
     [SerializeField] public float firstWaveTimer = 15f;
     
     [SerializeField] public EnemySpawnSystem spawnSystem;
-    [SerializeField] public EnemyPool enemyPool;
+    [FormerlySerializedAs("enemyPool")] [SerializeField] public EnemyDatabase enemyDatabase;
     [SerializeField] private WaveRuleSo waveRuleSo;
     [SerializeField] private Transform enemyContainer;
     [FormerlySerializedAs("baseTransform")] [SerializeField] private Transform homeTransform;
@@ -244,13 +244,13 @@ public class EnemyWaveManager : MonoBehaviour
         switch (enemyKind)
         {
             case WaveRuleSystem.EnemyKind.BossEnemy:
-                return enemyPool.GetBoss();
+                return enemyDatabase.GetBoss();
 
             case WaveRuleSystem.EnemyKind.HardEnemy:
-                return enemyPool.GetHard();
+                return enemyDatabase.GetHard();
 
             default:
-                return enemyPool.GetNormal();
+                return enemyDatabase.GetNormal();
         }
     }
 

@@ -14,6 +14,7 @@ public class EnemySpawnSystem : MonoBehaviour
         return spawnPoints[Random.Range(0, spawnPoints.Count)].transform;
     }
     
+    // 备用，按按敌人类型选出生点
     public Transform GetPointByType(EnemySpawnPoint.SpawnType type)
     {
         var list = spawnPoints.FindAll(p => p.type == type);
