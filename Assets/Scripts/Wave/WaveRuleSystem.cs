@@ -5,18 +5,34 @@ using UnityEngine;
 /// </summary>
 public class WaveRuleSystem
 {
-    private const int DEFAULT_WAVE_COUNT = 10;
+    private const int DEFAULT_WAVE_COUNT = 20;
     private const float DEFAULT_SPAWN_INTERVAL = 1f;
 
-    private WaveRuleSo _config;
-
+    private WaveRuleSo _waveRuleSo;
+    
+    // 波次类型
+    public enum WaveType
+    {
+        NormalWave,
+        HardWave,
+        BossWave
+    }
+    
+    // 敌人类型
+    public enum EnemyKind
+    {
+        NormalEnemy,
+        HardEnemy,
+        BossEnemy
+    }
+    
     /// <summary>
     /// 一波敌人的完整生成计划。
     /// </summary>
     public class WavePlan
     {
         public int waveIndex;
-        public WaveType type;
+        public WaveType waveType;
         public int enemyCount;
         public int minBatchSize;
         public int maxBatchSize;
@@ -26,133 +42,118 @@ public class WaveRuleSystem
         public float bossWeight;
     }
 
-    public enum WaveType
+    public void SetWaveRuleConfig(WaveRuleSo config)
     {
-        Normal,
-        Hard,
-        Boss
+        _waveRuleSo = config;
     }
 
-    public enum EnemyKind
+    // 建立一波的刷怪计划。
+    public WavePlan BuildPlan(int waveIndex)
     {
-        Normal,
-        Hard,
-        Boss
-    }
-
-    // 设置波次规则配置资产。
-    public void SetConfig(WaveRuleSo config)
-    {
-        _config = config;
-    }
-
-    // 根据当前波数和难度系统生成刷怪计划。
-    public WavePlan BuildPlan(int wave, DifficultySystem difficulty)
-    {
-        difficulty.waveIndex = wave;
-
-        WaveType type = GetWaveType(wave);
+        // 当前波次类型
+        WaveType type = GetWaveType(waveIndex);
         WavePlan plan = new WavePlan
         {
-            waveIndex = wave,
-            type = type,
-            enemyCount = GetEnemyCount(wave, difficulty),
+            waveIndex = waveIndex,
+            waveType = type,
+            enemyCount = GetEnemyCount(waveIndex),
             minBatchSize = GetMinBatchSize(),
             maxBatchSize = GetMaxBatchSize(),
-            spawnInterval = GetSpawnInterval(wave, difficulty)
+            spawnInterval = GetSpawnInterval(waveIndex)
         };
 
+        // 应用权重
         ApplyEnemyWeights(plan);
         return plan;
     }
 
-    // 根据计划权重随机选择本次要生成的敌人类型。
+    // 这一只怪是什么类型，根据计划权重随机选择
     public EnemyKind PickEnemyKind(WavePlan plan, float randomValue)
     {
         float totalWeight = plan.normalWeight + plan.hardWeight + plan.bossWeight;
         if (totalWeight <= 0f)
         {
-            return EnemyKind.Normal;
+            return EnemyKind.NormalEnemy;
         }
 
         float roll = randomValue * totalWeight;
         if (roll < plan.normalWeight)
         {
-            return EnemyKind.Normal;
+            return EnemyKind.NormalEnemy;
         }
 
         roll -= plan.normalWeight;
         if (roll < plan.hardWeight)
         {
-            return EnemyKind.Hard;
+            return EnemyKind.HardEnemy;
         }
 
-        return EnemyKind.Boss;
+        return EnemyKind.BossEnemy;
     }
 
     // 根据波数判断当前波次类型。
-    private WaveType GetWaveType(int wave)
+    private WaveType GetWaveType(int waveIndex)
     {
-        int bossInterval = _config ? _config.BossInterval : 10;
-        int hardInterval = _config ? _config.HardInterval : 5;
+        int bossInterval = _waveRuleSo ? _waveRuleSo.BossInterval : 10;
+        int hardInterval = _waveRuleSo ? _waveRuleSo.HardInterval : 5;
 
-        if (bossInterval > 0 && wave % bossInterval == 0)
+        if (bossInterval > 0 && waveIndex % bossInterval == 0)
         {
-            return WaveType.Boss;
+            return WaveType.BossWave;
         }
 
-        if (hardInterval > 0 && wave % hardInterval == 0)
+        if (hardInterval > 0 && waveIndex % hardInterval == 0)
         {
-            return WaveType.Hard;
+            return WaveType.HardWave;
         }
 
-        return WaveType.Normal;
+        return WaveType.NormalWave;
     }
 
     // 计算当前波次敌人总数。
-    private int GetEnemyCount(int wave, DifficultySystem difficulty)
+    private int GetEnemyCount(int wave)
     {
-        if (!_config)
+        if (!_waveRuleSo)
         {
-            return Mathf.RoundToInt(DEFAULT_WAVE_COUNT * difficulty.SpawnCountMultiplier);
+            return DEFAULT_WAVE_COUNT;
         }
 
-        return Mathf.Max(0, Mathf.RoundToInt(EvaluateCurve(_config.EnemyCountByWave, wave, DEFAULT_WAVE_COUNT)));
+        return Mathf.Max(0, Mathf.RoundToInt(EvaluateCurve(_waveRuleSo.EnemyCountByWave, wave, DEFAULT_WAVE_COUNT)));
     }
 
     // 获取每批刷怪的最小数量。
     private int GetMinBatchSize()
     {
-        return _config ? _config.MinBatchSize : 3;
+        return _waveRuleSo ? _waveRuleSo.MinBatchSize : 3;
     }
 
     // 获取每批刷怪的最大数量。
     private int GetMaxBatchSize()
     {
-        return _config ? _config.MaxBatchSize : 20;
+        return _waveRuleSo ? _waveRuleSo.MaxBatchSize : 20;
     }
 
     // 获取当前波次每批刷怪之间的间隔。
-    private float GetSpawnInterval(int wave, DifficultySystem difficulty)
+    private float GetSpawnInterval(int wave)
     {
-        if (!_config)
+        if (!_waveRuleSo)
         {
-            return difficulty.SpawnInterval;
+            return DEFAULT_SPAWN_INTERVAL;
         }
 
-        return Mathf.Max(0.05f, EvaluateCurve(_config.SpawnIntervalByWave, wave, DEFAULT_SPAWN_INTERVAL));
+        return Mathf.Max(0.05f, EvaluateCurve(_waveRuleSo.SpawnIntervalByWave, wave, DEFAULT_SPAWN_INTERVAL));
     }
 
     // 按波次类型设置敌人生成权重。
     private void ApplyEnemyWeights(WavePlan plan)
     {
-        switch (plan.type)
+        switch (plan.waveType)
         {
-            case WaveType.Boss:
+            case WaveType.BossWave:
                 SetWeights(plan, GetBossWaveWeights());
                 break;
 
-            case WaveType.Hard:
+            case WaveType.HardWave:
                 SetWeights(plan, GetHardWaveWeights());
                 break;
 
@@ -173,19 +174,19 @@ public class WaveRuleSystem
     // 获取普通波敌人权重。
     private WaveEnemyWeights GetNormalWaveWeights()
     {
-        return _config ? _config.NormalWaveWeights : new WaveEnemyWeights(0.8f, 0.2f, 0f);
+        return _waveRuleSo ? _waveRuleSo.NormalWaveWeights : new WaveEnemyWeights(0.8f, 0.2f, 0f);
     }
 
     // 获取精英波敌人权重。
     private WaveEnemyWeights GetHardWaveWeights()
     {
-        return _config ? _config.HardWaveWeights : new WaveEnemyWeights(0.6f, 0.4f, 0f);
+        return _waveRuleSo ? _waveRuleSo.HardWaveWeights : new WaveEnemyWeights(0.6f, 0.4f, 0f);
     }
 
     // 获取 Boss 波敌人权重。
     private WaveEnemyWeights GetBossWaveWeights()
     {
-        return _config ? _config.BossWaveWeights : new WaveEnemyWeights(0.3f, 0.3f, 0.4f);
+        return _waveRuleSo ? _waveRuleSo.BossWaveWeights : new WaveEnemyWeights(0.3f, 0.3f, 0.4f);
     }
 
     // 安全读取曲线值，曲线为空时返回默认值。

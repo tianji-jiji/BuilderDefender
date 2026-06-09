@@ -42,7 +42,6 @@ public class EnemyWaveManager : MonoBehaviour
     public event Action OnAliveEnemyCountChanged;
     public event Action<IReadOnlyList<Enemy>> OnEnemyBatchSpawned;
     
-    private readonly DifficultySystem _difficulty = new();
     private readonly WaveRuleSystem _ruleSystem = new();
     private readonly EnemyGrowthSystem _growthSystem = new();
     
@@ -52,8 +51,8 @@ public class EnemyWaveManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _ruleSystem.SetConfig(waveRuleSo);
-        _growthSystem.SetConfig(waveRuleSo);
+        _ruleSystem.SetWaveRuleConfig(waveRuleSo);
+        _growthSystem.SetWaveRuleConfig(waveRuleSo);
     }
 
     // 订阅敌人死亡事件来维护存活数量。
@@ -165,7 +164,7 @@ public class EnemyWaveManager : MonoBehaviour
         waveIndex++;
 
         OnWaveStarted?.Invoke();
-        WaveRuleSystem.WavePlan plan = _ruleSystem.BuildPlan(waveIndex, _difficulty);
+        WaveRuleSystem.WavePlan plan = _ruleSystem.BuildPlan(waveIndex);
         StartCoroutine(SpawnWave(plan));
     }
 
@@ -244,10 +243,10 @@ public class EnemyWaveManager : MonoBehaviour
     {
         switch (enemyKind)
         {
-            case WaveRuleSystem.EnemyKind.Boss:
+            case WaveRuleSystem.EnemyKind.BossEnemy:
                 return enemyPool.GetBoss();
 
-            case WaveRuleSystem.EnemyKind.Hard:
+            case WaveRuleSystem.EnemyKind.HardEnemy:
                 return enemyPool.GetHard();
 
             default:

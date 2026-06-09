@@ -9,12 +9,12 @@ public class WaveGrowthSystemTests
     {
         WaveRuleSo config = ScriptableObject.CreateInstance<WaveRuleSo>();
         WaveRuleSystem ruleSystem = new WaveRuleSystem();
-        ruleSystem.SetConfig(config);
+        ruleSystem.SetWaveRuleConfig(config);
 
-        WaveRuleSystem.WavePlan waveOnePlan = ruleSystem.BuildPlan(1, new DifficultySystem());
-        WaveRuleSystem.WavePlan waveTenPlan = ruleSystem.BuildPlan(10, new DifficultySystem());
-        WaveRuleSystem.WavePlan waveTwentyPlan = ruleSystem.BuildPlan(20, new DifficultySystem());
-        WaveRuleSystem.WavePlan waveThirtyPlan = ruleSystem.BuildPlan(30, new DifficultySystem());
+        WaveRuleSystem.WavePlan waveOnePlan = ruleSystem.BuildPlan(1);
+        WaveRuleSystem.WavePlan waveTenPlan = ruleSystem.BuildPlan(10);
+        WaveRuleSystem.WavePlan waveTwentyPlan = ruleSystem.BuildPlan(20);
+        WaveRuleSystem.WavePlan waveThirtyPlan = ruleSystem.BuildPlan(30);
 
         Assert.AreEqual(10, waveOnePlan.enemyCount);
         Assert.AreEqual(18, waveTenPlan.enemyCount);
@@ -38,11 +38,11 @@ public class WaveGrowthSystemTests
         enemySo.detectRadius = 6f;
 
         EnemyGrowthSystem growthSystem = new EnemyGrowthSystem();
-        growthSystem.SetConfig(config);
+        growthSystem.SetWaveRuleConfig(config);
 
-        EnemyRuntimeStats baseStats = growthSystem.BuildStats(enemySo, 1, WaveRuleSystem.EnemyKind.Normal, DefensePowerSnapshot.Default());
+        EnemyRuntimeStats baseStats = growthSystem.BuildStats(enemySo, 1, WaveRuleSystem.EnemyKind.NormalEnemy, DefensePowerSnapshot.Default());
         DefensePowerSnapshot strongPlayerSnapshot = new DefensePowerSnapshot(4f, 1f, 0f, 1f, 1f, 1f);
-        EnemyRuntimeStats scaledStats = growthSystem.BuildStats(enemySo, 1, WaveRuleSystem.EnemyKind.Normal, strongPlayerSnapshot);
+        EnemyRuntimeStats scaledStats = growthSystem.BuildStats(enemySo, 1, WaveRuleSystem.EnemyKind.NormalEnemy, strongPlayerSnapshot);
 
         Assert.Greater(scaledStats.MaxHealth, baseStats.MaxHealth);
         Assert.Less(scaledStats.MaxHealth, enemySo.maxHealth * strongPlayerSnapshot.PowerMultiplier);

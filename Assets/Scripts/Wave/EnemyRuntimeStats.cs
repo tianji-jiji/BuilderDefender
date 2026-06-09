@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 敌人出生时锁定的运行时属性
+/// 敌人出生时的运行时属性
 /// </summary>
 public readonly struct EnemyRuntimeStats
 {
@@ -11,7 +11,7 @@ public readonly struct EnemyRuntimeStats
     public float MoveSpeed { get; }
     public float DetectRadius { get; }
 
-    // 保存敌人本次出生使用的运行时属性。
+    // 敌人本次出生使用的运行时属性
     public EnemyRuntimeStats(int maxHealth, int armor, int attackDamage, float moveSpeed, float detectRadius)
     {
         MaxHealth = Mathf.Max(1, maxHealth);
@@ -21,12 +21,12 @@ public readonly struct EnemyRuntimeStats
         DetectRadius = Mathf.Max(0.01f, detectRadius);
     }
 
-    // 从敌人静态配置创建未成长的运行时属性。
+    // 直接从 EnemySo 创建一份没有成长加成的运行时属性。
     public static EnemyRuntimeStats FromEnemySo(EnemySo enemySo)
     {
         if (!enemySo)
         {
-            return new EnemyRuntimeStats(1, 0, 1, 1f, 1f);
+            return new EnemyRuntimeStats(10, 0, 5, 3f, 3f);
         }
 
         return new EnemyRuntimeStats(

@@ -65,6 +65,7 @@ public class Enemy : MonoBehaviour, IPoolable
     {
         enemySo = so;
         _runtimeStats = runtimeStats;
+        
         RefreshTargetContactFilter();
         IsAlive = true;
         _timer = 0f;
