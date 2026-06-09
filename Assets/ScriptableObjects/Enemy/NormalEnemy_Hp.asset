@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47cc1b5c122d5d3428614bfdb8e32ccc, type: 3}
   m_Name: NormalEnemy_Hp
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8267456965921251620, guid: 5cc88883157f2924896240f334d82dbe, type: 3}
+  prefab: {fileID: 8267456965921251620, guid: 209e5322900f4dc4da17e151cd682bf8, type: 3}
   maxHealth: 30
-  armor: 0
+  armor: 3
   moveSpeed: 3
-  atk: 10
+  atk: 5
   detectRadius: 8

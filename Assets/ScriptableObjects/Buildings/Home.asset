@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   assetName: Home
   buildingType: 2
-  maxHealth: 200
+  maxHealth: 2000
   prefab: {fileID: 8856701511490564311, guid: ddebd32a9f3ed4c47acb8d083387e71f, type: 3}
   constructionTime: 2
   demolishRefundMultiplier: 0

@@ -32,12 +32,12 @@ public class EnemyWaveUI : MonoBehaviour
 
     private void UpdateCurrentEnemyCountUI()
     {
-        currentEnemyCountText.text = "Current Enemy Count: " + EnemyWaveManager.Instance.aliveEnemyCount;
+        currentEnemyCountText.text = "剩余敌人数量: " + EnemyWaveManager.Instance.aliveEnemyCount;
     }
 
     private void UpdateCurrentWaveUI()
     {
-        currentWaveText.text = "Wave: " + EnemyWaveManager.Instance.waveIndex;
+        currentWaveText.text = "当前波次: " + EnemyWaveManager.Instance.waveIndex;
     }
 
     private void UpdateWaveStateUI()
@@ -49,13 +49,13 @@ public class EnemyWaveUI : MonoBehaviour
             case EnemyWaveManager.WaveState.Preparing:
                 nextWaveTimeText.gameObject.SetActive(true);
                 nextWaveTimeText.text =
-                    $"First Wave In: {manager.stateTimer:F1}s";
+                    $"第一波倒计时: {manager.stateTimer:F1}s";
                 break;
 
             case EnemyWaveManager.WaveState.WaitingNextWave:
                 nextWaveTimeText.gameObject.SetActive(true);
                 nextWaveTimeText.text =
-                    $"Next Wave In: {manager.stateTimer:F1}s";
+                    $"下一波倒计时: {manager.stateTimer:F1}s";
                 break;
 
             default:

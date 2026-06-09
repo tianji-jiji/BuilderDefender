@@ -29,7 +29,7 @@ public class BuildMenuUI : MonoBehaviour
     public void SelectButton(BuildButtonUI button)
     {
         // 取消上一个按钮的高亮
-        if (_currentSelectedButton != null)
+        if (_currentSelectedButton)
         {
             _currentSelectedButton.SetSelectedVisual(false);
         }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour
 {
-    private const string RESULT_WAVE_TEXT_FORMAT = "YOU SURVIVED {0} WAVE";
+    private const string RESULT_WAVE_TEXT_FORMAT = "你存活了 {0} 波";
 
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TextMeshProUGUI resultWaveText;

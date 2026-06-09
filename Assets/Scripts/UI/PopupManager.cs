@@ -6,7 +6,7 @@ using UnityEngine;
 public class PopupManager : MonoBehaviour
 {
     private const float SCREEN_CENTER_RATIO = 0.5f;
-    private const string UPGRADE_WARNING_PREFIX = "UPDATE REQUIRED:";
+    private const string UPGRADE_WARNING_PREFIX = "升级需要:";
 
     public static PopupManager Instance;
     [SerializeField] private GameObject goldPopupPrefab;

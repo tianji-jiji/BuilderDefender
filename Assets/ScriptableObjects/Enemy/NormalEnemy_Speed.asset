@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47cc1b5c122d5d3428614bfdb8e32ccc, type: 3}
   m_Name: NormalEnemy_Speed
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8267456965921251620, guid: 5cc88883157f2924896240f334d82dbe, type: 3}
+  prefab: {fileID: 8267456965921251620, guid: 179ad2ea0e649504cb7a227a496e4098, type: 3}
   maxHealth: 20
   armor: 0
   moveSpeed: 6

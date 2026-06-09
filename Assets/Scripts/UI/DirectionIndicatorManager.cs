@@ -20,14 +20,14 @@ public class DirectionIndicatorManager : MonoBehaviour
 
     private class EnemyBatchIndicator
     {
-        public readonly List<Enemy> Enemies;
-        public readonly RectTransform Indicator;
+        public readonly List<Enemy> enemies;
+        public readonly RectTransform indicator;
 
         // 保存一批敌人的引用和这批敌人共用的箭头。
         public EnemyBatchIndicator(IReadOnlyList<Enemy> enemies, RectTransform indicator)
         {
-            Enemies = new List<Enemy>(enemies);
-            Indicator = indicator;
+            this.enemies = new List<Enemy>(enemies);
+            this.indicator = indicator;
         }
     }
 
@@ -143,22 +143,22 @@ public class DirectionIndicatorManager : MonoBehaviour
     // 更新单个敌人批次箭头。
     private void UpdateEnemyBatchIndicator(EnemyBatchIndicator batchIndicator)
     {
-        RemoveInvalidEnemies(batchIndicator.Enemies);
+        RemoveInvalidEnemies(batchIndicator.enemies);
 
-        if (batchIndicator.Enemies.Count <= 0)
+        if (batchIndicator.enemies.Count <= 0)
         {
             _removedBatchIndicators.Add(batchIndicator);
             return;
         }
 
-        if (IsAnyEnemyOnScreen(batchIndicator.Enemies) && !showWhenTargetOnScreen)
+        if (IsAnyEnemyOnScreen(batchIndicator.enemies) && !showWhenTargetOnScreen)
         {
-            batchIndicator.Indicator.gameObject.SetActive(false);
+            batchIndicator.indicator.gameObject.SetActive(false);
             return;
         }
 
-        Vector3 targetPosition = GetEnemyBatchCenter(batchIndicator.Enemies);
-        UpdateOffScreenIndicator(targetPosition, batchIndicator.Indicator);
+        Vector3 targetPosition = GetEnemyBatchCenter(batchIndicator.enemies);
+        UpdateOffScreenIndicator(targetPosition, batchIndicator.indicator);
     }
 
     // 移除一批敌人中已经失效的敌人引用。
@@ -184,9 +184,9 @@ public class DirectionIndicatorManager : MonoBehaviour
     {
         _enemyBatchIndicators.Remove(batchIndicator);
 
-        if (batchIndicator.Indicator)
+        if (batchIndicator.indicator)
         {
-            Destroy(batchIndicator.Indicator.gameObject);
+            Destroy(batchIndicator.indicator.gameObject);
         }
     }
 
@@ -239,8 +239,7 @@ public class DirectionIndicatorManager : MonoBehaviour
     {
         Vector3 screenPosition = worldCamera.WorldToScreenPoint(worldPosition);
 
-        return screenPosition.z > 0f &&
-               screenPosition.x >= 0f &&
+        return screenPosition is { z: > 0f, x: >= 0f } &&
                screenPosition.x <= Screen.width &&
                screenPosition.y >= 0f &&
                screenPosition.y <= Screen.height;

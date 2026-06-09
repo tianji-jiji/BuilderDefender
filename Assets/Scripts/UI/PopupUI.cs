@@ -84,10 +84,7 @@ public class PopupUI : MonoBehaviour, IPoolable
             .SetLink(gameObject);
 
         // 自动销毁
-        _returnTween = DOVirtual.DelayedCall(duration, () =>
-        {
-            ReturnPopup();
-        }).SetLink(gameObject);
+        _returnTween = DOVirtual.DelayedCall(duration, ReturnPopup).SetLink(gameObject);
     }
 
     // 设置漂浮提示显示的文本。

@@ -53,7 +53,7 @@ public class TooltipManager : MonoBehaviour
         if (!buildingSo) return;
         priceTooltip.gameObject.SetActive(true);
 
-        string text = $"{buildingSo.assetName} Cost:\n";
+        string text = $"{buildingSo.assetName} 花费:\n";
 
         foreach (var resourceCost in buildingSo.resourceCost)
         {
@@ -87,7 +87,7 @@ public class TooltipManager : MonoBehaviour
         efficiencyTooltip.gameObject.SetActive(true);
         int percent = Mathf.RoundToInt(efficiency * 100f);
         efficiencyTooltipIcon.sprite = icon;
-        efficiencyTooltipText.text = $"Efficiency : {percent}%";
+        efficiencyTooltipText.text = $"生产效率 : {percent}%";
     }
 
     public void HideEfficiencyTooltip()
