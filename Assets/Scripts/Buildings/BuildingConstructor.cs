@@ -1,11 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 建筑建造器
+/// 建筑建造器，负责建造过程表现、进度更新和建造完成后生成正式建筑。
 /// </summary>
 public class BuildingConstructor : MonoBehaviour
 {
@@ -14,6 +14,7 @@ public class BuildingConstructor : MonoBehaviour
     [SerializeField] private float materialProgressUpdateInterval;
     [SerializeField] private GameObject constructionProgressBarPrefab;
     [SerializeField] private Vector3 progressBarOffset;
+    [SerializeField] private GameObject placedParticlePrefab;
 
     private BuildingSo _buildingSo;
     private Action _onConstructionCompleted;
@@ -22,13 +23,8 @@ public class BuildingConstructor : MonoBehaviour
     private Coroutine _constructionCoroutine;
     private MaterialPropertyBlock _materialPropertyBlock;
     private float _lastMaterialProgressUpdateTime;
-    private GameObject particlePrefab;
 
-    private void Awake()
-    {
-        particlePrefab = Resources.Load<GameObject>("Particles/BuildingPlacedParticles");
-    }
-
+    // 初始化本次建造的配置和完成回调。
     public void Init(BuildingSo buildingSo, Action onConstructionCompleted = null)
     {
         _buildingSo = buildingSo;
@@ -47,6 +43,7 @@ public class BuildingConstructor : MonoBehaviour
         _constructionCoroutine = StartCoroutine(Construct());
     }
 
+    // 创建建造进度条并缓存填充图片。
     private void CreateProgressBar()
     {
         _progressBarImage = null;
@@ -63,6 +60,7 @@ public class BuildingConstructor : MonoBehaviour
         _progressBarImage = GetComponentInChildren<Image>(true);
     }
 
+    // 显示与当前建筑配置匹配的建造中贴图。
     private void ShowConstructionSprite()
     {
         _activeSpriteRenderer = null;
@@ -87,6 +85,7 @@ public class BuildingConstructor : MonoBehaviour
         }
     }
 
+    // 按建筑配置的建造时间推进进度。
     private IEnumerator Construct()
     {
         float constructionTime = Mathf.Max(0.01f, _buildingSo.constructionTime);
@@ -100,12 +99,19 @@ public class BuildingConstructor : MonoBehaviour
         }
 
         SetProgress(1f, true);
+        CompleteConstruction();
+    }
+
+    // 完成建造，生成正式建筑、播放粒子、通知回调并销毁建造中对象。
+    private void CompleteConstruction()
+    {
         Instantiate(_buildingSo.prefab, transform.position, Quaternion.identity);
         SpawnPlacedParticles();
         _onConstructionCompleted?.Invoke();
         Destroy(gameObject);
     }
 
+    // 设置建造进度材质参数和进度条填充。
     private void SetProgress(float progress, bool forceUpdateMaterial = false)
     {
         progress = Mathf.Clamp01(progress);
@@ -128,10 +134,13 @@ public class BuildingConstructor : MonoBehaviour
         UpdateProgressBar(progress);
     }
 
+    // 更新建造进度条显示。
     private void UpdateProgressBar(float progress)
     {
         if (!_progressBarImage)
+        {
             return;
+        }
 
         _progressBarImage.fillAmount = progress;
     }
@@ -139,17 +148,17 @@ public class BuildingConstructor : MonoBehaviour
     // 生成建筑建造完成粒子。
     private void SpawnPlacedParticles()
     {
-        if (!particlePrefab)
+        if (!placedParticlePrefab)
         {
             return;
         }
 
         if (PoolManager.Instance)
         {
-            PoolManager.Instance.Spawn(particlePrefab, transform.position, Quaternion.identity);
+            PoolManager.Instance.Spawn(placedParticlePrefab, transform.position, Quaternion.identity);
             return;
         }
 
-        Instantiate(particlePrefab, transform.position, Quaternion.identity);
+        Instantiate(placedParticlePrefab, transform.position, Quaternion.identity);
     }
 }

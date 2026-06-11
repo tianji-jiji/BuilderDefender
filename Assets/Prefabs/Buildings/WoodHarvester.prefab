@@ -220,6 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSo: {fileID: 11400000, guid: c1ca574c5e291cd489cd904292536b1d, type: 2}
+  destroyedParticlePrefab: {fileID: 7186901638340864668, guid: 0717275f98dbb484c86b22e1a82bd99d, type: 3}
 --- !u!1001 &493851874482997819
 PrefabInstance:
   m_ObjectHideFlags: 0

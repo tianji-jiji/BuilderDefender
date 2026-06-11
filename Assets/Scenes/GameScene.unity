@@ -19427,6 +19427,7 @@ MonoBehaviour:
   materialProgressUpdateInterval: 0
   constructionProgressBarPrefab: {fileID: 4006020235469049484, guid: 8705b260f933c134e8ffc0633f10531d, type: 3}
   progressBarOffset: {x: -7, y: 0, z: 0}
+  placedParticlePrefab: {fileID: 8295742346658607647, guid: 8b2766fdb2e52754a82ba1815a0e577d, type: 3}
 --- !u!1 &1754823078
 GameObject:
   m_ObjectHideFlags: 0

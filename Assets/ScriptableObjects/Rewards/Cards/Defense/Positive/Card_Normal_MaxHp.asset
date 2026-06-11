@@ -25,7 +25,7 @@ MonoBehaviour:
   - effectDefinition: {fileID: 11400000, guid: 08a843f04f754b62848f38e91e542d58, type: 2}
     parameterConfigList:
     - parameterId: Value
-      value: 0.15
+      value: 0.1
       displayImpactOverride: 0
     value: 0.2
     displayImpact: 0

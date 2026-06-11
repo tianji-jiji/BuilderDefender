@@ -7,23 +7,25 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
     [SerializeField] private BuildingSo buildingSo;
+    [SerializeField] private GameObject destroyedParticlePrefab;
 
     // 建筑被摧毁时触发，通知建筑类型和位置。
     public static event Action<BuildingSo, Vector3> OnBuildingDestroyed;
 
     private BuildingDemolitionButton _buildingDemolitionButton;
     private HealthSystem _healthSystem;
-    private GameObject _buildingDestroyedParticles;
     private int _baseMaxHealth;
     private float _upgradeMaxHealthMultiplier = 1f;
+    private bool _isSubscribedToHealthSystem;
+    private bool _isSubscribedToRewardBonuses;
+    private bool _isRegisteredToRuntimeRegistry;
 
-    public bool IsDefenseBuilding => buildingSo && buildingSo.buildingType == BuildingSo.BuildingType.Defense;
-    public bool IsHomeBuilding => buildingSo && buildingSo.buildingType == BuildingSo.BuildingType.Home;
+    private bool IsDefenseBuilding => buildingSo && buildingSo.buildingType == BuildingSo.BuildingType.Defense;
+    private bool IsHomeBuilding => buildingSo && buildingSo.buildingType == BuildingSo.BuildingType.Home;
 
     // 初始化建筑需要缓存的组件和生命值。
     private void Awake()
     {
-        _buildingDestroyedParticles = Resources.Load<GameObject>("Particles/BuildingDestroyedParticles");
         _buildingDemolitionButton = GetComponentInChildren<BuildingDemolitionButton>();
         _healthSystem = GetComponent<HealthSystem>();
         _baseMaxHealth = buildingSo ? buildingSo.maxHealth : 1;
@@ -35,10 +37,17 @@ public class Building : MonoBehaviour
         }
     }
 
-    // 订阅全局奖励变化并注册到运行时查询表。
+    // 启动时隐藏拆除按钮。
+    private void Start()
+    {
+        HideBuildingDemolitionButton();
+    }
+
+    // 启用建筑时订阅事件并注册到运行时查询表。
     private void OnEnable()
     {
-        RewardBonusManager.OnRewardBonusChanged += RefreshRewardBonuses;
+        TrySubscribeRewardBonuses();
+        TrySubscribeHealthSystem();
         RegisterToRuntimeRegistry();
     }
 
@@ -65,18 +74,7 @@ public class Building : MonoBehaviour
         _healthSystem.HealByMaxHealthPercent(healPercent);
     }
 
-    // 订阅建筑生命值死亡事件并隐藏拆除按钮。
-    private void Start()
-    {
-        if (_healthSystem)
-        {
-            _healthSystem.OnDied += Death;
-        }
-
-        HideBuildingDemolitionButton();
-    }
-
-    // 处理建筑被摧毁时的销毁、粒子和全局事件。
+    // 处理建筑被摧毁时的事件、粒子和对象销毁。
     private void Death()
     {
         OnBuildingDestroyed?.Invoke(buildingSo, transform.position);
@@ -117,18 +115,18 @@ public class Building : MonoBehaviour
     // 生成建筑摧毁粒子。
     private void SpawnDestroyedParticles()
     {
-        if (!_buildingDestroyedParticles)
+        if (!destroyedParticlePrefab)
         {
             return;
         }
 
         if (PoolManager.Instance)
         {
-            PoolManager.Instance.Spawn(_buildingDestroyedParticles, transform.position, Quaternion.identity);
+            PoolManager.Instance.Spawn(destroyedParticlePrefab, transform.position, Quaternion.identity);
             return;
         }
 
-        Instantiate(_buildingDestroyedParticles, transform.position, Quaternion.identity);
+        Instantiate(destroyedParticlePrefab, transform.position, Quaternion.identity);
     }
 
     // 刷新全局奖励带来的建筑属性变化，保留当前生命值。
@@ -175,9 +173,62 @@ public class Building : MonoBehaviour
         return RewardBonusManager.Instance.DefenseDamageTakenMultiplier;
     }
 
+    // 订阅建筑生命值死亡事件。
+    private void TrySubscribeHealthSystem()
+    {
+        if (_isSubscribedToHealthSystem || !_healthSystem)
+        {
+            return;
+        }
+
+        _healthSystem.OnDied += Death;
+        _isSubscribedToHealthSystem = true;
+    }
+
+    // 取消订阅建筑生命值死亡事件。
+    private void TryUnsubscribeHealthSystem()
+    {
+        if (!_isSubscribedToHealthSystem || !_healthSystem)
+        {
+            return;
+        }
+
+        _healthSystem.OnDied -= Death;
+        _isSubscribedToHealthSystem = false;
+    }
+
+    // 订阅全局奖励变化事件。
+    private void TrySubscribeRewardBonuses()
+    {
+        if (_isSubscribedToRewardBonuses)
+        {
+            return;
+        }
+
+        RewardBonusManager.OnRewardBonusChanged += RefreshRewardBonuses;
+        _isSubscribedToRewardBonuses = true;
+    }
+
+    // 取消订阅全局奖励变化事件。
+    private void TryUnsubscribeRewardBonuses()
+    {
+        if (!_isSubscribedToRewardBonuses)
+        {
+            return;
+        }
+
+        RewardBonusManager.OnRewardBonusChanged -= RefreshRewardBonuses;
+        _isSubscribedToRewardBonuses = false;
+    }
+
     // 将建筑注册到运行时查询表。
     private void RegisterToRuntimeRegistry()
     {
+        if (_isRegisteredToRuntimeRegistry)
+        {
+            return;
+        }
+
         if (IsDefenseBuilding)
         {
             DefenseTowerRegistry.RegisterDefenseBuilding(this);
@@ -187,11 +238,18 @@ public class Building : MonoBehaviour
         {
             DefenseTowerRegistry.RegisterHomeHealthSystem(_healthSystem);
         }
+
+        _isRegisteredToRuntimeRegistry = true;
     }
 
     // 从运行时查询表取消注册建筑。
     private void UnregisterFromRuntimeRegistry()
     {
+        if (!_isRegisteredToRuntimeRegistry)
+        {
+            return;
+        }
+
         if (IsDefenseBuilding)
         {
             DefenseTowerRegistry.UnregisterDefenseBuilding(this);
@@ -201,17 +259,15 @@ public class Building : MonoBehaviour
         {
             DefenseTowerRegistry.UnregisterHomeHealthSystem(_healthSystem);
         }
+
+        _isRegisteredToRuntimeRegistry = false;
     }
 
-    // 取消订阅建筑生命值死亡事件。
+    // 禁用建筑时取消事件订阅和运行时注册。
     private void OnDisable()
     {
-        RewardBonusManager.OnRewardBonusChanged -= RefreshRewardBonuses;
+        TryUnsubscribeRewardBonuses();
         UnregisterFromRuntimeRegistry();
-
-        if (_healthSystem)
-        {
-            _healthSystem.OnDied -= Death;
-        }
+        TryUnsubscribeHealthSystem();
     }
 }

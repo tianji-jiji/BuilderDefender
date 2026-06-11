@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSo: {fileID: 11400000, guid: efa406131dab6814ea92cab0f139ce52, type: 2}
+  destroyedParticlePrefab: {fileID: 7186901638340864668, guid: 0717275f98dbb484c86b22e1a82bd99d, type: 3}
 --- !u!1 &8750874091099368296
 GameObject:
   m_ObjectHideFlags: 0

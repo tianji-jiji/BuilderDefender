@@ -544,6 +544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSo: {fileID: 11400000, guid: 6a417d5152eb06643b9b3d8673ea4bbd, type: 2}
+  destroyedParticlePrefab: {fileID: 7186901638340864668, guid: 0717275f98dbb484c86b22e1a82bd99d, type: 3}
 --- !u!114 &-5391085893718665421
 MonoBehaviour:
   m_ObjectHideFlags: 0
