@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 闃插尽濉旀敾鍑昏寖鍥村姞鎴?Handler銆?/// </summary>
+/// 防御塔攻击范围加成 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Detect Radius Handler")]
 public class DefenseDetectRadiusHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤鏀诲嚮鑼冨洿鍔犳垚銆?
+    // 应用攻击范围加成。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (TryGetDefenseRewardState(context, out DefenseRewardState state))

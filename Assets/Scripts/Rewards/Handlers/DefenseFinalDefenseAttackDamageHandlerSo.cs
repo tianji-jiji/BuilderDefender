@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 鍩哄湴浣庤閲忛槻寰″鏀诲嚮鍔犳垚 Handler銆?/// </summary>
+/// 基地低血量防御塔攻击加成 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Final Defense Attack Damage Handler")]
 public class DefenseFinalDefenseAttackDamageHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤鏈€缁堥槻绾挎敾鍑诲姞鎴愩€?
+    // 应用最终防线攻击加成。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (TryGetDefenseRewardState(context, out DefenseRewardState state))

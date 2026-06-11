@@ -1,14 +1,15 @@
 ﻿/// <summary>
-/// 闃插尽濉斿鍔?Handler 鍩虹被锛屾彁渚涜鍙栧弬鏁板拰濂栧姳鐘舵€佺殑閫氱敤鏂规硶銆?/// </summary>
+/// 防御塔奖励 Handler 基类，提供读取参数和奖励状态的通用方法。
+/// </summary>
 public abstract class DefenseRewardHandlerSo : RewardEffectHandlerSo
 {
-    // 璇诲彇褰撳墠鏁堟灉鐨勪富鏁板€笺€?
+    // 读取当前效果的主数值。
     protected float GetValue(RewardEffectConfig config)
     {
         return RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.VALUE, config.LegacyValue);
     }
 
-    // 灏濊瘯鍙栧緱闃插尽濉斿鍔辩姸鎬併€?
+    // 尝试取得防御塔奖励状态。
     protected bool TryGetDefenseRewardState(RewardEffectContext context, out DefenseRewardState defenseRewardState)
     {
         defenseRewardState = context?.DefenseRewardState;

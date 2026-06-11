@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4917164657916411714}
   - component: {fileID: 5012835431581906492}
+  - component: {fileID: 8489479532261054745}
   - component: {fileID: 976708685597598724}
   - component: {fileID: 9158055646236183539}
   - component: {fileID: 3052970490853070858}
@@ -51,6 +52,21 @@ MonoBehaviour:
   flySpeed: 30
   lifetime: 3
   defaultDamage: 10
+  arrowVisual: {fileID: 8489479532261054745}
+  explosiveArrowEffect: {fileID: 11400000, guid: 49f3899c598440acbfaad97949f5ac91, type: 2}
+--- !u!114 &8489479532261054745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4085518841194330122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d69f0ad56d1646b79ba1a67b80dcf092, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visualRoot: {fileID: 7837650507774576102}
   spriteRenderers:
   - {fileID: 7090830185295996579}
   trailRenderers:

@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 鏂板缓闃插尽濉斿垵濮嬫槦绾?Handler銆?/// </summary>
+/// 新建防御塔初始星级 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense New Tower Initial Star Handler")]
 public class DefenseNewTowerInitialStarHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤鏂板鍒濆鏄熺骇鍔犳垚銆?
+    // 应用新塔初始星级加成。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (TryGetDefenseRewardState(context, out DefenseRewardState state))

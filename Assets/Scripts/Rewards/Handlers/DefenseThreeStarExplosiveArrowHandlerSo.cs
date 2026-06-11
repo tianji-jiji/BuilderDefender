@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 涓夋槦闃插尽濉旂垎瑁傜 Handler銆?/// </summary>
+/// 三星防御塔爆裂箭 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Three Star Explosive Arrow Handler")]
 public class DefenseThreeStarExplosiveArrowHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤涓夋槦鐖嗚绠厤缃€?
+    // 应用三星爆裂箭配置。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (!TryGetDefenseRewardState(context, out DefenseRewardState state))

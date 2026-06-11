@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 闅忔満闃插尽濉斿崌婊℃槦 Handler銆?/// </summary>
+/// 随机防御塔升满星 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Random Tower Max Star Handler")]
 public class DefenseRandomTowerMaxStarHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤闅忔満闃插尽濉旀弧鏄熷嵆鏃舵晥鏋溿€?
+    // 应用随机防御塔满星即时效果。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         DefenseRewardImmediateEffectApplier.UpgradeRandomTowerToMaxStar();

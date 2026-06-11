@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 闃插尽濉旇秴杞芥敾鍑婚€熷害 Handler銆?/// </summary>
+/// 防御塔超载攻击速度 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Attack Speed Overload Handler")]
 public class DefenseAttackSpeedOverloadHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤瓒呰浇鏀婚€熷彉鍖栥€?
+    // 应用超载攻速变化。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (TryGetDefenseRewardState(context, out DefenseRewardState state))

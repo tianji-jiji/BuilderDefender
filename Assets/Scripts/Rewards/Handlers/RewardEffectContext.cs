@@ -1,5 +1,6 @@
 ﻿/// <summary>
-/// Reward 鏁堟灉杩愯鏃朵笂涓嬫枃锛岃礋璐ｆ妸 Handler 闇€瑕佺殑鏈眬绯荤粺寮曠敤闆嗕腑浼犲叆銆?/// </summary>
+/// Reward 效果运行时上下文，负责把 Handler 需要的本局系统引用集中传入。
+/// </summary>
 public sealed class RewardEffectContext
 {
     public RewardBonusManager RewardBonusManager { get; }
@@ -8,7 +9,7 @@ public sealed class RewardEffectContext
     public EnemyWaveManager EnemyWaveManager { get; }
     public BuildManager BuildManager { get; }
 
-    // 鍒涘缓 Reward 鏁堟灉杩愯鏃朵笂涓嬫枃銆?
+    // 创建 Reward 效果运行时上下文。
     public RewardEffectContext(
         RewardBonusManager rewardBonusManager,
         DefenseRewardState defenseRewardState,

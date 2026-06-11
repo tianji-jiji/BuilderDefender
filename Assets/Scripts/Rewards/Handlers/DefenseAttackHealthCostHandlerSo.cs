@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 闃插尽濉旀敾鍑绘墸琛€瑙勫垯 Handler銆?/// </summary>
+/// 防御塔攻击扣血规则 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Attack Health Cost Handler")]
 public class DefenseAttackHealthCostHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤鏀诲嚮鎵ｈ瑙勫垯銆?
+    // 应用攻击扣血规则。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (!TryGetDefenseRewardState(context, out DefenseRewardState state))

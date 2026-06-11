@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 闃插尽濉旀尝鏈洖琛€ Handler銆?/// </summary>
+/// 防御塔波末回血 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Wave End Heal Handler")]
 public class DefenseWaveEndHealHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤娉㈡湯鍥炶姣斾緥銆?
+    // 应用波末回血比例。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (TryGetDefenseRewardState(context, out DefenseRewardState state))

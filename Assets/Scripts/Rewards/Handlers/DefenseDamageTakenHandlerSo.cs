@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 闃插尽濉斿彈鍒颁激瀹冲彉鍖?Handler銆?/// </summary>
+/// 防御塔受到伤害变化 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Damage Taken Handler")]
 public class DefenseDamageTakenHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤鍙楀埌浼ゅ鍙樺寲銆?
+    // 应用受到伤害变化。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (TryGetDefenseRewardState(context, out DefenseRewardState state))

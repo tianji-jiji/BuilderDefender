@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 闃插尽濉斿弻鍊嶄激瀹虫鐜?Handler銆?/// </summary>
+/// 防御塔双倍伤害概率 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Double Damage Chance Handler")]
 public class DefenseDoubleDamageChanceHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤鍙屽€嶄激瀹虫鐜囥€?
+    // 应用双倍伤害概率。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (TryGetDefenseRewardState(context, out DefenseRewardState state))

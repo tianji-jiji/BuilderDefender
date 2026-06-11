@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 闃插尽濉旇仈鍔ㄦ敾閫?Handler銆?/// </summary>
+/// 防御塔联动攻速 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Linked Attack Speed Handler")]
 public class DefenseLinkedAttackSpeedHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤鑱斿姩鏀婚€熻鍒欍€?
+    // 应用联动攻速规则。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (!TryGetDefenseRewardState(context, out DefenseRewardState state))

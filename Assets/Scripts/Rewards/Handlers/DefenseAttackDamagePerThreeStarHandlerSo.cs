@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 涓夋槦闃插尽濉旀暟閲忔敾鍑诲姞鎴?Handler銆?/// </summary>
+/// 三星防御塔数量攻击加成 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Attack Damage Per Three Star Handler")]
 public class DefenseAttackDamagePerThreeStarHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤姣忓骇涓夋槦濉旀敾鍑诲姞鎴愩€?
+    // 应用每座三星塔攻击加成。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (TryGetDefenseRewardState(context, out DefenseRewardState state))

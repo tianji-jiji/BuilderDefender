@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 闃插尽濉旈澶栨敾鍑昏鍒?Handler銆?/// </summary>
+/// 防御塔额外攻击规则 Handler。
+/// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Extra Arrow Handler")]
 public class DefenseExtraArrowHandlerSo : DefenseRewardHandlerSo
 {
-    // 搴旂敤棰濆鏀诲嚮瑙勫垯銆?
+    // 应用额外攻击规则。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
         if (!TryGetDefenseRewardState(context, out DefenseRewardState state))

@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Reward 鏁堟灉杩愯鏃跺鐞嗗櫒锛屾瘡涓€绉嶅鏉傛晥鏋滃彲浠ラ€氳繃鐙珛 Handler 瀹炵幇銆?/// </summary>
+/// Reward 效果运行时处理器，每一种复杂效果可以通过独立 Handler 实现。
+/// </summary>
 public abstract class RewardEffectHandlerSo : ScriptableObject
 {
-    // 搴旂敤褰撳墠 Reward 鏁堟灉閰嶇疆銆?
+    // 应用当前 Reward 效果配置。
     public abstract void Apply(RewardEffectContext context, RewardEffectConfig config);
 }
