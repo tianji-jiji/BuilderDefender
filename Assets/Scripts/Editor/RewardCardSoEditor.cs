@@ -8,7 +8,6 @@ using UnityEngine;
 [CustomEditor(typeof(RewardCardSo))]
 public class RewardCardSoEditor : Editor
 {
-    private SerializedProperty _cardIdProp;
     private SerializedProperty _cardNameProp;
     private SerializedProperty _cardPrefabProp;
     private SerializedProperty _weightProp;
@@ -22,7 +21,6 @@ public class RewardCardSoEditor : Editor
     // 缓存序列化字段引用。
     private void OnEnable()
     {
-        _cardIdProp = serializedObject.FindProperty("cardId");
         _cardNameProp = serializedObject.FindProperty("cardName");
         _cardPrefabProp = serializedObject.FindProperty("cardPrefab");
         _weightProp = serializedObject.FindProperty("weight");
@@ -52,11 +50,6 @@ public class RewardCardSoEditor : Editor
     private void DrawBasicInfo()
     {
         EditorGUILayout.LabelField("基础信息", EditorStyles.boldLabel);
-
-        using (new EditorGUI.DisabledScope(true))
-        {
-            EditorGUILayout.PropertyField(_cardIdProp, new GUIContent("卡牌 ID"));
-        }
 
         EditorGUILayout.PropertyField(_cardNameProp, new GUIContent("卡牌名称"));
         EditorGUILayout.PropertyField(_cardPrefabProp, new GUIContent("卡牌预制体"));

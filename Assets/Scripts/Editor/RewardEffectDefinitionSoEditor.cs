@@ -9,9 +9,7 @@ using UnityEngine;
 public class RewardEffectDefinitionSoEditor : Editor
 {
     private SerializedProperty _displayNameProp;
-    private SerializedProperty _useCustomDescriptionProp;
     private SerializedProperty _descriptionTemplateProp;
-    private SerializedProperty _autoImpactRuleProp;
     private SerializedProperty _handlerProp;
     private SerializedProperty _parameterDisplayDefinitionListProp;
 
@@ -19,9 +17,7 @@ public class RewardEffectDefinitionSoEditor : Editor
     private void OnEnable()
     {
         _displayNameProp = serializedObject.FindProperty("displayName");
-        _useCustomDescriptionProp = serializedObject.FindProperty("useCustomDescription");
         _descriptionTemplateProp = serializedObject.FindProperty("descriptionTemplate");
-        _autoImpactRuleProp = serializedObject.FindProperty("autoImpactRule");
         _handlerProp = serializedObject.FindProperty("handler");
         _parameterDisplayDefinitionListProp = serializedObject.FindProperty("parameterDisplayDefinitionList");
     }
@@ -54,9 +50,7 @@ public class RewardEffectDefinitionSoEditor : Editor
     private void DrawDescriptionSettings()
     {
         EditorGUILayout.LabelField("描述模板", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(_useCustomDescriptionProp, new GUIContent("使用自定义描述"));
         EditorGUILayout.PropertyField(_descriptionTemplateProp, new GUIContent("描述模板"));
-        DrawEnumPopup(_autoImpactRuleProp, "默认颜色规则", RewardEffectAuthoringPresets.AutoImpactRuleDisplayNameArray);
     }
 
     // 绘制参数显示规则列表。
@@ -87,7 +81,6 @@ public class RewardEffectDefinitionSoEditor : Editor
     {
         SerializedProperty parameterIdProp = parameterDisplayDefinitionProp.FindPropertyRelative("parameterId");
         SerializedProperty displayNameProp = parameterDisplayDefinitionProp.FindPropertyRelative("displayName");
-        SerializedProperty templateTokenProp = parameterDisplayDefinitionProp.FindPropertyRelative("templateToken");
         SerializedProperty valueFormatProp = parameterDisplayDefinitionProp.FindPropertyRelative("valueFormat");
         SerializedProperty autoImpactRuleProp = parameterDisplayDefinitionProp.FindPropertyRelative("autoImpactRule");
 
@@ -106,7 +99,6 @@ public class RewardEffectDefinitionSoEditor : Editor
 
         EditorGUILayout.PropertyField(parameterIdProp, new GUIContent("参数 ID"));
         EditorGUILayout.PropertyField(displayNameProp, new GUIContent("显示名称"));
-        EditorGUILayout.PropertyField(templateTokenProp, new GUIContent("模板 Token"));
         DrawEnumPopup(valueFormatProp, "显示方式", RewardEffectAuthoringPresets.ValueFormatDisplayNameArray);
         DrawEnumPopup(autoImpactRuleProp, "颜色规则", RewardEffectAuthoringPresets.AutoImpactRuleDisplayNameArray);
 
