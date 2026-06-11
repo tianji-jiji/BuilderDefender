@@ -12,20 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: AtkHealthCost
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 11
   displayName: "\u9632\u5FA1\u5854\u6BCF N \u6B21\u653B\u51FB\u635F\u5931\u751F\u547D"
   useCustomDescription: 0
   descriptionTemplate: "\u6BCF\u653B\u51FB {TriggerAttackCount} \u6B21\uFF0C\u635F\u5931
     {AttackHealthCost} \u751F\u547D"
   autoImpactRule: 3
+  handler: {fileID: 11400000, guid: 3a8788834fcb0bf42810b2c7a25709aa, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 1
+  - parameterId: TriggerAttackCount
     displayName: "\u89E6\u53D1\u653B\u51FB\u6B21\u6570"
     templateToken: 
     valueFormat: 3
     autoImpactRule: 4
-  - parameterKey: 8
-    displayName: "\u653B\u51FB\u635F\u5931\u751F\u547D"
+  - parameterId: AttackHealthCost
+    displayName: "\u653B\u51FB\u751F\u547D\u6D88\u8017"
     templateToken: 
     valueFormat: 3
     autoImpactRule: 3

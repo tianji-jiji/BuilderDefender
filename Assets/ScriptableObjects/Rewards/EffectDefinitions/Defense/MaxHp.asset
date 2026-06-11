@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: MaxHp
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 3
   displayName: "\u9632\u5FA1\u5854\u6700\u5927\u751F\u547D\u503C"
   useCustomDescription: 0
   descriptionTemplate: '{displayName} {value}'
   autoImpactRule: 0
+  handler: {fileID: 11400000, guid: 3dfdfc3734f0b054a94cdad7f8090693, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 0
-    displayName: "\u751F\u547D\u503C\u52A0\u6210"
+  - parameterId: Value
+    displayName: "\u6570\u503C"
     templateToken: 
     valueFormat: 0
     autoImpactRule: 0

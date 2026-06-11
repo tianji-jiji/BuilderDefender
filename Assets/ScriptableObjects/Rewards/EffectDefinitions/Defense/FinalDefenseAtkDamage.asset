@@ -12,20 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: FinalDefenseAtkDamage
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 17
   displayName: "\u6700\u7EC8\u9632\u7EBF"
   useCustomDescription: 0
   descriptionTemplate: "\u57FA\u5730\u751F\u547D\u4F4E\u4E8E {HomeHealthThreshold}
     \u65F6\uFF0C\u9632\u5FA1\u5854\u653B\u51FB\u529B {value}"
   autoImpactRule: 0
+  handler: {fileID: 11400000, guid: 90eee7342296b46478fe2558704f09cf, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 13
-    displayName: "\u57FA\u5730\u751F\u547D\u9608\u503C"
+  - parameterId: HomeHealthThreshold
+    displayName: "\u57FA\u5730\u8840\u91CF\u9608\u503C"
     templateToken: 
     valueFormat: 1
     autoImpactRule: 4
-  - parameterKey: 0
-    displayName: "\u653B\u51FB\u529B\u52A0\u6210"
+  - parameterId: Value
+    displayName: "\u6570\u503C"
     templateToken: 
     valueFormat: 0
     autoImpactRule: 0

@@ -12,20 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: ExtraArrow
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 6
   displayName: "\u989D\u5916\u5C04\u51FB"
-  useCustomDescription: 1
+  useCustomDescription: 0
   descriptionTemplate: "\u9632\u5FA1\u5854\u6BCF\u653B\u51FB {TriggerAttackCount}\u6B21\uFF0C\u989D\u5916\u653B\u51FB
     {ExtraAttackCount}\u6B21"
   autoImpactRule: 2
+  handler: {fileID: 11400000, guid: e40e37c227439a24e8bb9066e3a57d37, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 1
+  - parameterId: TriggerAttackCount
     displayName: "\u89E6\u53D1\u653B\u51FB\u6B21\u6570"
     templateToken: 
     valueFormat: 3
     autoImpactRule: 4
-  - parameterKey: 2
-    displayName: "\u989D\u5916\u653B\u51FB\u6570\u91CF"
+  - parameterId: ExtraAttackCount
+    displayName: "\u989D\u5916\u653B\u51FB\u6B21\u6570"
     templateToken: 
     valueFormat: 3
-    autoImpactRule: 2
+    autoImpactRule: 0

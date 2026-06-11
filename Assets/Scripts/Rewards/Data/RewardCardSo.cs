@@ -37,7 +37,7 @@ public class RewardCardSo : ScriptableObject
     [SerializeField] private int minWaveIndex;
     [SerializeField] private int maxPickCount;
     [SerializeField] private bool isUnique;
-    [SerializeField] private List<RewardEffectConfig> effectConfigList = new List<RewardEffectConfig>();
+    [SerializeField] private List<RewardEffectConfig> effectConfigList = new();
 
     public string CardId => cardId;
     public string CardName => string.IsNullOrWhiteSpace(cardName) ? cardId : cardName;

@@ -69,7 +69,8 @@ public class RewardBonusManager : MonoBehaviour
             return;
         }
 
-        DefenseRewardEffectApplier.ApplyEffects(rewardCard.EffectConfigList, _defenseRewardState);
+        RewardEffectContext context = new RewardEffectContext(this, _defenseRewardState, ResourceManager.Instance, EnemyWaveManager.Instance, BuildManager.Instance);
+        DefenseRewardEffectApplier.ApplyEffects(rewardCard.EffectConfigList, _defenseRewardState, context);
         RecordRewardSelection(rewardCard);
         OnRewardBonusChanged?.Invoke();
     }

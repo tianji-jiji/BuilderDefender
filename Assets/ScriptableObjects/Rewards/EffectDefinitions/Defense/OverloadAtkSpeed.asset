@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: OverloadAtkSpeed
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 10
   displayName: "\u8D85\u8F7D\u653B\u51FB\u901F\u5EA6"
   useCustomDescription: 0
   descriptionTemplate: '{displayName} {AttackSpeedMultiplier}'
   autoImpactRule: 0
+  handler: {fileID: 11400000, guid: b8cf160687d17a34ba7c0c20eea14e3c, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 7
-    displayName: "\u653B\u51FB\u901F\u5EA6\u53D8\u5316"
+  - parameterId: AttackSpeedMultiplier
+    displayName: "\u653B\u51FB\u901F\u5EA6\u52A0\u6210"
     templateToken: 
     valueFormat: 0
     autoImpactRule: 0

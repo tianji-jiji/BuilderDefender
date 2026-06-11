@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: KillAutoUpgrade
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 9
   displayName: "\u51FB\u6740\u81EA\u52A8\u5347\u661F"
   useCustomDescription: 0
   descriptionTemplate: "\u51FB\u6740 {KillCountToUpgrade} \u4E2A\u654C\u4EBA\u540E\u81EA\u52A8\u5347\u661F"
   autoImpactRule: 2
+  handler: {fileID: 11400000, guid: ff9d9660a2014c94383230438d383c28, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 6
-    displayName: "\u5347\u661F\u6240\u9700\u51FB\u6740\u6570"
+  - parameterId: KillCountToUpgrade
+    displayName: "\u5347\u7EA7\u51FB\u6740\u6570"
     templateToken: 
     valueFormat: 3
     autoImpactRule: 0

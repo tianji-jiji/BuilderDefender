@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: DamageTaken
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 7
   displayName: "\u9632\u5FA1\u5854\u53D7\u5230\u7684\u4F24\u5BB3"
   useCustomDescription: 0
   descriptionTemplate: '{displayName} {DamageTakenMultiplier}'
   autoImpactRule: 1
+  handler: {fileID: 11400000, guid: 269de59b7f77eb446916d4d7b99df901, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 4
+  - parameterId: DamageTakenMultiplier
     displayName: "\u53D7\u5230\u4F24\u5BB3\u53D8\u5316"
     templateToken: 
     valueFormat: 0

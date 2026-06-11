@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: WaveEndHeal
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 8
   displayName: "\u9632\u5FA1\u5854\u6CE2\u6B21\u7ED3\u675F\u6062\u590D\u751F\u547D"
   useCustomDescription: 0
   descriptionTemplate: "\u6BCF\u6CE2\u7ED3\u675F\u6062\u590D {WaveEndHealPercent}
     \u6700\u5927\u751F\u547D"
   autoImpactRule: 2
+  handler: {fileID: 11400000, guid: e0f130d9ea4b04e4088cb32fee057d02, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 5
-    displayName: "\u6CE2\u672B\u56DE\u8840\u767E\u5206\u6BD4"
+  - parameterId: WaveEndHealPercent
+    displayName: "\u56DE\u5408\u7ED3\u675F\u6CBB\u7597"
     templateToken: 
     valueFormat: 1
-    autoImpactRule: 2
+    autoImpactRule: 0

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: ArmorIgnore
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 5
   displayName: "\u9632\u5FA1\u5854\u62A4\u7532\u7A7F\u900F"
   useCustomDescription: 0
   descriptionTemplate: '{displayName} {ArmorIgnorePercent}'
   autoImpactRule: 0
+  handler: {fileID: 11400000, guid: f29922a7ec8c2e1499a05d020b8b28d9, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 3
-    displayName: "\u62A4\u7532\u7A7F\u900F\u767E\u5206\u6BD4"
+  - parameterId: ArmorIgnorePercent
+    displayName: "\u62A4\u7532\u7A7F\u900F"
     templateToken: 
     valueFormat: 1
-    autoImpactRule: 2
+    autoImpactRule: 0

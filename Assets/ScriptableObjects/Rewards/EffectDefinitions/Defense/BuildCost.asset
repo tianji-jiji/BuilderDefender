@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: BuildCost
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 4
   displayName: "\u9632\u5FA1\u5854\u5EFA\u9020\u6210\u672C"
   useCustomDescription: 0
   descriptionTemplate: '{displayName} {value}'
   autoImpactRule: 1
+  handler: {fileID: 11400000, guid: 9d931975ab14cd54fbcee04090ae7608, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 0
-    displayName: "\u5EFA\u9020\u6210\u672C\u53D8\u5316"
+  - parameterId: Value
+    displayName: "\u6570\u503C"
     templateToken: 
     valueFormat: 0
-    autoImpactRule: 1
+    autoImpactRule: 0

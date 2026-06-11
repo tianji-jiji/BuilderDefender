@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: DoubleDamageChance
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 13
   displayName: "\u53CC\u500D\u4F24\u5BB3\u6982\u7387"
   useCustomDescription: 0
   descriptionTemplate: "\u653B\u51FB\u65F6\u6709 {DoubleDamageChance} \u6982\u7387\u9020\u6210\u53CC\u500D\u4F24\u5BB3"
   autoImpactRule: 2
+  handler: {fileID: 11400000, guid: 6fd462a8d1735c043b18eafb4a07bafa, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 10
+  - parameterId: DoubleDamageChance
     displayName: "\u53CC\u500D\u4F24\u5BB3\u6982\u7387"
     templateToken: 
     valueFormat: 1
-    autoImpactRule: 2
+    autoImpactRule: 0

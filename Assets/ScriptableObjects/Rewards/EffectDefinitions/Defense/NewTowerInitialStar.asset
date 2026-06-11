@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: NewTowerInitialStar
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 16
   displayName: "\u65B0\u5EFA\u9632\u5FA1\u5854\u521D\u59CB\u661F\u7EA7"
+  useCustomDescription: 0
   descriptionTemplate: "\u65B0\u5EFA\u9632\u5FA1\u5854\u521D\u59CB\u661F\u7EA7 {InitialStarBonus}"
   autoImpactRule: 2
+  handler: {fileID: 11400000, guid: 84defb16a2458e84bbd4863e137b7541, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 12
+  - parameterId: InitialStarBonus
     displayName: "\u521D\u59CB\u661F\u7EA7\u52A0\u6210"
     templateToken: 
     valueFormat: 2
-    autoImpactRule: 2
+    autoImpactRule: 0

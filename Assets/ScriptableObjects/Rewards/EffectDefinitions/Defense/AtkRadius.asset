@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: AtkRadius
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 2
   displayName: "\u9632\u5FA1\u5854\u653B\u51FB\u8303\u56F4"
   useCustomDescription: 0
   descriptionTemplate: '{displayName} {value}'
   autoImpactRule: 0
+  handler: {fileID: 11400000, guid: 4bcb67ea33e03a24ba5943eb03e3394c, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 0
-    displayName: "\u653B\u51FB\u8303\u56F4\u52A0\u6210"
+  - parameterId: Value
+    displayName: "\u6570\u503C"
     templateToken: 
     valueFormat: 0
     autoImpactRule: 0

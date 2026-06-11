@@ -11,8 +11,8 @@ public class PoolConfig
     [SerializeField] private Transform parent;
 
     public GameObject Prefab => prefab;
-    public int InitialSize => Mathf.Max(0, initialSize);
     public int MaxSize => Mathf.Max(1, maxSize);
+    public int InitialSize => Mathf.Clamp(initialSize, 0, MaxSize);
     public Transform Parent => parent;
 }
 
@@ -31,9 +31,25 @@ public class PoolManager : MonoBehaviour
     // 初始化对象池单例并预热配置中的对象池。
     private void Awake()
     {
+        if (Instance && Instance != this)
+        {
+            Debug.LogWarning($"场景中存在重复的 {nameof(PoolManager)}，已移除重复对象：{name}");
+            DestroyDuplicateManager();
+            return;
+        }
+
         Instance = this;
         EnsureDefaultPoolRoot();
         InitializeConfiguredPools();
+    }
+
+    // 清理对象池单例引用。
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     // 从对象池生成指定预制体实例。
@@ -184,11 +200,6 @@ public class PoolManager : MonoBehaviour
             pooledObject = instance.AddComponent<PooledObject>();
         }
 
-        if (ShouldAddParticleAutoReturn(instance) && !instance.TryGetComponent(out PooledParticleAutoReturn _))
-        {
-            instance.AddComponent<PooledParticleAutoReturn>();
-        }
-
         pooledObject.Initialize(this, prefab);
         instance.SetActive(false);
         return instance;
@@ -233,12 +244,15 @@ public class PoolManager : MonoBehaviour
         return requestedParent ? requestedParent : GetPoolParent(prefab);
     }
 
-    // 判断当前对象是否适合自动添加粒子回池组件。
-    private bool ShouldAddParticleAutoReturn(GameObject instance)
+    // 销毁重复的对象池管理器。
+    private void DestroyDuplicateManager()
     {
-        return instance.TryGetComponent(out ParticleSystem _)
-               && !instance.GetComponent<Enemy>()
-               && !instance.GetComponent<Arrow>()
-               && !instance.GetComponent<PopupUI>();
+        if (Application.isPlaying)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        DestroyImmediate(gameObject);
     }
 }

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
   m_Name: AtkDamagePerThreeStar
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
-  effectType: 12
   displayName: "\u4E09\u661F\u5854\u6570\u91CF\u52A0\u653B\u51FB"
   useCustomDescription: 0
   descriptionTemplate: "\u6BCF\u5EA7\u4E09\u661F\u5854\u4F7F\u653B\u51FB\u529B {DamageBonusPerThreeStarTower}"
   autoImpactRule: 0
+  handler: {fileID: 11400000, guid: 287ec7143ae8a07468e185cc26d0e407, type: 2}
   parameterDisplayDefinitionList:
-  - parameterKey: 9
-    displayName: "\u6BCF\u5EA7\u4E09\u661F\u5854\u653B\u51FB\u52A0\u6210"
+  - parameterId: DamageBonusPerThreeStarTower
+    displayName: "\u4E09\u661F\u5854\u653B\u51FB\u52A0\u6210"
     templateToken: 
     valueFormat: 0
-    autoImpactRule: 2
+    autoImpactRule: 0
