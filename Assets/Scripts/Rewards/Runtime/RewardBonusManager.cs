@@ -19,6 +19,7 @@ public class RewardBonusManager : MonoBehaviour
     public static event Action OnRewardBonusChanged;
 
     private readonly DefenseRewardState _defenseRewardState = new DefenseRewardState();
+    private readonly DefenseCardEffectRuntime _defenseCardEffectRuntime = new();
 
     private EnemyWaveManager _waveManager;
 
@@ -42,6 +43,7 @@ public class RewardBonusManager : MonoBehaviour
     public bool DefenseThreeStarExplosiveArrowEnabled => _defenseRewardState.ThreeStarExplosiveArrowEnabled;
     public float DefenseExplosionRadius => _defenseRewardState.ExplosionRadius;
     public float DefenseExplosionDamageMultiplier => _defenseRewardState.ExplosionDamageMultiplier;
+    public DefenseCardEffectRuntime DefenseCardEffectRuntime => _defenseCardEffectRuntime;
 
     // 初始化全局奖励管理器单例。
     private void Awake()
@@ -69,7 +71,7 @@ public class RewardBonusManager : MonoBehaviour
             return;
         }
 
-        RewardEffectContext context = new RewardEffectContext(this, _defenseRewardState, ResourceManager.Instance, EnemyWaveManager.Instance, BuildManager.Instance);
+        RewardEffectContext context = new RewardEffectContext(this, _defenseRewardState, ResourceManager.Instance, EnemyWaveManager.Instance, BuildManager.Instance, _defenseCardEffectRuntime);
         DefenseRewardEffectApplier.ApplyEffects(rewardCard.EffectConfigList, _defenseRewardState, context);
         RecordRewardSelection(rewardCard);
         OnRewardBonusChanged?.Invoke();
@@ -194,7 +196,7 @@ public class RewardBonusManager : MonoBehaviour
     // 波次结束时应用波次结算型奖励。
     private void HandleWaveCompleted(int waveIndex)
     {
-        DefenseRewardWaveEndApplier.ApplyWaveEndHeal(DefenseWaveEndHealPercent);
+        _defenseCardEffectRuntime.OnWaveCompleted(new DefenseWaveContext(waveIndex));
     }
 
     // 追加倍率型奖励摘要行。

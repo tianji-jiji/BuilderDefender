@@ -5,6 +5,7 @@ public sealed class RewardEffectContext
 {
     public RewardBonusManager RewardBonusManager { get; }
     public DefenseRewardState DefenseRewardState { get; }
+    public DefenseCardEffectRuntime DefenseCardEffectRuntime { get; }
     public ResourceManager ResourceManager { get; }
     public EnemyWaveManager EnemyWaveManager { get; }
     public BuildManager BuildManager { get; }
@@ -15,10 +16,12 @@ public sealed class RewardEffectContext
         DefenseRewardState defenseRewardState,
         ResourceManager resourceManager,
         EnemyWaveManager enemyWaveManager,
-        BuildManager buildManager)
+        BuildManager buildManager,
+        DefenseCardEffectRuntime defenseCardEffectRuntime = null)
     {
         RewardBonusManager = rewardBonusManager;
         DefenseRewardState = defenseRewardState;
+        DefenseCardEffectRuntime = defenseCardEffectRuntime;
         ResourceManager = resourceManager;
         EnemyWaveManager = enemyWaveManager;
         BuildManager = buildManager;

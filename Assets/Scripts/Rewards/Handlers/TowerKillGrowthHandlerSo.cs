@@ -6,6 +6,10 @@
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Tower Kill Growth Handler")]
 public class TowerKillGrowthHandlerSo : DefenseRewardHandlerSo
 {
+    private const string KILL_COUNTER_ID = "KillAutoUpgrade";
+
+    public override bool ShouldRegisterRuntimeEffect => true;
+
     // 应用防御塔击杀成长配置。
     public override void Apply(RewardEffectContext context, RewardEffectConfig config)
     {
@@ -16,7 +20,28 @@ public class TowerKillGrowthHandlerSo : DefenseRewardHandlerSo
 
         int killCountToUpgrade = RewardEffectParameterReader.GetInt(config, RewardEffectParameterIds.KILL_COUNT_TO_UPGRADE, 0, true);
         state.AddKillCountAutoUpgrade(killCountToUpgrade);
+    }
 
-        // TODO：如果后续要做“单塔击杀后永久加攻击”，在这里接入防御塔击杀事件和运行时成长状态。
+    // 按击杀次数自动提升防御塔星级。
+    public override void OnEnemyKilled(DefenseCardEffectInstance instance, DefenseEnemyKillContext context)
+    {
+        int killCountToUpgrade = RewardEffectParameterReader.GetInt(instance.Config, RewardEffectParameterIds.KILL_COUNT_TO_UPGRADE, 0);
+        if (killCountToUpgrade <= 0 || !context.SourceDefenseSystem)
+        {
+            return;
+        }
+
+        int killCount = instance.IncrementCounter(KILL_COUNTER_ID);
+        if (killCount < killCountToUpgrade)
+        {
+            return;
+        }
+
+        instance.ResetCounter(KILL_COUNTER_ID);
+        BuildingUpgradeButton upgradeButton = DefenseTowerRegistry.GetUpgradeButton(context.SourceDefenseSystem);
+        if (upgradeButton)
+        {
+            upgradeButton.UpgradeOneLevelWithoutCost();
+        }
     }
 }

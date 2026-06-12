@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -27,8 +26,6 @@ public class DefenseSystem : MonoBehaviour
     [SerializeField] private Material starThreeArrowMaterial;
 
     private readonly Collider2D[] _detectResults = new Collider2D[MAX_DETECTED_ENEMIES];
-    private readonly List<int> _extraAttackCounterList = new List<int>();
-    private readonly List<int> _attackHealthCostCounterList = new List<int>();
     private HealthSystem _healthSystem;
     private float _baseDetectRadius;
     private float _baseArrowGenerateRate;
@@ -36,7 +33,6 @@ public class DefenseSystem : MonoBehaviour
     private int _baseAttackDamage;
     private int _detectedEnemyCount;
     private int _currentStarLevel = DEFAULT_STAR_LEVEL;
-    private int _killCountSinceUpgrade;
     private float _upgradeAttackDamageMultiplier = 1f;
     private float _upgradeAttackIntervalMultiplier = 1f;
     private float _upgradeDetectRadiusMultiplier = 1f;
@@ -45,6 +41,7 @@ public class DefenseSystem : MonoBehaviour
     private Enemy _currentTargetEnemy;
 
     public int CurrentStarLevel => _currentStarLevel;
+    private DefenseCardEffectRuntime ActiveDefenseCardEffectRuntime => RewardBonusManager.Instance ? RewardBonusManager.Instance.DefenseCardEffectRuntime : null;
 
     private enum TargetLane
     {
@@ -95,29 +92,19 @@ public class DefenseSystem : MonoBehaviour
     // 记录箭矢击杀并按奖励规则自动升星。
     public void NotifyEnemyKilled()
     {
-        if (!RewardBonusManager.Instance)
-        {
-            return;
-        }
+        NotifyEnemyKilled(null);
+    }
 
-        int killCountToUpgrade = RewardBonusManager.Instance.DefenseKillCountAutoUpgrade;
-        if (killCountToUpgrade <= 0)
-        {
-            return;
-        }
+    // 通知运行时卡牌效果本防御塔命中了敌人。
+    public void NotifyEnemyHit(Enemy hitEnemy, int actualDamage)
+    {
+        ActiveDefenseCardEffectRuntime?.OnEnemyHit(new DefenseEnemyHitContext(this, hitEnemy, actualDamage));
+    }
 
-        _killCountSinceUpgrade++;
-        if (_killCountSinceUpgrade < killCountToUpgrade)
-        {
-            return;
-        }
-
-        _killCountSinceUpgrade = 0;
-        BuildingUpgradeButton upgradeButton = DefenseTowerRegistry.GetUpgradeButton(this);
-        if (upgradeButton)
-        {
-            upgradeButton.UpgradeOneLevelWithoutCost();
-        }
+    // 通知运行时卡牌效果本防御塔击杀了敌人。
+    public void NotifyEnemyKilled(Enemy killedEnemy)
+    {
+        ActiveDefenseCardEffectRuntime?.OnEnemyKilled(new DefenseEnemyKillContext(this, killedEnemy));
     }
 
     // 根据攻击间隔持续向当前目标发射箭矢。
@@ -152,6 +139,8 @@ public class DefenseSystem : MonoBehaviour
             return;
         }
 
+        ActiveDefenseCardEffectRuntime?.OnBeforeAttack(new DefenseAttackContext(this, _healthSystem));
+
         bool hasFired = FirePrimaryShotGroup();
         if (!hasFired && TryRefreshTargetsForImmediateShot())
         {
@@ -185,48 +174,9 @@ public class DefenseSystem : MonoBehaviour
     // 处理一次主动攻击触发后的奖励效果。
     private void HandleAttackTriggeredRewards()
     {
-        ApplyAttackHealthCost();
-        FireRewardExtraAttacks();
-    }
-
-    // 根据额外攻击规则发射额外箭矢。
-    private void FireRewardExtraAttacks()
-    {
-        if (!RewardBonusManager.Instance)
-        {
-            return;
-        }
-
-        IReadOnlyList<DefenseExtraAttackRule> extraAttackRuleList = RewardBonusManager.Instance.DefenseExtraAttackRuleList;
-        EnsureExtraAttackCounterCount(extraAttackRuleList.Count);
-
-        for (int i = 0; i < extraAttackRuleList.Count; i++)
-        {
-            DefenseExtraAttackRule extraAttackRule = extraAttackRuleList[i];
-            _extraAttackCounterList[i]++;
-
-            if (_extraAttackCounterList[i] < extraAttackRule.triggerAttackCount)
-            {
-                continue;
-            }
-
-            _extraAttackCounterList[i] = 0;
-            FireExtraAttackArrows(extraAttackRule.extraAttackCount);
-        }
-    }
-
-    // 确保额外攻击计数器数量和规则数量一致。
-    private void EnsureExtraAttackCounterCount(int targetCount)
-    {
-        while (_extraAttackCounterList.Count < targetCount)
-        {
-            _extraAttackCounterList.Add(0);
-        }
-
-        while (_extraAttackCounterList.Count > targetCount)
-        {
-            _extraAttackCounterList.RemoveAt(_extraAttackCounterList.Count - 1);
-        }
+        DefenseAttackContext attackContext = new(this, _healthSystem);
+        ActiveDefenseCardEffectRuntime?.OnAfterAttack(attackContext);
+        FireExtraAttackArrows(attackContext.ExtraAttackCount);
     }
 
     // 发射指定数量的额外普通箭。
@@ -235,46 +185,6 @@ public class DefenseSystem : MonoBehaviour
         for (int i = 0; i < extraAttackCount; i++)
         {
             FireFromSpawnPoint(arrowSpawnPoint, TargetLane.Any);
-        }
-    }
-
-    // 应用超载核心的攻击损血。
-    private void ApplyAttackHealthCost()
-    {
-        if (!_healthSystem || !RewardBonusManager.Instance)
-        {
-            return;
-        }
-
-        IReadOnlyList<DefenseAttackHealthCostRule> attackHealthCostRuleList = RewardBonusManager.Instance.DefenseAttackHealthCostRuleList;
-        EnsureAttackHealthCostCounterCount(attackHealthCostRuleList.Count);
-
-        for (int i = 0; i < attackHealthCostRuleList.Count; i++)
-        {
-            DefenseAttackHealthCostRule attackHealthCostRule = attackHealthCostRuleList[i];
-            _attackHealthCostCounterList[i]++;
-
-            if (_attackHealthCostCounterList[i] < attackHealthCostRule.triggerAttackCount)
-            {
-                continue;
-            }
-
-            _attackHealthCostCounterList[i] = 0;
-            _healthSystem.LoseHealth(attackHealthCostRule.healthCost);
-        }
-    }
-
-    // 确保攻击损血计数器数量和规则数量一致。
-    private void EnsureAttackHealthCostCounterCount(int targetCount)
-    {
-        while (_attackHealthCostCounterList.Count < targetCount)
-        {
-            _attackHealthCostCounterList.Add(0);
-        }
-
-        while (_attackHealthCostCounterList.Count > targetCount)
-        {
-            _attackHealthCostCounterList.RemoveAt(_attackHealthCostCounterList.Count - 1);
         }
     }
 
@@ -318,9 +228,21 @@ public class DefenseSystem : MonoBehaviour
             return false;
         }
 
-        arrow.SetVisualEffect(GetArrowMaterialForCurrentStarLevel(), ShouldEnableArrowTrail());
-        arrow.SetDamage(GetCurrentAttackDamage());
-        arrow.SetAttackContext(this, GetArmorIgnorePercent(), ShouldUseExplosiveArrow(), GetExplosionRadius(), GetExplosionDamageMultiplier());
+        DefenseArrowContext arrowContext = new(
+            this,
+            target,
+            GetCurrentAttackDamage(),
+            GetArmorIgnorePercent(),
+            ShouldUseExplosiveArrow(),
+            GetExplosionRadius(),
+            GetExplosionDamageMultiplier(),
+            GetArrowMaterialForCurrentStarLevel(),
+            ShouldEnableArrowTrail());
+        ActiveDefenseCardEffectRuntime?.ModifyArrow(arrowContext);
+
+        arrow.SetVisualEffect(arrowContext.VisualMaterial, arrowContext.EnableTrail);
+        arrow.SetDamage(arrowContext.Damage);
+        arrow.SetAttackContext(this, arrowContext.ArmorIgnorePercent, arrowContext.IsExplosiveArrow, arrowContext.ExplosionRadius, arrowContext.ExplosionDamageMultiplier);
         arrow.SetTarget(target);
         return true;
     }
@@ -437,13 +359,19 @@ public class DefenseSystem : MonoBehaviour
     // 根据升星倍率和全局奖励倍率刷新防御塔战斗属性。
     private void RefreshRewardBonuses()
     {
-        attackDamage = GetCurrentAttackDamage(false);
-        arrowGenerateRate = GetCurrentArrowGenerateRate();
-
         float rewardDetectRadiusMultiplier = RewardBonusManager.Instance
             ? RewardBonusManager.Instance.DefenseDetectRadiusMultiplier
             : 1f;
-        detectRadius = Mathf.Max(0.01f, _baseDetectRadius * _upgradeDetectRadiusMultiplier * rewardDetectRadiusMultiplier);
+        DefenseStatsContext statsContext = new(
+            this,
+            GetCurrentAttackDamage(false),
+            GetCurrentArrowGenerateRate(),
+            Mathf.Max(0.01f, _baseDetectRadius * _upgradeDetectRadiusMultiplier * rewardDetectRadiusMultiplier));
+        ActiveDefenseCardEffectRuntime?.ModifyStats(statsContext);
+
+        attackDamage = statsContext.AttackDamage;
+        arrowGenerateRate = Mathf.Max(MIN_ARROW_GENERATE_RATE, statsContext.ArrowGenerateRate);
+        detectRadius = Mathf.Max(0.01f, statsContext.DetectRadius);
     }
 
     // 计算当前攻击伤害。

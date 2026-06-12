@@ -28,6 +28,12 @@ public static class DefenseRewardEffectApplier
             return;
         }
 
-        effectConfig.EffectDefinition.Handler.Apply(context, effectConfig);
+        RewardEffectHandlerSo handler = effectConfig.EffectDefinition.Handler;
+        handler.Apply(context, effectConfig);
+
+        if (handler is IDefenseCardEffect defenseCardEffect)
+        {
+            context.DefenseCardEffectRuntime?.RegisterEffect(defenseCardEffect, effectConfig);
+        }
     }
 }

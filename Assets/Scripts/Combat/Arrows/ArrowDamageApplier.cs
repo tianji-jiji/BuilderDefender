@@ -18,9 +18,14 @@ public static class ArrowDamageApplier
         int actualDamage = healthSystem.TakeDamage(adjustedDamage);
         DamageFloatingTextService.ShowEnemyDamage(enemy.DamageFloatingTextPosition, actualDamage);
 
+        if (actualDamage > 0 && sourceDefenseSystem)
+        {
+            sourceDefenseSystem.NotifyEnemyHit(enemy, actualDamage);
+        }
+
         if (wasAlive && !enemy.IsAlive && sourceDefenseSystem)
         {
-            sourceDefenseSystem.NotifyEnemyKilled();
+            sourceDefenseSystem.NotifyEnemyKilled(enemy);
         }
 
         return actualDamage;
