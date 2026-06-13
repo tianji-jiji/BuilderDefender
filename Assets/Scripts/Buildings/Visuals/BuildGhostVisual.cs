@@ -9,8 +9,18 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class BuildGhostVisual : MonoBehaviour
 {
+    [SerializeField] private Camera worldCamera;
     [SerializeField] private List<SpriteRenderer> buildingSprite;
     private BuildingSo _currentBuildingSo;
+
+    // 缓存世界相机，避免运行时反复查找主相机。
+    private void Awake()
+    {
+        if (!worldCamera)
+        {
+            worldCamera = Camera.main;
+        }
+    }
 
     private void Start()
     {
@@ -42,9 +52,9 @@ public class BuildGhostVisual : MonoBehaviour
         }
 
         // 更新位置
-        transform.position = Utils.GetMousePosition();
+        transform.position = GetMousePosition();
 
-        bool isAuthorizedConstructionZone = BuildManager.Instance.IsAuthorizedConstructionZone(
+        bool isAuthorizedConstructionZone = BuildManager.Instance.IsAuthorizedZone(
             _currentBuildingSo,
             transform.position
         );
@@ -71,6 +81,19 @@ public class BuildGhostVisual : MonoBehaviour
 
         // 显示对应幽灵
         ShowGhost(_currentBuildingSo, isAuthorizedConstructionZone, canAfford);
+    }
+
+    // 获取当前鼠标位置对应的世界坐标。
+    private Vector3 GetMousePosition()
+    {
+        if (!worldCamera)
+        {
+            return Vector3.zero;
+        }
+
+        Vector3 position = worldCamera.ScreenToWorldPoint(Input.mousePosition);
+        position.z = 0f;
+        return position;
     }
 
     private void ShowGhost(BuildingSo buildSo, bool isAuthorizedConstructionZone, bool canAfford)

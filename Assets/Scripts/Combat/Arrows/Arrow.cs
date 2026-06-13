@@ -14,13 +14,16 @@ public class Arrow : MonoBehaviour, IPoolable
     [SerializeField] private ArrowEffectSo explosiveArrowEffect;
 
     private readonly Collider2D[] _effectHitResults = new Collider2D[MAX_EFFECT_HIT_COUNT];
+    
     private Rigidbody2D _rb2;
     private Collider2D _collider;
     private PooledObject _pooledObject;
+    
     private DefenseSystem _sourceDefenseSystem;
     private Enemy _targetEnemy;
     private Transform _targetTransform;
     private Vector2 _moveDirection;
+    
     private float _lifeTimer;
     private float _armorIgnorePercent;
     private float _explosionRadius;
@@ -46,7 +49,7 @@ public class Arrow : MonoBehaviour, IPoolable
     public void OnSpawned()
     {
         TryGetComponent(out _pooledObject);
-        SetColliderActive(true);
+        _collider.enabled = true;
         arrowVisual?.ResetForSpawn();
         _sourceDefenseSystem = null;
         _targetEnemy = null;
@@ -59,8 +62,7 @@ public class Arrow : MonoBehaviour, IPoolable
         _explosionRadius = 0f;
         _explosionDamageMultiplier = 0f;
         _isReturning = false;
-
-        StopMovement();
+        _rb2.linearVelocity = Vector2.zero;
     }
 
     // 清理箭头回池前的运行状态。
@@ -71,12 +73,11 @@ public class Arrow : MonoBehaviour, IPoolable
         _targetTransform = null;
         _moveDirection = Vector2.zero;
         _isReturning = true;
-        SetColliderActive(false);
+        _collider.enabled = false;
         arrowVisual?.ResetForDespawn();
-        StopMovement();
+        _rb2.linearVelocity = Vector2.zero;
     }
 
-    // 处理箭头生命周期超时。
     private void Update()
     {
         _lifeTimer += Time.deltaTime;
@@ -87,7 +88,6 @@ public class Arrow : MonoBehaviour, IPoolable
         }
     }
 
-    // 固定帧更新箭头飞行。
     private void FixedUpdate()
     {
         FlyToEnemy();
@@ -187,24 +187,6 @@ public class Arrow : MonoBehaviour, IPoolable
         }
 
         transform.right = _moveDirection;
-    }
-
-    // 停止箭头刚体移动。
-    private void StopMovement()
-    {
-        if (_rb2)
-        {
-            _rb2.linearVelocity = Vector2.zero;
-        }
-    }
-
-    // 设置箭头碰撞体是否启用。
-    private void SetColliderActive(bool active)
-    {
-        if (_collider)
-        {
-            _collider.enabled = active;
-        }
     }
 
     // 将箭头回收到对象池，减少对象销毁。

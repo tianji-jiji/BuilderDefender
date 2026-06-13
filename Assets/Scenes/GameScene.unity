@@ -16800,6 +16800,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76ac6b0b244cef4f8b19c89e754e1be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  worldCamera: {fileID: 519420031}
   buildingSprite:
   - {fileID: 719444812}
   - {fileID: 1379042756}
@@ -20984,6 +20985,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 960
+  worldCamera: {fileID: 519420031}
   buildingConstructorPrefab: {fileID: 1752895960}
 --- !u!1001 &1868005165
 PrefabInstance:

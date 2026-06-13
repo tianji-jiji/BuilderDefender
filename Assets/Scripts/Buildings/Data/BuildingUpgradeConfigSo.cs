@@ -11,11 +11,11 @@ public class BuildingUpgradeConfigSo : ScriptableObject
     // 获取指定星级的升级配置。
     public BuildingUpgradeLevel GetUpgradeLevel(int starLevel)
     {
-        for (int i = 0; i < upgradeLevels.Count; i++)
+        foreach (var t in upgradeLevels)
         {
-            if (upgradeLevels[i].StarLevel == starLevel)
+            if (t.StarLevel == starLevel)
             {
-                return upgradeLevels[i];
+                return t;
             }
         }
 

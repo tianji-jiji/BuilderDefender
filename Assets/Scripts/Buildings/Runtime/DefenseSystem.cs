@@ -1,91 +1,79 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 /// <summary>
-/// 防御塔战斗系统，负责索敌、发射箭矢、升星战斗属性和攻击型奖励效果。
+/// 防御塔战斗门面，负责协调索敌、发射、属性计算和攻击型奖励效果。
 /// </summary>
 public class DefenseSystem : MonoBehaviour
 {
-    private const int MAX_DETECTED_ENEMIES = 10;
-    private const float DETECT_INTERVAL = 0.2f;
-    private const float MIN_ARROW_GENERATE_RATE = 0.05f;
-    private const int DEFAULT_STAR_LEVEL = 1;
-    private const int STAR_LEVEL_TWO = 2;
-    private const int STAR_LEVEL_THREE = 3;
-
     [SerializeField] private float detectRadius = 15f;
-    [SerializeField] private Transform arrowSpawnPoint;
-    [SerializeField] private Transform[] superArrowSpawnPoints;
-    [SerializeField] private Transform detectPoint;
-    [FormerlySerializedAs("buildingLayer")] [SerializeField] private LayerMask detectLayer;
     [SerializeField] private float arrowGenerateRate = 0.3f;
     [SerializeField] private int attackDamage = 10;
-    [SerializeField] private Arrow arrowPrefab;
-    [SerializeField] private Material starOneArrowMaterial;
-    [SerializeField] private Material starTwoArrowMaterial;
-    [SerializeField] private Material starThreeArrowMaterial;
+    [SerializeField] private DefenseTargetSelector targetSelector;
+    [SerializeField] private DefenseArrowLauncher arrowLauncher;
 
-    private readonly Collider2D[] _detectResults = new Collider2D[MAX_DETECTED_ENEMIES];
     private HealthSystem _healthSystem;
-    private float _baseDetectRadius;
-    private float _baseArrowGenerateRate;
     private float _timer;
-    private int _baseAttackDamage;
-    private int _detectedEnemyCount;
-    private int _currentStarLevel = DEFAULT_STAR_LEVEL;
-    private float _upgradeAttackDamageMultiplier = 1f;
-    private float _upgradeAttackIntervalMultiplier = 1f;
-    private float _upgradeDetectRadiusMultiplier = 1f;
     private bool _hasEnemy;
-    private bool _superArrowUnlocked;
-    private Enemy _currentTargetEnemy;
+    private DefenseStatCalculator _statCalculator;
+    private DefenseCombatStats _currentStats;
 
-    public int CurrentStarLevel => _currentStarLevel;
+    public int CurrentStarLevel => _statCalculator?.CurrentStarLevel ?? 1;
     private DefenseCardEffectRuntime ActiveDefenseCardEffectRuntime => RewardBonusManager.Instance ? RewardBonusManager.Instance.DefenseCardEffectRuntime : null;
 
-    private enum TargetLane
-    {
-        Any,
-        Upper,
-        Lower
-    }
-
-    // 缓存防御塔的基础战斗属性和组件引用。
     private void Awake()
     {
-        _baseDetectRadius = detectRadius;
-        _baseArrowGenerateRate = arrowGenerateRate;
-        _baseAttackDamage = attackDamage;
         TryGetComponent(out _healthSystem);
+        CacheCombatComponents();
+        _statCalculator = new DefenseStatCalculator(this, attackDamage, arrowGenerateRate, detectRadius);
+        _currentStats = _statCalculator.RefreshStats(null);
     }
 
-    // 订阅全局奖励变化事件并注册防御塔。
     private void OnEnable()
     {
         RewardBonusManager.OnRewardBonusChanged += RefreshRewardBonuses;
         DefenseTowerRegistry.RegisterDefenseSystem(this);
     }
 
-    // 启动防御塔的周期性敌人侦测。
+    private void OnDisable()
+    {
+        RewardBonusManager.OnRewardBonusChanged -= RefreshRewardBonuses;
+        DefenseTowerRegistry.UnregisterDefenseSystem(this);
+        CancelInvoke();
+        _hasEnemy = false;
+        targetSelector?.ClearTarget();
+    }
+
     private void Start()
     {
         RefreshRewardBonuses();
-        InvokeRepeating(nameof(DetectEnemy), 0f, DETECT_INTERVAL);
+        InvokeRepeating(nameof(DetectEnemy), 0f, DefenseTargetSelector.DETECT_INTERVAL);
+    }
+
+    private void Update()
+    {
+        if (!_hasEnemy)
+        {
+            return;
+        }
+
+        _hasEnemy = targetSelector && targetSelector.RefreshCurrentTarget(_currentStats.DetectRadius);
+        if (!_hasEnemy)
+        {
+            return;
+        }
+
+        _timer -= Time.deltaTime;
+        if (_timer <= 0f)
+        {
+            ExecuteAttack();
+            _timer = _currentStats.ArrowGenerateRate;
+        }
     }
 
     // 根据升星配置提升攻击力、射速并解锁超级箭。
     public void ApplyUpgradeLevel(BuildingUpgradeLevel upgradeLevel)
     {
-        if (upgradeLevel == null)
-        {
-            return;
-        }
-
-        _upgradeAttackDamageMultiplier = upgradeLevel.AttackDamageMultiplier;
-        _upgradeAttackIntervalMultiplier = upgradeLevel.AttackIntervalMultiplier;
-        _upgradeDetectRadiusMultiplier = upgradeLevel.DetectRadiusMultiplier;
-        _superArrowUnlocked = upgradeLevel.UnlockSuperArrow;
-        _currentStarLevel = upgradeLevel.StarLevel;
+        _statCalculator?.ApplyUpgradeLevel(upgradeLevel);
         RefreshRewardBonuses();
     }
 
@@ -107,144 +95,50 @@ public class DefenseSystem : MonoBehaviour
         ActiveDefenseCardEffectRuntime?.OnEnemyKilled(new DefenseEnemyKillContext(this, killedEnemy));
     }
 
-    // 根据攻击间隔持续向当前目标发射箭矢。
-    private void Update()
+    // 缓存防御塔战斗子组件。
+    private void CacheCombatComponents()
     {
-        if (!_hasEnemy)
+        if (!targetSelector)
         {
-            return;
+            TryGetComponent(out targetSelector);
         }
 
-        RefreshCurrentTargetIfNeeded();
-        if (!_hasEnemy)
+        if (!arrowLauncher)
         {
-            return;
-        }
-
-        _timer -= Time.deltaTime;
-        if (_timer <= 0f)
-        {
-            GenerateArrow();
-            _timer = GetCurrentArrowGenerateRate();
-        }
-    }
-
-    // 生成本次主动攻击的箭矢，并处理攻击触发型奖励。
-    private void GenerateArrow()
-    {
-        if (!arrowPrefab)
-        {
-            _hasEnemy = false;
-            _currentTargetEnemy = null;
-            return;
-        }
-
-        ActiveDefenseCardEffectRuntime?.OnBeforeAttack(new DefenseAttackContext(this, _healthSystem));
-
-        bool hasFired = FirePrimaryShotGroup();
-        if (!hasFired && TryRefreshTargetsForImmediateShot())
-        {
-            hasFired = FirePrimaryShotGroup();
-        }
-
-        if (!hasFired)
-        {
-            _hasEnemy = false;
-            _currentTargetEnemy = null;
-            return;
-        }
-
-        HandleAttackTriggeredRewards();
-    }
-
-    // 发射当前星级对应的一组主动攻击箭矢。
-    private bool FirePrimaryShotGroup()
-    {
-        bool hasFired = FireFromSpawnPoint(arrowSpawnPoint, TargetLane.Any);
-
-        if (_superArrowUnlocked)
-        {
-            hasFired |= FireSuperArrowSpawnPoint(0, TargetLane.Upper);
-            hasFired |= FireSuperArrowSpawnPoint(1, TargetLane.Lower);
-        }
-
-        return hasFired;
-    }
-
-    // 处理一次主动攻击触发后的奖励效果。
-    private void HandleAttackTriggeredRewards()
-    {
-        DefenseAttackContext attackContext = new(this, _healthSystem);
-        ActiveDefenseCardEffectRuntime?.OnAfterAttack(attackContext);
-        FireExtraAttackArrows(attackContext.ExtraAttackCount);
-    }
-
-    // 发射指定数量的额外普通箭。
-    private void FireExtraAttackArrows(int extraAttackCount)
-    {
-        for (int i = 0; i < extraAttackCount; i++)
-        {
-            FireFromSpawnPoint(arrowSpawnPoint, TargetLane.Any);
+            TryGetComponent(out arrowLauncher);
         }
     }
 
     // 侦测范围内最近的有效敌人并设置为当前攻击目标。
     private void DetectEnemy()
     {
-        Transform detectionPoint = detectPoint ? detectPoint : transform;
-        _detectedEnemyCount = Physics2D.OverlapCircleNonAlloc(detectionPoint.position, detectRadius, _detectResults, detectLayer);
+        _hasEnemy = targetSelector && targetSelector.Detect(_currentStats.DetectRadius);
+    }
 
-        if (_detectedEnemyCount == 0)
+    // 执行一次主动攻击并处理攻击触发型奖励。
+    private void ExecuteAttack()
+    {
+        if (!arrowLauncher || !targetSelector || _statCalculator == null)
         {
             _hasEnemy = false;
-            _currentTargetEnemy = null;
             return;
         }
 
-        _currentTargetEnemy = FindClosestTarget(TargetLane.Any);
-        _hasEnemy = _currentTargetEnemy;
-    }
-
-    // 使用指定发射点向目标区域内的最近敌人射箭。
-    private bool FireFromSpawnPoint(Transform spawnPoint, TargetLane targetLane)
-    {
-        if (!spawnPoint)
+        ActiveDefenseCardEffectRuntime?.OnBeforeAttack(new DefenseAttackContext(this, _healthSystem));
+        bool hasFired = arrowLauncher.FirePrimaryShotGroup(this, targetSelector, _statCalculator, ActiveDefenseCardEffectRuntime);
+        if (!hasFired && TryRefreshTargetsForImmediateShot())
         {
-            return false;
+            hasFired = arrowLauncher.FirePrimaryShotGroup(this, targetSelector, _statCalculator, ActiveDefenseCardEffectRuntime);
         }
 
-        Enemy target = FindPreferredTarget(targetLane);
-        if (!IsTargetValid(target))
+        if (!hasFired)
         {
-            return false;
+            _hasEnemy = false;
+            targetSelector.ClearTarget();
+            return;
         }
 
-        Arrow arrow = PoolManager.Instance
-            ? PoolManager.Instance.Spawn(arrowPrefab, spawnPoint.position, Quaternion.identity)
-            : Instantiate(arrowPrefab, spawnPoint.position, Quaternion.identity);
-
-        if (!arrow)
-        {
-            return false;
-        }
-
-        DefenseArrowContext arrowContext = new(
-            this,
-            target,
-            GetCurrentAttackDamage(),
-            GetArmorIgnorePercent(),
-            ShouldUseExplosiveArrow(),
-            GetExplosionRadius(),
-            GetExplosionDamageMultiplier(),
-            GetArrowMaterialForCurrentStarLevel(),
-            ShouldEnableArrowTrail());
-        ActiveDefenseCardEffectRuntime?.ModifyArrow(arrowContext);
-
-        arrow.SetVisualEffect(arrowContext.VisualMaterial, arrowContext.EnableTrail);
-        arrow.SetDamage(arrowContext.Damage);
-        arrow.SetAttackContext(this, arrowContext.ArmorIgnorePercent, arrowContext.IsExplosiveArrow, arrowContext.ExplosionRadius, arrowContext.ExplosionDamageMultiplier);
-        arrow.SetTarget(target);
-        return true;
+        HandleAttackTriggeredRewards();
     }
 
     // 发射缓存过期时立即重新检测一次，避免本次攻击 tick 因旧目标失效而空等。
@@ -254,229 +148,25 @@ public class DefenseSystem : MonoBehaviour
         return _hasEnemy;
     }
 
-    // 使用三星解锁的额外发射点进行分区射击。
-    private bool FireSuperArrowSpawnPoint(int index, TargetLane targetLane)
+    // 处理一次主动攻击触发后的奖励效果。
+    private void HandleAttackTriggeredRewards()
     {
-        if (superArrowSpawnPoints == null || index < 0 || index >= superArrowSpawnPoints.Length)
-        {
-            return false;
-        }
-
-        return FireFromSpawnPoint(superArrowSpawnPoints[index], targetLane);
-    }
-
-    // 优先查找指定区域目标，区域内没有敌人时回退到全局索敌。
-    private Enemy FindPreferredTarget(TargetLane targetLane)
-    {
-        Enemy target = FindClosestTarget(targetLane);
-        if (IsTargetValid(target) || targetLane == TargetLane.Any)
-        {
-            return target;
-        }
-
-        return FindClosestTarget(TargetLane.Any);
-    }
-
-    // 当前攻击目标失效时立即从缓存中重锁，缓存无效时再做一次实时检测。
-    private void RefreshCurrentTargetIfNeeded()
-    {
-        if (IsTargetValid(_currentTargetEnemy))
-        {
-            return;
-        }
-
-        _currentTargetEnemy = FindClosestTarget(TargetLane.Any);
-        if (IsTargetValid(_currentTargetEnemy))
-        {
-            _hasEnemy = true;
-            return;
-        }
-
-        DetectEnemy();
-    }
-
-    // 根据当前星级获取箭头应该使用的视觉材质。
-    private Material GetArrowMaterialForCurrentStarLevel()
-    {
-        if (_currentStarLevel >= STAR_LEVEL_THREE && starThreeArrowMaterial)
-        {
-            return starThreeArrowMaterial;
-        }
-
-        if (_currentStarLevel >= STAR_LEVEL_TWO && starTwoArrowMaterial)
-        {
-            return starTwoArrowMaterial;
-        }
-
-        return starOneArrowMaterial;
-    }
-
-    // 判断当前星级是否启用箭头拖尾效果。
-    private bool ShouldEnableArrowTrail()
-    {
-        return _currentStarLevel >= STAR_LEVEL_TWO;
-    }
-
-    // 查找指定区域内距离防御塔最近的有效敌人。
-    private Enemy FindClosestTarget(TargetLane targetLane)
-    {
-        Enemy closestTarget = null;
-        float minDistance = float.MaxValue;
-
-        for (int i = 0; i < _detectedEnemyCount; i++)
-        {
-            Collider2D result = _detectResults[i];
-            if (!result || !result.TryGetComponent(out Enemy enemy) || !IsTargetValid(enemy) || !IsEnemyInTargetLane(enemy, targetLane))
-            {
-                continue;
-            }
-
-            float distance = Vector2.SqrMagnitude(enemy.transform.position - transform.position);
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                closestTarget = enemy;
-            }
-        }
-
-        return closestTarget;
-    }
-
-    // 判断敌人是否属于指定的上下半区目标范围。
-    private bool IsEnemyInTargetLane(Enemy enemy, TargetLane targetLane)
-    {
-        switch (targetLane)
-        {
-            case TargetLane.Upper:
-                return enemy.transform.position.y >= transform.position.y;
-            case TargetLane.Lower:
-                return enemy.transform.position.y < transform.position.y;
-            default:
-                return true;
-        }
+        DefenseAttackContext attackContext = new(this, _healthSystem);
+        ActiveDefenseCardEffectRuntime?.OnAfterAttack(attackContext);
+        arrowLauncher.FireExtraAttackArrows(attackContext.ExtraAttackCount, this, targetSelector, _statCalculator, ActiveDefenseCardEffectRuntime);
     }
 
     // 根据升星倍率和全局奖励倍率刷新防御塔战斗属性。
     private void RefreshRewardBonuses()
     {
-        float rewardDetectRadiusMultiplier = RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.DefenseDetectRadiusMultiplier
-            : 1f;
-        DefenseStatsContext statsContext = new(
-            this,
-            GetCurrentAttackDamage(false),
-            GetCurrentArrowGenerateRate(),
-            Mathf.Max(0.01f, _baseDetectRadius * _upgradeDetectRadiusMultiplier * rewardDetectRadiusMultiplier));
-        ActiveDefenseCardEffectRuntime?.ModifyStats(statsContext);
-
-        attackDamage = statsContext.AttackDamage;
-        arrowGenerateRate = Mathf.Max(MIN_ARROW_GENERATE_RATE, statsContext.ArrowGenerateRate);
-        detectRadius = Mathf.Max(0.01f, statsContext.DetectRadius);
-    }
-
-    // 计算当前攻击伤害。
-    private int GetCurrentAttackDamage(bool includeRandomDoubleDamage = true)
-    {
-        float rewardAttackDamageMultiplier = RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.DefenseAttackDamageMultiplier
-            : 1f;
-        float threeStarResonanceMultiplier = GetThreeStarResonanceMultiplier();
-        float finalDefenseMultiplier = RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.GetFinalDefenseAttackDamageMultiplier()
-            : 1f;
-        float damage = _baseAttackDamage * _upgradeAttackDamageMultiplier * rewardAttackDamageMultiplier * threeStarResonanceMultiplier * finalDefenseMultiplier;
-
-        if (includeRandomDoubleDamage && ShouldApplyDoubleDamage())
+        if (_statCalculator == null)
         {
-            damage *= 2f;
+            return;
         }
 
-        return Mathf.Max(1, Mathf.RoundToInt(damage));
-    }
-
-    // 计算当前攻击间隔。
-    private float GetCurrentArrowGenerateRate()
-    {
-        float rewardAttackIntervalMultiplier = RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.DefenseAttackIntervalMultiplier
-            : 1f;
-        float overloadAttackIntervalMultiplier = RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.DefenseOverloadAttackIntervalMultiplier
-            : 1f;
-        float linkedAttackIntervalMultiplier = ShouldApplyLinkedAttackSpeed()
-            ? RewardBonusManager.Instance.DefenseLinkedAttackIntervalMultiplier
-            : 1f;
-
-        return Mathf.Max(MIN_ARROW_GENERATE_RATE, _baseArrowGenerateRate * _upgradeAttackIntervalMultiplier * rewardAttackIntervalMultiplier * overloadAttackIntervalMultiplier * linkedAttackIntervalMultiplier);
-    }
-
-    // 计算星级共鸣提供的攻击力倍率。
-    private float GetThreeStarResonanceMultiplier()
-    {
-        if (!RewardBonusManager.Instance)
-        {
-            return 1f;
-        }
-
-        int threeStarCount = DefenseTowerRegistry.GetThreeStarDefenseCount();
-        return 1f + threeStarCount * RewardBonusManager.Instance.DefenseAttackDamagePerThreeStarTower;
-    }
-
-    // 判断防线联动攻速是否生效。
-    private bool ShouldApplyLinkedAttackSpeed()
-    {
-        return RewardBonusManager.Instance
-               && RewardBonusManager.Instance.DefenseLinkRadius > 0f
-               && DefenseTowerRegistry.HasNearbyDefenseTower(this, RewardBonusManager.Instance.DefenseLinkRadius);
-    }
-
-    // 判断本次攻击是否触发双倍伤害。
-    private bool ShouldApplyDoubleDamage()
-    {
-        return RewardBonusManager.Instance
-               && RewardBonusManager.Instance.DefenseDoubleDamageChance > 0f
-               && Random.value < RewardBonusManager.Instance.DefenseDoubleDamageChance;
-    }
-
-    // 获取本次箭矢护甲穿透比例。
-    private float GetArmorIgnorePercent()
-    {
-        return RewardBonusManager.Instance ? RewardBonusManager.Instance.DefenseArmorIgnorePercent : 0f;
-    }
-
-    // 判断本次箭矢是否启用三星爆裂箭。
-    private bool ShouldUseExplosiveArrow()
-    {
-        return _currentStarLevel >= STAR_LEVEL_THREE
-               && RewardBonusManager.Instance
-               && RewardBonusManager.Instance.DefenseThreeStarExplosiveArrowEnabled;
-    }
-
-    // 获取爆裂箭爆炸半径。
-    private float GetExplosionRadius()
-    {
-        return RewardBonusManager.Instance ? RewardBonusManager.Instance.DefenseExplosionRadius : 0f;
-    }
-
-    // 获取爆裂箭范围伤害倍率。
-    private float GetExplosionDamageMultiplier()
-    {
-        return RewardBonusManager.Instance ? RewardBonusManager.Instance.DefenseExplosionDamageMultiplier : 0f;
-    }
-
-    // 禁用防御塔时停止周期侦测并取消注册。
-    private void OnDisable()
-    {
-        RewardBonusManager.OnRewardBonusChanged -= RefreshRewardBonuses;
-        DefenseTowerRegistry.UnregisterDefenseSystem(this);
-        CancelInvoke();
-        _hasEnemy = false;
-        _currentTargetEnemy = null;
-    }
-
-    // 判断敌人是否仍然可以被防御塔攻击。
-    private bool IsTargetValid(Enemy enemy)
-    {
-        return enemy && enemy.gameObject.activeInHierarchy && enemy.IsAlive;
+        _currentStats = _statCalculator.RefreshStats(ActiveDefenseCardEffectRuntime);
+        attackDamage = _currentStats.AttackDamage;
+        arrowGenerateRate = _currentStats.ArrowGenerateRate;
+        detectRadius = _currentStats.DetectRadius;
     }
 }

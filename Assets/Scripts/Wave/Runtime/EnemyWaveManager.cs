@@ -22,26 +22,28 @@ public class EnemyWaveManager : MonoBehaviour
         WaitingNextWave
     }
 
+    // 核心变量
     public WaveState State { get; private set; }
-
+    
+    [HideInInspector] public int waveIndex;
     [HideInInspector] public float stateTimer;
     [HideInInspector] public int aliveEnemyCount;
     
-    public int waveIndex;
     [SerializeField] public float nextWaveTimer;
     [SerializeField] public float firstWaveTimer = 15f;
     
     [SerializeField] public EnemySpawnSystem spawnSystem;
-    [FormerlySerializedAs("enemyPool")] [SerializeField] public EnemyDatabase enemyDatabase;
+    [SerializeField] private EnemyDatabase enemyDatabase;
     [SerializeField] private WaveRuleSo waveRuleSo;
     [SerializeField] private Transform enemyContainer;
-    [FormerlySerializedAs("baseTransform")] [SerializeField] private Transform homeTransform;
+    [SerializeField] private Transform homeTransform;
 
     public event Action OnWaveStarted;
     public event Action<int> OnWaveCompleted;
     public event Action OnAliveEnemyCountChanged;
     public event Action<IReadOnlyList<Enemy>> OnEnemyBatchSpawned;
     
+    // 波次规则系统和敌人成长系统
     private readonly WaveRuleSystem _ruleSystem = new();
     private readonly EnemyGrowthSystem _growthSystem = new();
     

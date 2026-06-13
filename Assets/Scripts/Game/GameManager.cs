@@ -36,19 +36,19 @@ public class GameManager : MonoBehaviour
     // 订阅基地建筑摧毁事件。
     private void OnEnable()
     {
-        Building.OnBuildingDestroyed += HandleBuildingDestroyed;
+        Building.OnBuildingDestroyed += HandleHomeDestroyed;
     }
 
     // 取消订阅基地建筑摧毁事件。
     private void OnDisable()
     {
-        Building.OnBuildingDestroyed -= HandleBuildingDestroyed;
+        Building.OnBuildingDestroyed -= HandleHomeDestroyed;
     }
 
     // 根据当前游戏状态处理暂停和恢复输入。
     private void Update()
     {
-        HandleHealthBarVisibilityInput();
+        HandleHealthBarVisible();
 
         switch (State)
         {
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     }
 
     // 处理全局血条显示隐藏快捷键。
-    private void HandleHealthBarVisibilityInput()
+    private void HandleHealthBarVisible()
     {
         if (!Input.GetKeyDown(KeyCode.Alpha1) && !Input.GetKeyDown(KeyCode.Keypad1))
         {
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         HealthBar.ToggleAllHealthBarsVisibility();
     }
 
-    // 开始游戏并启动敌人波次系统。
+    // 开始游戏
     public void StartGame()
     {
         State = GameState.Playing;
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 进入游戏结束状态并暂停游戏时间。
+    // 游戏结束
     public void GameOver()
     {
         if (State == GameState.GameOver)
@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
     }
 
-    // 暂停当前游戏。
+    // 暂停
     public void PauseGame()
     {
         if (State != GameState.Playing) return;
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         OnGamePaused?.Invoke();
     }
 
-    // 恢复当前游戏。
+    // 恢复
     public void ResumeGame()
     {
         if (State != GameState.Paused) return;
@@ -129,8 +129,8 @@ public class GameManager : MonoBehaviour
         OnGameResumed?.Invoke();
     }
 
-    // 检查被摧毁建筑是否是基地，是则触发游戏结束。
-    private void HandleBuildingDestroyed(BuildingSo buildingSo, Vector3 position)
+    // 检查被摧毁建筑是否是基地
+    private void HandleHomeDestroyed(BuildingSo buildingSo, Vector3 position)
     {
         if (!buildingSo || buildingSo.buildingType != BuildingSo.BuildingType.Home)
         {

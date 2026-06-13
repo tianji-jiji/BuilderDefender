@@ -11,15 +11,11 @@ public class HealthSystem : MonoBehaviour
     [SerializeField] private int maxHealth;
     [SerializeField] private int currentHealth;
 
-    // 生命归零时触发。
     public event Action OnDied;
-    // 受到伤害并产生实际扣血时触发，参数为实际扣除的生命值。
     public event Action<int> OnDamaged;
-    // 生命值或最大生命值变化时触发。
     public event Action OnHealthChanged;
 
     private float _damageTakenMultiplier = DEFAULT_DAMAGE_TAKEN_MULTIPLIER;
-
     public int MaxHealth => maxHealth;
     public int CurrentHealth => currentHealth;
     public float CurrentHealthNormalized => MaxHealth > 0 ? (float)CurrentHealth / MaxHealth : 0f;

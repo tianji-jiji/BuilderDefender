@@ -22,4 +22,4 @@ MonoBehaviour:
     displayName: "\u6570\u503C"
     templateToken: 
     valueFormat: 0
-    autoImpactRule: 0
+    autoImpactRule: 1

@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour, IPoolable
     private const int TARGET_DETECTION_BUFFER_SIZE = 16;
 
     [SerializeField] private EnemySo enemySo;
-    [FormerlySerializedAs("buildingLayer")] [SerializeField] private LayerMask detectLayer;
+    [SerializeField] private LayerMask detectLayer;
     [SerializeField] private HealthSystem healthSystem;
     [SerializeField] private Transform damageFloatingTextPoint;
 
@@ -30,10 +30,10 @@ public class Enemy : MonoBehaviour, IPoolable
     public int Armor => _runtimeStats.Armor;
     public Vector3 DamageFloatingTextPosition => damageFloatingTextPoint ? damageFloatingTextPoint.position : transform.position;
 
-    // 初始化敌人需要缓存的组件和默认攻击目标。
     private void Awake()
     {
         _enemyDiedParticles = Resources.Load<GameObject>("Particles/EnemyDieParticles");
+        
         TryGetComponent(out _rb2);
         TryGetComponent(out _pooledObject);
         
@@ -53,13 +53,32 @@ public class Enemy : MonoBehaviour, IPoolable
 
         _currentTarget = _defaultTarget;
     }
-
-    // 初始化敌人的运行时配置。
-    public void Init(EnemySo so)
+    
+    private void OnEnable()
     {
-        Init(so, EnemyRuntimeStats.FromEnemySo(so));
+        SubscribeHealthSystem();
     }
-
+    
+    private void OnDisable()
+    {
+        UnsubscribeHealthSystem();
+    }
+    
+    private void Update()
+    {
+        _timer += Time.deltaTime;
+        if (_timer >= DETECTION_INTERVAL)
+        {
+            FindTarget();
+            _timer = 0f;
+        }
+    }
+    
+    private void FixedUpdate()
+    {
+        HandleMovement();
+    }
+    
     // 使用成长后的运行时属性初始化敌人。
     public void Init(EnemySo so, EnemyRuntimeStats runtimeStats)
     {
@@ -109,29 +128,6 @@ public class Enemy : MonoBehaviour, IPoolable
         }
     }
 
-    // 启用敌人时订阅血量系统死亡事件。
-    private void OnEnable()
-    {
-        SubscribeHealthSystem();
-    }
-
-    // 固定帧处理敌人移动。
-    private void FixedUpdate()
-    {
-        HandleMovement();
-    }
-
-    // 按固定间隔重新寻找攻击目标。
-    private void Update()
-    {
-        _timer += Time.deltaTime;
-        if (_timer >= DETECTION_INTERVAL)
-        {
-            FindTarget();
-            _timer = 0f;
-        }
-    }
-
     // 根据当前目标移动敌人。
     private void HandleMovement()
     {
@@ -152,7 +148,7 @@ public class Enemy : MonoBehaviour, IPoolable
             return;
         }
 
-        if (IsCurrentTargetStillValid())
+        if (IsTargetValid())
         {
             return;
         }
@@ -161,7 +157,7 @@ public class Enemy : MonoBehaviour, IPoolable
     }
 
     // 判断当前非基地目标是否仍然有效，避免索敌在多个碰撞体之间抖动。
-    private bool IsCurrentTargetStillValid()
+    private bool IsTargetValid()
     {
         if (!_currentTarget || _currentTarget == _defaultTarget)
         {
@@ -252,13 +248,7 @@ public class Enemy : MonoBehaviour, IPoolable
         OnEnemyDead?.Invoke();
         ReturnEnemy();
     }
-
-    // 取消订阅血量系统的死亡事件。
-    private void OnDisable()
-    {
-        UnsubscribeHealthSystem();
-    }
-
+   
     // 订阅血量系统死亡事件。
     private void SubscribeHealthSystem()
     {

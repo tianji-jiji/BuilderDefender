@@ -43,7 +43,6 @@ public class Building : MonoBehaviour
         HideBuildingDemolitionButton();
     }
 
-    // 启用建筑时订阅事件并注册到运行时查询表。
     private void OnEnable()
     {
         TrySubscribeRewardBonuses();
@@ -51,6 +50,13 @@ public class Building : MonoBehaviour
         RegisterToRuntimeRegistry();
     }
 
+    private void OnDisable()
+    {
+        TryUnsubscribeRewardBonuses();
+        UnregisterFromRuntimeRegistry();
+        TryUnsubscribeHealthSystem();
+    }
+    
     // 根据升星配置提升建筑生命值。
     public void ApplyUpgradeLevel(BuildingUpgradeLevel upgradeLevel)
     {
@@ -261,13 +267,5 @@ public class Building : MonoBehaviour
         }
 
         _isRegisteredToRuntimeRegistry = false;
-    }
-
-    // 禁用建筑时取消事件订阅和运行时注册。
-    private void OnDisable()
-    {
-        TryUnsubscribeRewardBonuses();
-        UnregisterFromRuntimeRegistry();
-        TryUnsubscribeHealthSystem();
     }
 }

@@ -25,6 +25,7 @@ public class BuildManager : MonoBehaviour
     }
 
     [SerializeField] private LayerMask layerMask;
+    [SerializeField] private Camera worldCamera;
     [SerializeField] private BuildingConstructor buildingConstructorPrefab;
 
     private BuildingSo _currentBuildingSo;
@@ -38,6 +39,11 @@ public class BuildManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        
+        if (!worldCamera)
+        {
+            worldCamera = Camera.main;
+        }
     }
 
     // 处理建造选择、放置提示和建造输入。
@@ -56,17 +62,31 @@ public class BuildManager : MonoBehaviour
 
         if (IsPointerOverUI())
         {
-            HidePlacementPreviewOrTooltipIfNeeded();
+            TooltipManager.Instance.HidePlacementTooltip();
+            TooltipManager.Instance.HideEfficiencyTooltip();
             return;
         }
 
-        Vector3 mousePosition = Utils.GetMousePosition();
+        Vector3 mousePosition = GetMousePosition();
         UpdatePlacementTooltip(mousePosition);
 
         if (Input.GetMouseButtonDown(0))
         {
             TryPlaceCurrentBuilding(mousePosition);
         }
+    }
+
+    // 获取当前鼠标位置对应的世界坐标。
+    private Vector3 GetMousePosition()
+    {
+        if (!worldCamera)
+        {
+            return Vector3.zero;
+        }
+
+        Vector3 position = worldCamera.ScreenToWorldPoint(Input.mousePosition);
+        position.z = 0f;
+        return position;
     }
 
     // 右键短点击取消当前已选择的待建造建筑，右键拖拽镜头时不取消。
@@ -126,14 +146,14 @@ public class BuildManager : MonoBehaviour
     }
 
     // 判断指定位置是否允许建造。
-    public bool IsAuthorizedConstructionZone(BuildingSo buildingSo, Vector3 position)
+    public bool IsAuthorizedZone(BuildingSo buildingSo, Vector3 position)
     {
         if (IsTooCloseToOthers(buildingSo, position))
         {
             return false;
         }
 
-        if (IsTooCloseToConstructionSite(buildingSo, position))
+        if (IsTooCloseToConstruction(buildingSo, position))
         {
             return false;
         }
@@ -158,7 +178,7 @@ public class BuildManager : MonoBehaviour
     }
 
     // 判断当前位置是否与正在建造的占位区域重叠。
-    private bool IsTooCloseToConstructionSite(BuildingSo buildingSo, Vector3 position)
+    private bool IsTooCloseToConstruction(BuildingSo buildingSo, Vector3 position)
     {
         foreach (ConstructionSite constructionSite in _constructionSites)
         {
@@ -175,12 +195,7 @@ public class BuildManager : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// 计算建造在指定位置的采集效率。
-    /// </summary>
-    /// <param name="buildingSo">待建造建筑配置。</param>
-    /// <param name="position">建造位置。</param>
-    /// <returns>0 到 1 的效率比例。</returns>
+    // 计算建造在指定位置的采集效率。
     public float CalculateEfficiency(BuildingSo buildingSo, Vector3 position)
     {
         Collider2D[] results = new Collider2D[50];
@@ -212,7 +227,7 @@ public class BuildManager : MonoBehaviour
     }
 
     // 开始建造指定建筑，并记录建造中占位。
-    private bool StartConstruction(BuildingSo buildingSo, Vector3 position)
+    private bool Construction(BuildingSo buildingSo, Vector3 position)
     {
         if (!buildingConstructorPrefab)
         {
@@ -248,17 +263,10 @@ public class BuildManager : MonoBehaviour
         return EventSystem.current && EventSystem.current.IsPointerOverGameObject();
     }
 
-    // 鼠标悬停 UI 时隐藏放置相关提示，避免保留上一帧状态。
-    private void HidePlacementPreviewOrTooltipIfNeeded()
-    {
-        TooltipManager.Instance.HidePlacementTooltip();
-        TooltipManager.Instance.HideEfficiencyTooltip();
-    }
-
     // 根据当前位置刷新放置失败原因提示。
     private void UpdatePlacementTooltip(Vector3 position)
     {
-        if (!IsAuthorizedConstructionZone(_currentBuildingSo, position))
+        if (!IsAuthorizedZone(_currentBuildingSo, position))
         {
             TooltipManager.Instance.ShowPlacementTooltip("离资源太近了!");
             return;
@@ -277,19 +285,19 @@ public class BuildManager : MonoBehaviour
     private void TryPlaceCurrentBuilding(Vector3 position)
     {
         if (!_currentBuildingSo
-            || !IsAuthorizedConstructionZone(_currentBuildingSo, position)
+            || !IsAuthorizedZone(_currentBuildingSo, position)
             || !CanAfford(_currentBuildingSo))
         {
             return;
         }
 
-        TrySpendAndStartConstruction(_currentBuildingSo, position);
+        StartConstruction(_currentBuildingSo, position);
     }
 
     // 成功启动建造后扣除资源。
-    private void TrySpendAndStartConstruction(BuildingSo buildingSo, Vector3 position)
+    private void StartConstruction(BuildingSo buildingSo, Vector3 position)
     {
-        bool constructionStarted = StartConstruction(buildingSo, position);
+        bool constructionStarted = Construction(buildingSo, position);
         if (constructionStarted)
         {
             ResourceManager.Instance.Spend(buildingSo);
