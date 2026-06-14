@@ -27,32 +27,32 @@ public class RewardEffectHandlerTests
     [Test]
     public void ApplyEffects_WithHandler_UsesHandler()
     {
-        DefenseRewardState defenseRewardState = new();
+        DefenseTowerRewardModifiers defenseTowerRewardModifiers = new();
         RewardEffectDefinitionSo definition = CreateDefinition();
         TestRewardEffectHandlerSo handler = CreateHandler();
         RewardEffectConfig config = CreateConfig(definition, 0.5f);
-        RewardEffectContext context = new(null, defenseRewardState, null, null, null);
+        RewardEffectContext context = new(null, defenseTowerRewardModifiers, null, null, null);
         SetField(definition, "handler", handler);
 
-        DefenseRewardEffectApplier.ApplyEffects(new[] { config }, defenseRewardState, context);
+        DefenseTowerRewardConfigApplier.ApplyEffects(new[] { config }, defenseTowerRewardModifiers, context);
 
         Assert.AreEqual(1, handler.ApplyCount);
         Assert.AreSame(context, handler.LastContext);
         Assert.AreSame(config, handler.LastConfig);
-        Assert.AreEqual(1f, defenseRewardState.AttackDamageMultiplier);
+        Assert.AreEqual(1f, defenseTowerRewardModifiers.AttackDamageMultiplier);
     }
 
     // 验证没有 Handler 的效果不会再进入旧 switch fallback。
     [Test]
     public void ApplyEffects_WithoutHandler_DoesNotApplyLegacyFallback()
     {
-        DefenseRewardState defenseRewardState = new();
+        DefenseTowerRewardModifiers defenseTowerRewardModifiers = new();
         RewardEffectDefinitionSo definition = CreateDefinition();
         RewardEffectConfig config = CreateConfig(definition, 0.25f);
 
-        DefenseRewardEffectApplier.ApplyEffects(new[] { config }, defenseRewardState);
+        DefenseTowerRewardConfigApplier.ApplyEffects(new[] { config }, defenseTowerRewardModifiers);
 
-        Assert.AreEqual(1f, defenseRewardState.AttackDamageMultiplier);
+        Assert.AreEqual(1f, defenseTowerRewardModifiers.AttackDamageMultiplier);
     }
 
     // 验证旧效果枚举和旧参数枚举已经从程序集里移除。

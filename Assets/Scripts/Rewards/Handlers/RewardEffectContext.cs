@@ -1,11 +1,11 @@
-﻿/// <summary>
+/// <summary>
 /// Reward 效果运行时上下文，负责把 Handler 需要的本局系统引用集中传入。
 /// </summary>
 public sealed class RewardEffectContext
 {
     public RewardBonusManager RewardBonusManager { get; }
-    public DefenseRewardState DefenseRewardState { get; }
-    public DefenseCardEffectRuntime DefenseCardEffectRuntime { get; }
+    public DefenseTowerRewardModifiers DefenseTowerRewardModifiers { get; }
+    public DefenseTowerCardEffectDispatcher DefenseTowerCardEffectDispatcher { get; }
     public ResourceManager ResourceManager { get; }
     public EnemyWaveManager EnemyWaveManager { get; }
     public BuildManager BuildManager { get; }
@@ -13,15 +13,15 @@ public sealed class RewardEffectContext
     // 创建 Reward 效果运行时上下文。
     public RewardEffectContext(
         RewardBonusManager rewardBonusManager,
-        DefenseRewardState defenseRewardState,
+        DefenseTowerRewardModifiers defenseTowerRewardModifiers,
         ResourceManager resourceManager,
         EnemyWaveManager enemyWaveManager,
         BuildManager buildManager,
-        DefenseCardEffectRuntime defenseCardEffectRuntime = null)
+        DefenseTowerCardEffectDispatcher defenseTowerCardEffectDispatcher = null)
     {
         RewardBonusManager = rewardBonusManager;
-        DefenseRewardState = defenseRewardState;
-        DefenseCardEffectRuntime = defenseCardEffectRuntime;
+        DefenseTowerRewardModifiers = defenseTowerRewardModifiers;
+        DefenseTowerCardEffectDispatcher = defenseTowerCardEffectDispatcher;
         ResourceManager = resourceManager;
         EnemyWaveManager = enemyWaveManager;
         BuildManager = buildManager;

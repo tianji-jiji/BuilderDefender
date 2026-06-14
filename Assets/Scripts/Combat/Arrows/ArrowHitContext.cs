@@ -9,7 +9,7 @@ public class ArrowHitContext
     public Vector3 HitPosition { get; }
     public int Damage { get; }
     public float ArmorIgnorePercent { get; }
-    public DefenseSystem SourceDefenseSystem { get; }
+    public DefenseTowerSystem SourceDefenseTowerSystem { get; }
     public float ExplosionRadius { get; }
     public float ExplosionDamageMultiplier { get; }
     public Collider2D[] EffectHitResults { get; }
@@ -20,7 +20,7 @@ public class ArrowHitContext
         Vector3 hitPosition,
         int damage,
         float armorIgnorePercent,
-        DefenseSystem sourceDefenseSystem,
+        DefenseTowerSystem sourceDefenseTowerSystem,
         float explosionRadius,
         float explosionDamageMultiplier,
         Collider2D[] effectHitResults)
@@ -29,7 +29,7 @@ public class ArrowHitContext
         HitPosition = hitPosition;
         Damage = Mathf.Max(1, damage);
         ArmorIgnorePercent = Mathf.Clamp01(armorIgnorePercent);
-        SourceDefenseSystem = sourceDefenseSystem;
+        SourceDefenseTowerSystem = sourceDefenseTowerSystem;
         ExplosionRadius = Mathf.Max(0f, explosionRadius);
         ExplosionDamageMultiplier = Mathf.Max(0f, explosionDamageMultiplier);
         EffectHitResults = effectHitResults;

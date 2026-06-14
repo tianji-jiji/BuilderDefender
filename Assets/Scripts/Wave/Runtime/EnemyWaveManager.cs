@@ -257,10 +257,10 @@ public class EnemyWaveManager : MonoBehaviour
     }
 
     // 获取当前玩家防御体系战力快照。
-    private DefensePowerSnapshot GetPlayerPowerSnapshot()
+    private DefenseTowerPowerSnapshot GetPlayerPowerSnapshot()
     {
         return RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.GetDefensePowerSnapshot()
-            : DefensePowerSnapshot.Default();
+            ? RewardBonusManager.Instance.GetDefenseTowerPowerSnapshot()
+            : DefenseTowerPowerSnapshot.Default();
     }
 }

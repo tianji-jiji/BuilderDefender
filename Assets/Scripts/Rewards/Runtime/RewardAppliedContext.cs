@@ -11,7 +11,6 @@ public class RewardAppliedContext
     public int TotalCardCount { get; }
     public string LatestDescriptionText { get; }
 
-    // 初始化奖励生效事件携带的数据。
     public RewardAppliedContext(RewardCardSo rewardCard, RewardSelectionRecord selectionRecord, IReadOnlyList<RewardSelectionRecord> allRecordList, int totalCardCount)
     {
         RewardCard = rewardCard;

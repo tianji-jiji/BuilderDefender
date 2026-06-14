@@ -11,7 +11,6 @@ public class RewardSelectionRecord
     public int AcquiredWaveIndex { get; }
     public int StackCount { get; private set; }
 
-    // 初始化一条奖励选择记录。
     public RewardSelectionRecord(string cardId, string cardName, RewardCardRarity rarity, RewardCardCategory category, string descriptionText, int acquiredWaveIndex)
     {
         CardId = cardId;

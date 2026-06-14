@@ -8,7 +8,6 @@ public readonly struct RewardOfferContext
     public int CurrentWaveIndex { get; }
     private readonly IReadOnlyDictionary<string, int> _selectedCardCountDic;
 
-    // 保存本次奖励抽取需要参考的上下文。
     public RewardOfferContext(int currentWaveIndex, IReadOnlyDictionary<string, int> selectedCardCountDic)
     {
         CurrentWaveIndex = currentWaveIndex;

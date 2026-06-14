@@ -19,7 +19,7 @@ public class EnemyGrowthSystem
     }
 
     // 计算指定敌人在当前波次出生时应使用的运行时属性。
-    public EnemyRuntimeStats BuildStats(EnemySo enemySo, int waveIndex, WaveRuleSystem.EnemyKind enemyKind, DefensePowerSnapshot playerPowerSnapshot)
+    public EnemyRuntimeStats BuildStats(EnemySo enemySo, int waveIndex, WaveRuleSystem.EnemyKind enemyKind, DefenseTowerPowerSnapshot playerPowerSnapshot)
     {
         // 从 EnemySo 里拿基础属性
         EnemyRuntimeStats baseStats = EnemyRuntimeStats.FromEnemySo(enemySo);

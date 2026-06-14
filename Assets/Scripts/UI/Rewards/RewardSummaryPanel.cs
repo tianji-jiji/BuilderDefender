@@ -125,7 +125,7 @@ public class RewardSummaryPanel : MonoBehaviour
 
         totalBonusText.richText = true;
         totalBonusText.text = RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.BuildDefenseRewardSummaryText()
+            ? RewardBonusManager.Instance.BuildDefenseTowerRewardSummaryText()
             : EMPTY_BONUS_TEXT;
     }
 

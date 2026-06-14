@@ -19,7 +19,7 @@ public class Arrow : MonoBehaviour, IPoolable
     private Collider2D _collider;
     private PooledObject _pooledObject;
     
-    private DefenseSystem _sourceDefenseSystem;
+    private DefenseTowerSystem _sourceDefenseTowerSystem;
     private Enemy _targetEnemy;
     private Transform _targetTransform;
     private Vector2 _moveDirection;
@@ -51,7 +51,7 @@ public class Arrow : MonoBehaviour, IPoolable
         TryGetComponent(out _pooledObject);
         _collider.enabled = true;
         arrowVisual?.ResetForSpawn();
-        _sourceDefenseSystem = null;
+        _sourceDefenseTowerSystem = null;
         _targetEnemy = null;
         _targetTransform = null;
         _moveDirection = Vector2.zero;
@@ -68,7 +68,7 @@ public class Arrow : MonoBehaviour, IPoolable
     // 清理箭头回池前的运行状态。
     public void OnDespawned()
     {
-        _sourceDefenseSystem = null;
+        _sourceDefenseTowerSystem = null;
         _targetEnemy = null;
         _targetTransform = null;
         _moveDirection = Vector2.zero;
@@ -114,9 +114,9 @@ public class Arrow : MonoBehaviour, IPoolable
     }
 
     // 设置本次发射携带的攻击上下文。
-    public void SetAttackContext(DefenseSystem sourceDefenseSystem, float armorIgnorePercent, bool isExplosiveArrow, float explosionRadius, float explosionDamageMultiplier)
+    public void SetAttackContext(DefenseTowerSystem sourceDefenseTowerSystem, float armorIgnorePercent, bool isExplosiveArrow, float explosionRadius, float explosionDamageMultiplier)
     {
-        _sourceDefenseSystem = sourceDefenseSystem;
+        _sourceDefenseTowerSystem = sourceDefenseTowerSystem;
         _armorIgnorePercent = Mathf.Clamp01(armorIgnorePercent);
         _isExplosiveArrow = isExplosiveArrow;
         _explosionRadius = Mathf.Max(0f, explosionRadius);
@@ -155,7 +155,7 @@ public class Arrow : MonoBehaviour, IPoolable
             transform.position,
             _damage,
             _armorIgnorePercent,
-            _sourceDefenseSystem,
+            _sourceDefenseTowerSystem,
             _explosionRadius,
             _explosionDamageMultiplier,
             _effectHitResults);

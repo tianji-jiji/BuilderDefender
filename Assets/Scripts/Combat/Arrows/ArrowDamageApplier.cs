@@ -6,7 +6,7 @@ using UnityEngine;
 public static class ArrowDamageApplier
 {
     // 对指定敌人应用箭矢伤害，并返回实际扣除的生命值。
-    public static int ApplyDamage(Enemy enemy, int rawDamage, float armorIgnorePercent, DefenseSystem sourceDefenseSystem)
+    public static int ApplyDamage(Enemy enemy, int rawDamage, float armorIgnorePercent, DefenseTowerSystem sourceDefenseTowerSystem)
     {
         if (!IsEnemyValid(enemy) || !enemy.gameObject.TryGetComponent(out HealthSystem healthSystem))
         {
@@ -18,14 +18,14 @@ public static class ArrowDamageApplier
         int actualDamage = healthSystem.TakeDamage(adjustedDamage);
         DamageFloatingTextService.ShowEnemyDamage(enemy.DamageFloatingTextPosition, actualDamage);
 
-        if (actualDamage > 0 && sourceDefenseSystem)
+        if (actualDamage > 0 && sourceDefenseTowerSystem)
         {
-            sourceDefenseSystem.NotifyEnemyHit(enemy, actualDamage);
+            sourceDefenseTowerSystem.NotifyEnemyHit(enemy, actualDamage);
         }
 
-        if (wasAlive && !enemy.IsAlive && sourceDefenseSystem)
+        if (wasAlive && !enemy.IsAlive && sourceDefenseTowerSystem)
         {
-            sourceDefenseSystem.NotifyEnemyKilled(enemy);
+            sourceDefenseTowerSystem.NotifyEnemyKilled(enemy);
         }
 
         return actualDamage;

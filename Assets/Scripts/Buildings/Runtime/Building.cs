@@ -157,7 +157,7 @@ public class Building : MonoBehaviour
     private int CalculateMaxHealth()
     {
         float rewardMaxHealthMultiplier = RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.DefenseMaxHealthMultiplier
+            ? RewardBonusManager.Instance.DefenseTowerMaxHealthMultiplier
             : 1f;
 
         if (!IsDefenseBuilding)
@@ -176,7 +176,7 @@ public class Building : MonoBehaviour
             return 1f;
         }
 
-        return RewardBonusManager.Instance.DefenseDamageTakenMultiplier;
+        return RewardBonusManager.Instance.DefenseTowerDamageTakenMultiplier;
     }
 
     // 订阅建筑生命值死亡事件。
@@ -237,12 +237,12 @@ public class Building : MonoBehaviour
 
         if (IsDefenseBuilding)
         {
-            DefenseTowerRegistry.RegisterDefenseBuilding(this);
+            DefenseTowerTracker.RegisterDefenseBuilding(this);
         }
 
         if (IsHomeBuilding && _healthSystem)
         {
-            DefenseTowerRegistry.RegisterHomeHealthSystem(_healthSystem);
+            DefenseTowerTracker.RegisterHomeHealthSystem(_healthSystem);
         }
 
         _isRegisteredToRuntimeRegistry = true;
@@ -258,12 +258,12 @@ public class Building : MonoBehaviour
 
         if (IsDefenseBuilding)
         {
-            DefenseTowerRegistry.UnregisterDefenseBuilding(this);
+            DefenseTowerTracker.UnregisterDefenseBuilding(this);
         }
 
         if (IsHomeBuilding && _healthSystem)
         {
-            DefenseTowerRegistry.UnregisterHomeHealthSystem(_healthSystem);
+            DefenseTowerTracker.UnregisterHomeHealthSystem(_healthSystem);
         }
 
         _isRegisteredToRuntimeRegistry = false;

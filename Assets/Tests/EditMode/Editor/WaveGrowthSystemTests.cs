@@ -40,8 +40,8 @@ public class WaveGrowthSystemTests
         EnemyGrowthSystem growthSystem = new EnemyGrowthSystem();
         growthSystem.SetWaveRuleConfig(config);
 
-        EnemyRuntimeStats baseStats = growthSystem.BuildStats(enemySo, 1, WaveRuleSystem.EnemyKind.NormalEnemy, DefensePowerSnapshot.Default());
-        DefensePowerSnapshot strongPlayerSnapshot = new DefensePowerSnapshot(4f, 1f, 0f, 1f, 1f, 1f);
+        EnemyRuntimeStats baseStats = growthSystem.BuildStats(enemySo, 1, WaveRuleSystem.EnemyKind.NormalEnemy, DefenseTowerPowerSnapshot.Default());
+        DefenseTowerPowerSnapshot strongPlayerSnapshot = new DefenseTowerPowerSnapshot(4f, 1f, 0f, 1f, 1f, 1f);
         EnemyRuntimeStats scaledStats = growthSystem.BuildStats(enemySo, 1, WaveRuleSystem.EnemyKind.NormalEnemy, strongPlayerSnapshot);
 
         Assert.Greater(scaledStats.MaxHealth, baseStats.MaxHealth);

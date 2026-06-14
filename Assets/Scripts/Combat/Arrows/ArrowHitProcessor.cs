@@ -15,7 +15,7 @@ public static class ArrowHitProcessor
             context.DirectHitEnemy,
             context.Damage,
             context.ArmorIgnorePercent,
-            context.SourceDefenseSystem);
+            context.SourceDefenseTowerSystem);
 
         if (arrowEffect)
         {

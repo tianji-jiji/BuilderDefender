@@ -35,7 +35,7 @@ public class ExplosiveArrowEffectSo : ArrowEffectSo
                 enemy,
                 explosionDamage,
                 context.ArmorIgnorePercent,
-                context.SourceDefenseSystem);
+                context.SourceDefenseTowerSystem);
         }
     }
 }

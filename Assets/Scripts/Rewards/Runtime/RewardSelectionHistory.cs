@@ -15,7 +15,6 @@ public class RewardSelectionHistory : MonoBehaviour
     private readonly List<RewardSelectionRecord> _rewardRecordList = new();
     private readonly Dictionary<string, RewardSelectionRecord> _recordByCardIdDic = new();
 
-    // 初始化奖励选择历史单例。
     private void Awake()
     {
         if (Instance && Instance != this)
@@ -27,7 +26,6 @@ public class RewardSelectionHistory : MonoBehaviour
         Instance = this;
     }
 
-    // 清理奖励选择历史单例引用。
     private void OnDestroy()
     {
         if (Instance == this)
