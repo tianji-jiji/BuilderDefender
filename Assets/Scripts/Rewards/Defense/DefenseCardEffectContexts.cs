@@ -10,7 +10,6 @@ public class DefenseStatsContext
     public float ArrowGenerateRate { get; set; }
     public float DetectRadius { get; set; }
 
-    // 创建防御塔战斗属性上下文。
     public DefenseStatsContext(DefenseSystem sourceDefenseSystem, int attackDamage, float arrowGenerateRate, float detectRadius)
     {
         SourceDefenseSystem = sourceDefenseSystem;
@@ -29,7 +28,6 @@ public class DefenseAttackContext
     public HealthSystem SourceHealthSystem { get; }
     public int ExtraAttackCount { get; private set; }
 
-    // 创建防御塔攻击上下文。
     public DefenseAttackContext(DefenseSystem sourceDefenseSystem, HealthSystem sourceHealthSystem)
     {
         SourceDefenseSystem = sourceDefenseSystem;
@@ -58,7 +56,6 @@ public class DefenseArrowContext
     public Material VisualMaterial { get; set; }
     public bool EnableTrail { get; set; }
 
-    // 创建防御塔单支箭上下文。
     public DefenseArrowContext(
         DefenseSystem sourceDefenseSystem,
         Enemy targetEnemy,
@@ -91,7 +88,6 @@ public class DefenseEnemyHitContext
     public Enemy HitEnemy { get; }
     public int ActualDamage { get; }
 
-    // 创建防御塔命中敌人上下文。
     public DefenseEnemyHitContext(DefenseSystem sourceDefenseSystem, Enemy hitEnemy, int actualDamage)
     {
         SourceDefenseSystem = sourceDefenseSystem;
@@ -108,7 +104,6 @@ public class DefenseEnemyKillContext
     public DefenseSystem SourceDefenseSystem { get; }
     public Enemy KilledEnemy { get; }
 
-    // 创建防御塔击杀敌人上下文。
     public DefenseEnemyKillContext(DefenseSystem sourceDefenseSystem, Enemy killedEnemy)
     {
         SourceDefenseSystem = sourceDefenseSystem;
@@ -123,7 +118,6 @@ public class DefenseWaveContext
 {
     public int WaveIndex { get; }
 
-    // 创建防御塔波次上下文。
     public DefenseWaveContext(int waveIndex)
     {
         WaveIndex = waveIndex;

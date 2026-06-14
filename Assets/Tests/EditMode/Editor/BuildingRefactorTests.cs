@@ -56,6 +56,15 @@ public class BuildingRefactorTests
         Assert.IsNull(oldParticleField, "Building should not keep the old runtime-loaded _buildingDestroyedParticles field.");
     }
 
+    // 验证升星按钮不再持有建筑材质刷新组件，升星只负责数值和星级 UI。
+    [Test]
+    public void BuildingUpgradeButton_DoesNotKeepUpgradeVisualDependency()
+    {
+        FieldInfo upgradeVisualField = GetPrivateField(typeof(BuildingUpgradeButton), "upgradeVisual");
+
+        Assert.IsNull(upgradeVisualField, "BuildingUpgradeButton should not change building material when star level changes.");
+    }
+
     // 验证重复启用不会重复订阅死亡事件。
     [Test]
     public void Building_OnEnableTwice_DeathEventInvokedOnce()

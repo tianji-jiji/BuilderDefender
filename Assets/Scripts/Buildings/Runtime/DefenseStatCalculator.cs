@@ -82,7 +82,7 @@ public class DefenseStatCalculator
     }
 
     // 计算当前攻击间隔。
-    public float GetCurrentArrowGenerateRate()
+    private float GetCurrentArrowGenerateRate()
     {
         float rewardAttackIntervalMultiplier = RewardBonusManager.Instance
             ? RewardBonusManager.Instance.DefenseAttackIntervalMultiplier

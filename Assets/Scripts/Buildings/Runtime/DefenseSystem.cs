@@ -76,13 +76,7 @@ public class DefenseSystem : MonoBehaviour
         _statCalculator?.ApplyUpgradeLevel(upgradeLevel);
         RefreshRewardBonuses();
     }
-
-    // 记录箭矢击杀并按奖励规则自动升星。
-    public void NotifyEnemyKilled()
-    {
-        NotifyEnemyKilled(null);
-    }
-
+    
     // 通知运行时卡牌效果本防御塔命中了敌人。
     public void NotifyEnemyHit(Enemy hitEnemy, int actualDamage)
     {
@@ -141,7 +135,7 @@ public class DefenseSystem : MonoBehaviour
         HandleAttackTriggeredRewards();
     }
 
-    // 发射缓存过期时立即重新检测一次，避免本次攻击 tick 因旧目标失效而空等。
+    // 发射缓存过期时立即重新检测一次
     private bool TryRefreshTargetsForImmediateShot()
     {
         DetectEnemy();

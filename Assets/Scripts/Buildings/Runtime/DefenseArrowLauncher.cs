@@ -5,17 +5,11 @@ using UnityEngine;
 /// </summary>
 public class DefenseArrowLauncher : MonoBehaviour
 {
-    private const int STAR_LEVEL_TWO = 2;
-    private const int STAR_LEVEL_THREE = 3;
-
     [SerializeField] private Arrow arrowPrefab;
     [SerializeField] private Transform arrowSpawnPoint;
     [SerializeField] private Transform[] superArrowSpawnPoints;
-    [SerializeField] private Material starOneArrowMaterial;
-    [SerializeField] private Material starTwoArrowMaterial;
-    [SerializeField] private Material starThreeArrowMaterial;
 
-    // 发射当前星级对应的一组主动攻击箭矢。
+    // 发射一组主动攻击箭矢。
     public bool FirePrimaryShotGroup(
         DefenseSystem sourceDefenseSystem,
         DefenseTargetSelector targetSelector,
@@ -115,8 +109,8 @@ public class DefenseArrowLauncher : MonoBehaviour
             statCalculator.ShouldUseExplosiveArrow(),
             statCalculator.GetExplosionRadius(),
             statCalculator.GetExplosionDamageMultiplier(),
-            GetArrowMaterialForCurrentStarLevel(statCalculator.CurrentStarLevel),
-            ShouldEnableArrowTrail(statCalculator.CurrentStarLevel));
+            null,
+            false);
     }
 
     // 将箭矢上下文写入箭矢实例。
@@ -133,25 +127,4 @@ public class DefenseArrowLauncher : MonoBehaviour
         arrow.SetTarget(arrowContext.TargetEnemy);
     }
 
-    // 根据当前星级获取箭头应该使用的视觉材质。
-    private Material GetArrowMaterialForCurrentStarLevel(int currentStarLevel)
-    {
-        if (currentStarLevel >= STAR_LEVEL_THREE && starThreeArrowMaterial)
-        {
-            return starThreeArrowMaterial;
-        }
-
-        if (currentStarLevel >= STAR_LEVEL_TWO && starTwoArrowMaterial)
-        {
-            return starTwoArrowMaterial;
-        }
-
-        return starOneArrowMaterial;
-    }
-
-    // 判断当前星级是否启用箭头拖尾效果。
-    private bool ShouldEnableArrowTrail(int currentStarLevel)
-    {
-        return currentStarLevel >= STAR_LEVEL_TWO;
-    }
 }
