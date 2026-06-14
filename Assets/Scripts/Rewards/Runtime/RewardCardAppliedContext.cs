@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// 奖励生效上下文，负责把本次选卡结果传递给 UI、音效和反馈表现层。
+/// 奖励卡牌生效上下文，负责把本次选卡结果传递给 UI、音效和反馈表现层。
 /// </summary>
-public class RewardAppliedContext
+public class RewardCardAppliedContext
 {
     public RewardCardSo RewardCard { get; }
-    public RewardSelectionRecord SelectionRecord { get; }
-    public IReadOnlyList<RewardSelectionRecord> AllRecordList { get; }
+    public RewardCardSelectionRecord SelectionRecord { get; }
+    public IReadOnlyList<RewardCardSelectionRecord> AllRecordList { get; }
     public int TotalCardCount { get; }
     public string LatestDescriptionText { get; }
 
-    public RewardAppliedContext(RewardCardSo rewardCard, RewardSelectionRecord selectionRecord, IReadOnlyList<RewardSelectionRecord> allRecordList, int totalCardCount)
+    public RewardCardAppliedContext(RewardCardSo rewardCard, RewardCardSelectionRecord selectionRecord, IReadOnlyList<RewardCardSelectionRecord> allRecordList, int totalCardCount)
     {
         RewardCard = rewardCard;
         SelectionRecord = selectionRecord;

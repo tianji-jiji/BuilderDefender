@@ -70,7 +70,7 @@ public class RewardBonusManager : MonoBehaviour
 
         RewardEffectContext context = new RewardEffectContext(this, _defenseTowerRewardModifiers, ResourceManager.Instance, EnemyWaveManager.Instance, BuildManager.Instance, _defenseTowerCardEffectDispatcher);
         DefenseTowerRewardConfigApplier.ApplyEffects(rewardCard.EffectConfigList, _defenseTowerRewardModifiers, context);
-        RecordRewardSelection(rewardCard);
+        RecordRewardCardSelection(rewardCard);
         OnRewardBonusChanged?.Invoke();
     }
 
@@ -155,15 +155,15 @@ public class RewardBonusManager : MonoBehaviour
     }
 
     // 记录本次奖励选择，缺少历史组件时只输出警告而不阻断数值生效。
-    private void RecordRewardSelection(RewardCardSo rewardCard)
+    private void RecordRewardCardSelection(RewardCardSo rewardCard)
     {
-        if (RewardSelectionHistory.Instance)
+        if (RewardCardSelectionHistory.Instance)
         {
-            RewardSelectionHistory.Instance.RecordReward(rewardCard);
+            RewardCardSelectionHistory.Instance.RecordRewardCard(rewardCard);
             return;
         }
 
-        Debug.LogWarning("RewardSelectionHistory is missing in scene. Reward bonus applied, but visible reward history was not recorded.");
+        Debug.LogWarning("RewardCardSelectionHistory is missing in scene. Reward bonus applied, but visible reward history was not recorded.");
     }
 
     // 绑定当前场景中的波次管理器。

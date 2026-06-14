@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Feedbacks;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 奖励卡牌选择控制器，负责在波次结束后展示卡牌并应用玩家选择。
 /// </summary>
-public class CardRewardController : MonoBehaviour
+public class RewardCardController : MonoBehaviour
 {
     [SerializeField] private RewardCardPoolSo rewardCardPool;
-    [SerializeField] private CanvasGroup cardRewardCanvasGroup;
+    [FormerlySerializedAs("cardRewardCanvasGroup")]
+    [SerializeField] private CanvasGroup rewardCardCanvasGroup;
     [SerializeField] private Transform cardOptionRoot;
     [SerializeField] private MMF_Player showFeedbacks;
     [SerializeField] private bool pauseGameDuringSelection = true;
@@ -72,9 +74,9 @@ public class CardRewardController : MonoBehaviour
     // 缓存奖励选卡控制器依赖的组件。
     private void CacheReferences()
     {
-        if (!cardRewardCanvasGroup)
+        if (!rewardCardCanvasGroup)
         {
-            TryGetComponent(out cardRewardCanvasGroup);
+            TryGetComponent(out rewardCardCanvasGroup);
         }
 
         if (!showFeedbacks)
@@ -122,9 +124,9 @@ public class CardRewardController : MonoBehaviour
         }
 
         ClearOptions();
-        RewardOfferContext offerContext = RewardSelectionHistory.Instance
-            ? RewardSelectionHistory.Instance.BuildOfferContext()
-            : RewardOfferContext.Default(_waveManager ? _waveManager.waveIndex : 0);
+        RewardCardOfferContext offerContext = RewardCardSelectionHistory.Instance
+            ? RewardCardSelectionHistory.Instance.BuildRewardCardOfferContext()
+            : RewardCardOfferContext.Default(_waveManager ? _waveManager.waveIndex : 0);
         List<RewardCardSo> rewardCardList = rewardCardPool.DrawCards(offerContext);
         if (rewardCardList.Count <= 0)
         {
@@ -196,12 +198,12 @@ public class CardRewardController : MonoBehaviour
     // 显示奖励选卡画布，并在展示完成前拦截点击。
     private void ShowCanvas()
     {
-        if (!cardRewardCanvasGroup)
+        if (!rewardCardCanvasGroup)
         {
             return;
         }
 
-        cardRewardCanvasGroup.transform.localScale = Vector3.one;
+        rewardCardCanvasGroup.transform.localScale = Vector3.one;
         _canSelectCard = false;
         SetCanvasInteraction(false, true);
 
@@ -211,14 +213,14 @@ public class CardRewardController : MonoBehaviour
     // 隐藏奖励选卡画布并停止未完成的展示反馈。
     private void HideCanvas()
     {
-        if (!cardRewardCanvasGroup)
+        if (!rewardCardCanvasGroup)
         {
             return;
         }
 
         StopShowFeedback();
         _canSelectCard = false;
-        cardRewardCanvasGroup.alpha = 0f;
+        rewardCardCanvasGroup.alpha = 0f;
         SetCanvasInteraction(false, false);
     }
 
@@ -229,13 +231,13 @@ public class CardRewardController : MonoBehaviour
 
         if (showFeedbacks)
         {
-            cardRewardCanvasGroup.alpha = 0f;
+            rewardCardCanvasGroup.alpha = 0f;
             showFeedbacks.PlayFeedbacks();
             _showCoroutine = StartCoroutine(WaitForShowFeedbackComplete());
             return;
         }
 
-        cardRewardCanvasGroup.alpha = 1f;
+        rewardCardCanvasGroup.alpha = 1f;
         EnableCardSelection();
     }
 
@@ -249,12 +251,12 @@ public class CardRewardController : MonoBehaviour
 
         _showCoroutine = null;
 
-        if (!_isShowing || !cardRewardCanvasGroup)
+        if (!_isShowing || !rewardCardCanvasGroup)
         {
             yield break;
         }
 
-        cardRewardCanvasGroup.alpha = 1f;
+        rewardCardCanvasGroup.alpha = 1f;
         EnableCardSelection();
     }
 
@@ -291,13 +293,13 @@ public class CardRewardController : MonoBehaviour
     // 设置奖励面板的交互和射线拦截状态。
     private void SetCanvasInteraction(bool interactable, bool blocksRaycasts)
     {
-        if (!cardRewardCanvasGroup)
+        if (!rewardCardCanvasGroup)
         {
             return;
         }
 
-        cardRewardCanvasGroup.interactable = interactable;
-        cardRewardCanvasGroup.blocksRaycasts = blocksRaycasts;
+        rewardCardCanvasGroup.interactable = interactable;
+        rewardCardCanvasGroup.blocksRaycasts = blocksRaycasts;
     }
 
     // 暂停游戏时间以等待玩家选择奖励。

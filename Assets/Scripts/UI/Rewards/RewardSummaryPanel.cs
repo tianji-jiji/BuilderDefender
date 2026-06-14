@@ -77,13 +77,13 @@ public class RewardSummaryPanel : MonoBehaviour
     {
         ClearRecordItems();
 
-        if (!RewardSelectionHistory.Instance || !recordRoot || !recordItemPrefab)
+        if (!RewardCardSelectionHistory.Instance || !recordRoot || !recordItemPrefab)
         {
             return;
         }
 
-        IReadOnlyList<RewardSelectionRecord> rewardRecordList = RewardSelectionHistory.Instance.GetRecordList();
-        foreach (RewardSelectionRecord rewardRecord in rewardRecordList)
+        IReadOnlyList<RewardCardSelectionRecord> rewardRecordList = RewardCardSelectionHistory.Instance.GetRecordList();
+        foreach (RewardCardSelectionRecord rewardRecord in rewardRecordList)
         {
             RewardSummaryRecordItem recordItem = Instantiate(recordItemPrefab, recordRoot);
             recordItem.SetRecord(rewardRecord);

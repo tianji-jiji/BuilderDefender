@@ -1,7 +1,7 @@
 /// <summary>
-/// 奖励选择记录，负责保存玩家已经获得的一张卡牌及其可展示状态。
+/// 奖励卡牌选择记录，负责保存玩家已经获得的一张卡牌及其可展示状态。
 /// </summary>
-public class RewardSelectionRecord
+public class RewardCardSelectionRecord
 {
     public string CardId { get; }
     public string CardName { get; }
@@ -11,7 +11,7 @@ public class RewardSelectionRecord
     public int AcquiredWaveIndex { get; }
     public int StackCount { get; private set; }
 
-    public RewardSelectionRecord(string cardId, string cardName, RewardCardRarity rarity, RewardCardCategory category, string descriptionText, int acquiredWaveIndex)
+    public RewardCardSelectionRecord(string cardId, string cardName, RewardCardRarity rarity, RewardCardCategory category, string descriptionText, int acquiredWaveIndex)
     {
         CardId = cardId;
         CardName = cardName;

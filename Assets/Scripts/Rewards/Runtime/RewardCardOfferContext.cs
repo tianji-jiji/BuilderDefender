@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// 奖励抽取时的运行时上下文，负责提供当前波次和历史选择次数。
+/// 奖励卡牌抽取时的运行时上下文，负责提供当前波次和历史选择次数。
 /// </summary>
-public readonly struct RewardOfferContext
+public readonly struct RewardCardOfferContext
 {
     public int CurrentWaveIndex { get; }
     private readonly IReadOnlyDictionary<string, int> _selectedCardCountDic;
 
-    public RewardOfferContext(int currentWaveIndex, IReadOnlyDictionary<string, int> selectedCardCountDic)
+    public RewardCardOfferContext(int currentWaveIndex, IReadOnlyDictionary<string, int> selectedCardCountDic)
     {
         CurrentWaveIndex = currentWaveIndex;
         _selectedCardCountDic = selectedCardCountDic;
@@ -26,9 +26,9 @@ public readonly struct RewardOfferContext
         return _selectedCardCountDic.GetValueOrDefault(cardId, 0);
     }
 
-    // 创建没有历史记录的默认抽卡上下文。
-    public static RewardOfferContext Default(int currentWaveIndex)
+    // 创建没有历史记录的默认奖励卡牌抽取上下文。
+    public static RewardCardOfferContext Default(int currentWaveIndex)
     {
-        return new RewardOfferContext(currentWaveIndex, null);
+        return new RewardCardOfferContext(currentWaveIndex, null);
     }
 }

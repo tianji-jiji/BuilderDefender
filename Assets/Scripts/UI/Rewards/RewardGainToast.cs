@@ -35,18 +35,18 @@ public class RewardGainToast : MonoBehaviour
     // 订阅奖励生效事件。
     private void OnEnable()
     {
-        RewardSelectionHistory.OnRewardApplied += HandleRewardApplied;
+        RewardCardSelectionHistory.OnRewardCardApplied += HandleRewardCardApplied;
     }
 
     // 取消订阅奖励生效事件。
     private void OnDisable()
     {
-        RewardSelectionHistory.OnRewardApplied -= HandleRewardApplied;
+        RewardCardSelectionHistory.OnRewardCardApplied -= HandleRewardCardApplied;
         StopHideCoroutine();
     }
 
     // 处理奖励生效事件并刷新提示内容。
-    private void HandleRewardApplied(RewardAppliedContext context)
+    private void HandleRewardCardApplied(RewardCardAppliedContext context)
     {
         if (context == null || context.SelectionRecord == null)
         {
@@ -79,7 +79,7 @@ public class RewardGainToast : MonoBehaviour
     }
 
     // 刷新本次获得奖励的文本。
-    private void RefreshText(RewardSelectionRecord selectionRecord)
+    private void RefreshText(RewardCardSelectionRecord selectionRecord)
     {
         if (cardNameText)
         {

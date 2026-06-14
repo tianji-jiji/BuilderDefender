@@ -41,7 +41,7 @@ public class RewardCardPoolTests
         RewardCardSo lateCard = CreateCard("LateCard", 11, false, 0);
         SetField(rewardCardPool, "rewardCardList", new List<RewardCardSo> { earlyCard, lateCard });
 
-        List<RewardCardSo> resultList = rewardCardPool.DrawCards(1, RewardOfferContext.Default(5));
+        List<RewardCardSo> resultList = rewardCardPool.DrawCards(1, RewardCardOfferContext.Default(5));
 
         Assert.AreEqual(1, resultList.Count);
         Assert.AreSame(earlyCard, resultList[0]);
@@ -60,7 +60,7 @@ public class RewardCardPoolTests
         {
             { uniqueCard.name, 1 }
         };
-        RewardOfferContext context = new RewardOfferContext(12, selectedCountDic);
+        RewardCardOfferContext context = new RewardCardOfferContext(12, selectedCountDic);
         List<RewardCardSo> resultList = rewardCardPool.DrawCards(1, context);
 
         Assert.AreEqual(1, resultList.Count);

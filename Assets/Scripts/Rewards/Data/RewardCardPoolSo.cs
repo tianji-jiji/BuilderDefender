@@ -19,23 +19,23 @@ public class RewardCardPoolSo : ScriptableObject
     // 按权重从卡池中抽取本次可以展示的奖励卡。
     public List<RewardCardSo> DrawCards()
     {
-        return DrawCards(ChoiceCount, RewardOfferContext.Default(0));
+        return DrawCards(ChoiceCount, RewardCardOfferContext.Default(0));
     }
 
     // 按指定数量从卡池中抽取奖励卡。
     public List<RewardCardSo> DrawCards(int count)
     {
-        return DrawCards(count, RewardOfferContext.Default(0));
+        return DrawCards(count, RewardCardOfferContext.Default(0));
     }
 
     // 根据抽卡上下文按指定数量从卡池中抽取奖励卡。
-    public List<RewardCardSo> DrawCards(RewardOfferContext context)
+    public List<RewardCardSo> DrawCards(RewardCardOfferContext context)
     {
         return DrawCards(ChoiceCount, context);
     }
 
     // 根据抽卡上下文按指定数量从卡池中抽取奖励卡。
-    public List<RewardCardSo> DrawCards(int count, RewardOfferContext context)
+    public List<RewardCardSo> DrawCards(int count, RewardCardOfferContext context)
     {
         List<RewardCardSo> resultList = new List<RewardCardSo>();
         List<RewardCardSo> availableCardList = BuildAvailableCardList(context);
@@ -61,7 +61,7 @@ public class RewardCardPoolSo : ScriptableObject
     }
 
     // 收集当前可以参与抽取的有效卡牌。
-    private List<RewardCardSo> BuildAvailableCardList(RewardOfferContext context)
+    private List<RewardCardSo> BuildAvailableCardList(RewardCardOfferContext context)
     {
         List<RewardCardSo> availableCardList = new List<RewardCardSo>();
 
@@ -79,7 +79,7 @@ public class RewardCardPoolSo : ScriptableObject
     }
 
     // 根据权重从候选列表中选择一张卡。
-    private RewardCardSo PickWeightedCard(IReadOnlyList<RewardCardSo> availableCardList, RewardOfferContext context)
+    private RewardCardSo PickWeightedCard(IReadOnlyList<RewardCardSo> availableCardList, RewardCardOfferContext context)
     {
         int totalWeight = 0;
 
@@ -119,7 +119,7 @@ public class RewardCardPoolSo : ScriptableObject
     }
 
     // 判断卡牌在当前上下文中是否可以进入抽取池。
-    private bool IsCardAvailable(RewardCardSo rewardCard, RewardOfferContext context)
+    private bool IsCardAvailable(RewardCardSo rewardCard, RewardCardOfferContext context)
     {
         if (!rewardCard || rewardCard.Weight <= 0 || !rewardCard.CardPrefab)
         {

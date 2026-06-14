@@ -34,7 +34,7 @@ public class ActiveRewardHud : MonoBehaviour
             openSummaryButton.onClick.AddListener(OpenSummaryPanel);
         }
 
-        RewardSelectionHistory.OnRewardApplied += HandleRewardApplied;
+        RewardCardSelectionHistory.OnRewardCardApplied += HandleRewardCardApplied;
     }
 
     // 取消订阅按钮和奖励生效事件。
@@ -45,11 +45,11 @@ public class ActiveRewardHud : MonoBehaviour
             openSummaryButton.onClick.RemoveListener(OpenSummaryPanel);
         }
 
-        RewardSelectionHistory.OnRewardApplied -= HandleRewardApplied;
+        RewardCardSelectionHistory.OnRewardCardApplied -= HandleRewardCardApplied;
     }
 
     // 处理奖励生效事件并刷新 HUD。
-    private void HandleRewardApplied(RewardAppliedContext context)
+    private void HandleRewardCardApplied(RewardCardAppliedContext context)
     {
         if (context == null || context.SelectionRecord == null)
         {
@@ -84,7 +84,7 @@ public class ActiveRewardHud : MonoBehaviour
     }
 
     // 根据奖励上下文刷新 HUD 文本。
-    private void RefreshHud(RewardAppliedContext context)
+    private void RefreshHud(RewardCardAppliedContext context)
     {
         if (countText)
         {

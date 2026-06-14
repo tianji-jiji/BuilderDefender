@@ -14,7 +14,7 @@ public class RewardCardOption : MonoBehaviour, IPointerEnterHandler, IPointerExi
     [SerializeField] private MMF_Player pointerExitFeedbacks;
 
     private RewardCardSo _rewardCard;
-    private CardRewardController _controller;
+    private RewardCardController _controller;
 
     // 缓存卡牌根节点上的按钮引用。
     private void Awake()
@@ -43,7 +43,7 @@ public class RewardCardOption : MonoBehaviour, IPointerEnterHandler, IPointerExi
     }
 
     // 初始化本次实例对应的奖励卡数据和控制器。
-    public void Init(RewardCardSo rewardCard, CardRewardController controller)
+    public void Init(RewardCardSo rewardCard, RewardCardController controller)
     {
         _rewardCard = rewardCard;
         _controller = controller;
