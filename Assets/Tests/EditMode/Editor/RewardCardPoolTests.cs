@@ -36,12 +36,12 @@ public class RewardCardPoolTests
     [Test]
     public void DrawCards_FiltersByMinWave()
     {
-        RewardCardPoolSo rewardCardPool = CreatePool();
+        RewardCardDrawPoolSo rewardCardDrawPool = CreatePool();
         RewardCardSo earlyCard = CreateCard("EarlyCard", 0, false, 0);
         RewardCardSo lateCard = CreateCard("LateCard", 11, false, 0);
-        SetField(rewardCardPool, "rewardCardList", new List<RewardCardSo> { earlyCard, lateCard });
+        SetField(rewardCardDrawPool, "rewardCardList", new List<RewardCardSo> { earlyCard, lateCard });
 
-        List<RewardCardSo> resultList = rewardCardPool.DrawCards(1, RewardCardOfferContext.Default(5));
+        List<RewardCardSo> resultList = rewardCardDrawPool.DrawCards(1, RewardCardDrawContext.Default(5));
 
         Assert.AreEqual(1, resultList.Count);
         Assert.AreSame(earlyCard, resultList[0]);
@@ -51,28 +51,28 @@ public class RewardCardPoolTests
     [Test]
     public void DrawCards_FiltersUniqueSelectedCard()
     {
-        RewardCardPoolSo rewardCardPool = CreatePool();
+        RewardCardDrawPoolSo rewardCardDrawPool = CreatePool();
         RewardCardSo uniqueCard = CreateCard("UniqueCard", 0, true, 0);
         RewardCardSo fallbackCard = CreateCard("FallbackCard", 0, false, 0);
-        SetField(rewardCardPool, "rewardCardList", new List<RewardCardSo> { uniqueCard, fallbackCard });
+        SetField(rewardCardDrawPool, "rewardCardList", new List<RewardCardSo> { uniqueCard, fallbackCard });
 
         Dictionary<string, int> selectedCountDic = new Dictionary<string, int>
         {
             { uniqueCard.name, 1 }
         };
-        RewardCardOfferContext context = new RewardCardOfferContext(12, selectedCountDic);
-        List<RewardCardSo> resultList = rewardCardPool.DrawCards(1, context);
+        RewardCardDrawContext context = new RewardCardDrawContext(12, selectedCountDic);
+        List<RewardCardSo> resultList = rewardCardDrawPool.DrawCards(1, context);
 
         Assert.AreEqual(1, resultList.Count);
         Assert.AreSame(fallbackCard, resultList[0]);
     }
 
     // 创建测试用奖励池。
-    private RewardCardPoolSo CreatePool()
+    private RewardCardDrawPoolSo CreatePool()
     {
-        RewardCardPoolSo rewardCardPool = ScriptableObject.CreateInstance<RewardCardPoolSo>();
-        _createdScriptableObjectList.Add(rewardCardPool);
-        return rewardCardPool;
+        RewardCardDrawPoolSo rewardCardDrawPool = ScriptableObject.CreateInstance<RewardCardDrawPoolSo>();
+        _createdScriptableObjectList.Add(rewardCardDrawPool);
+        return rewardCardDrawPool;
     }
 
     // 创建测试用奖励卡。

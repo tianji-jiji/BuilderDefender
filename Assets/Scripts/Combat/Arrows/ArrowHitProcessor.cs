@@ -4,22 +4,22 @@
 public static class ArrowHitProcessor
 {
     // 处理箭矢命中后的直接伤害和可选特殊效果。
-    public static void ApplyHit(ArrowHitContext context, ArrowEffectSo arrowEffect)
+    public static void ApplyHit(ArrowHitContext context, ArrowHitEffectSo arrowHitEffect)
     {
-        if (context == null || !ArrowDamageApplier.IsEnemyValid(context.DirectHitEnemy))
+        if (context == null || !ArrowHitDamageApplier.IsEnemyValid(context.DirectHitEnemy))
         {
             return;
         }
 
-        ArrowDamageApplier.ApplyDamage(
+        ArrowHitDamageApplier.ApplyDamage(
             context.DirectHitEnemy,
             context.Damage,
             context.ArmorIgnorePercent,
-            context.SourceDefenseTowerSystem);
+            context.SourceDefenseTowerCombatSystem);
 
-        if (arrowEffect)
+        if (arrowHitEffect)
         {
-            arrowEffect.Apply(context);
+            arrowHitEffect.Apply(context);
         }
     }
 }

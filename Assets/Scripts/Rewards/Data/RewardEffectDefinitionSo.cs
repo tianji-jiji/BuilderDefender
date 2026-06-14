@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 奖励效果参数的自动显示倾向规则。
@@ -41,7 +42,6 @@ public class RewardEffectParameterDisplayDefinition
     [SerializeField] private RewardEffectAutoImpactRule autoImpactRule = RewardEffectAutoImpactRule.GreaterThanZeroIsPositive;
 
     public string ParameterId => string.IsNullOrWhiteSpace(parameterId) ? RewardEffectParameterIds.VALUE : parameterId.Trim();
-    public string DisplayName => displayName;
     public string TemplateToken => string.IsNullOrWhiteSpace(templateToken) ? string.Format(TOKEN_FORMAT, ParameterId) : templateToken;
     public RewardEffectValueFormat ValueFormat => valueFormat;
 
@@ -96,12 +96,12 @@ public class RewardEffectDefinitionSo : ScriptableObject
     [SerializeField] private bool useCustomDescription;
     [SerializeField] private string descriptionTemplate = DEFAULT_DESCRIPTION_TEMPLATE;
     [SerializeField] private RewardEffectAutoImpactRule autoImpactRule = RewardEffectAutoImpactRule.GreaterThanZeroIsPositive;
-    [SerializeField] private RewardEffectHandlerSo handler;
+    [FormerlySerializedAs("handler")] [SerializeField] private RewardEffectApplierSo applier;
     [SerializeField] private List<RewardEffectParameterDisplayDefinition> parameterDisplayDefinitionList = new();
 
     public string DisplayName => displayName;
     public bool UseCustomDescription => useCustomDescription;
-    public RewardEffectHandlerSo Handler => handler;
+    public RewardEffectApplierSo Applier => applier;
     public IReadOnlyList<RewardEffectParameterDisplayDefinition> ParameterDisplayDefinitionList => parameterDisplayDefinitionList;
 
     // 根据参数富文本构建完整效果描述。

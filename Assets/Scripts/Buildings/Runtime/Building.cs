@@ -156,8 +156,8 @@ public class Building : MonoBehaviour
     // 计算当前建筑应该拥有的最大生命值。
     private int CalculateMaxHealth()
     {
-        float rewardMaxHealthMultiplier = RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.DefenseTowerMaxHealthMultiplier
+        float rewardMaxHealthMultiplier = RewardRuntimeStateManager.Instance
+            ? RewardRuntimeStateManager.Instance.DefenseTowerMaxHealthMultiplier
             : 1f;
 
         if (!IsDefenseBuilding)
@@ -171,12 +171,12 @@ public class Building : MonoBehaviour
     // 计算当前建筑受到伤害时使用的伤害倍率。
     private float CalculateDamageTakenMultiplier()
     {
-        if (!IsDefenseBuilding || !RewardBonusManager.Instance)
+        if (!IsDefenseBuilding || !RewardRuntimeStateManager.Instance)
         {
             return 1f;
         }
 
-        return RewardBonusManager.Instance.DefenseTowerDamageTakenMultiplier;
+        return RewardRuntimeStateManager.Instance.DefenseTowerDamageTakenMultiplier;
     }
 
     // 订阅建筑生命值死亡事件。
@@ -211,7 +211,7 @@ public class Building : MonoBehaviour
             return;
         }
 
-        RewardBonusManager.OnRewardBonusChanged += RefreshRewardBonuses;
+        RewardRuntimeStateManager.OnRewardBonusChanged += RefreshRewardBonuses;
         _isSubscribedToRewardBonuses = true;
     }
 
@@ -223,7 +223,7 @@ public class Building : MonoBehaviour
             return;
         }
 
-        RewardBonusManager.OnRewardBonusChanged -= RefreshRewardBonuses;
+        RewardRuntimeStateManager.OnRewardBonusChanged -= RefreshRewardBonuses;
         _isSubscribedToRewardBonuses = false;
     }
 
@@ -237,12 +237,12 @@ public class Building : MonoBehaviour
 
         if (IsDefenseBuilding)
         {
-            DefenseTowerTracker.RegisterDefenseBuilding(this);
+            DefenseTowerRegistry.RegisterDefenseBuilding(this);
         }
 
         if (IsHomeBuilding && _healthSystem)
         {
-            DefenseTowerTracker.RegisterHomeHealthSystem(_healthSystem);
+            DefenseTowerRegistry.RegisterHomeHealthSystem(_healthSystem);
         }
 
         _isRegisteredToRuntimeRegistry = true;
@@ -258,12 +258,12 @@ public class Building : MonoBehaviour
 
         if (IsDefenseBuilding)
         {
-            DefenseTowerTracker.UnregisterDefenseBuilding(this);
+            DefenseTowerRegistry.UnregisterDefenseBuilding(this);
         }
 
         if (IsHomeBuilding && _healthSystem)
         {
-            DefenseTowerTracker.UnregisterHomeHealthSystem(_healthSystem);
+            DefenseTowerRegistry.UnregisterHomeHealthSystem(_healthSystem);
         }
 
         _isRegisteredToRuntimeRegistry = false;

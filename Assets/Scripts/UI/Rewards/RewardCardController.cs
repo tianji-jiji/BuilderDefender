@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 /// </summary>
 public class RewardCardController : MonoBehaviour
 {
-    [SerializeField] private RewardCardPoolSo rewardCardPool;
+    [FormerlySerializedAs("rewardCardPool")] [SerializeField] private RewardCardDrawPoolSo rewardCardDrawPool;
     [FormerlySerializedAs("cardRewardCanvasGroup")]
     [SerializeField] private CanvasGroup rewardCardCanvasGroup;
     [SerializeField] private Transform cardOptionRoot;
@@ -63,9 +63,9 @@ public class RewardCardController : MonoBehaviour
         _canSelectCard = false;
         SetCanvasInteraction(false, true);
 
-        if (RewardBonusManager.Instance)
+        if (RewardRuntimeStateManager.Instance)
         {
-            RewardBonusManager.Instance.ApplyReward(rewardCard);
+            RewardRuntimeStateManager.Instance.ApplyReward(rewardCard);
         }
 
         CloseRewardChoices();
@@ -118,16 +118,16 @@ public class RewardCardController : MonoBehaviour
     // 抽取并展示本次可选的奖励卡。
     private void ShowRewardChoices()
     {
-        if (_isShowing || !rewardCardPool || !cardOptionRoot)
+        if (_isShowing || !rewardCardDrawPool || !cardOptionRoot)
         {
             return;
         }
 
         ClearOptions();
-        RewardCardOfferContext offerContext = RewardCardSelectionHistory.Instance
-            ? RewardCardSelectionHistory.Instance.BuildRewardCardOfferContext()
-            : RewardCardOfferContext.Default(_waveManager ? _waveManager.waveIndex : 0);
-        List<RewardCardSo> rewardCardList = rewardCardPool.DrawCards(offerContext);
+        RewardCardDrawContext drawContext = RewardCardAcquisitionHistory.Instance
+            ? RewardCardAcquisitionHistory.Instance.BuildRewardCardOfferContext()
+            : RewardCardDrawContext.Default(_waveManager ? _waveManager.waveIndex : 0);
+        List<RewardCardSo> rewardCardList = rewardCardDrawPool.DrawCards(drawContext);
         if (rewardCardList.Count <= 0)
         {
             return;

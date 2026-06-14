@@ -23,7 +23,7 @@ public class BuildButtonUI : MonoBehaviour,IPointerEnterHandler,IPointerExitHand
     public void OnClick()
     {
         _buildMenuUI.SelectButton(this);
-        BuildManager.Instance.SetCurrentBuilding(buildingSo);
+        BuildingPlacementManager.Instance.SetCurrentBuilding(buildingSo);
     }
 
     /// <summary>

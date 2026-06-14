@@ -77,13 +77,13 @@ public class RewardSummaryPanel : MonoBehaviour
     {
         ClearRecordItems();
 
-        if (!RewardCardSelectionHistory.Instance || !recordRoot || !recordItemPrefab)
+        if (!RewardCardAcquisitionHistory.Instance || !recordRoot || !recordItemPrefab)
         {
             return;
         }
 
-        IReadOnlyList<RewardCardSelectionRecord> rewardRecordList = RewardCardSelectionHistory.Instance.GetRecordList();
-        foreach (RewardCardSelectionRecord rewardRecord in rewardRecordList)
+        IReadOnlyList<RewardCardAcquisitionRecord> rewardRecordList = RewardCardAcquisitionHistory.Instance.GetRecordList();
+        foreach (RewardCardAcquisitionRecord rewardRecord in rewardRecordList)
         {
             RewardSummaryRecordItem recordItem = Instantiate(recordItemPrefab, recordRoot);
             recordItem.SetRecord(rewardRecord);
@@ -124,8 +124,8 @@ public class RewardSummaryPanel : MonoBehaviour
         }
 
         totalBonusText.richText = true;
-        totalBonusText.text = RewardBonusManager.Instance
-            ? RewardBonusManager.Instance.BuildDefenseTowerRewardSummaryText()
+        totalBonusText.text = RewardRuntimeStateManager.Instance
+            ? RewardRuntimeStateManager.Instance.BuildDefenseTowerRewardSummaryText()
             : EMPTY_BONUS_TEXT;
     }
 

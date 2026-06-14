@@ -14,9 +14,9 @@ public class BuildMenuUI : MonoBehaviour
     
     private void Start()
     {
-        if (BuildManager.Instance)
+        if (BuildingPlacementManager.Instance)
         {
-            BuildManager.Instance.OnSelectedBuildingChanged += OnSelectedBuildingChanged;
+            BuildingPlacementManager.Instance.OnSelectedBuildingChanged += OnSelectedBuildingChanged;
         }
 
         SelectButton(defaultButton);
@@ -59,9 +59,9 @@ public class BuildMenuUI : MonoBehaviour
     // 注销建筑选择事件，避免界面销毁后仍收到回调。
     private void OnDestroy()
     {
-        if (BuildManager.Instance)
+        if (BuildingPlacementManager.Instance)
         {
-            BuildManager.Instance.OnSelectedBuildingChanged -= OnSelectedBuildingChanged;
+            BuildingPlacementManager.Instance.OnSelectedBuildingChanged -= OnSelectedBuildingChanged;
         }
     }
 }

@@ -16,7 +16,7 @@ public class RewardSummaryRecordItem : MonoBehaviour
     [SerializeField] private TMP_Text waveText;
 
     // 刷新单条奖励记录的 UI 文本。
-    public void SetRecord(RewardCardSelectionRecord rewardRecord)
+    public void SetRecord(RewardCardAcquisitionRecord rewardRecord)
     {
         if (rewardRecord == null)
         {
@@ -28,7 +28,7 @@ public class RewardSummaryRecordItem : MonoBehaviour
     }
 
     // 刷新有效奖励记录的所有文本。
-    private void RefreshText(RewardCardSelectionRecord rewardRecord)
+    private void RefreshText(RewardCardAcquisitionRecord rewardRecord)
     {
         if (cardNameText)
         {

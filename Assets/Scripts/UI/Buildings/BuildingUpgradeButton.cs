@@ -12,8 +12,9 @@ public class BuildingUpgradeButton : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private BuildingUpgradeConfigSo upgradeConfig;
     [SerializeField] private Building building;
+    [FormerlySerializedAs("defenseTowerSystem")]
     [FormerlySerializedAs("defenseSystem")]
-    [SerializeField] private DefenseTowerSystem defenseTowerSystem;
+    [SerializeField] private DefenseTowerCombatSystem defenseTowerCombatSystem;
     [SerializeField] private Transform[] starVisuals;
     [SerializeField] private float starSpacing = 1.5f;
     [SerializeField] private int currentStarLevel = MIN_STAR_LEVEL;
@@ -22,14 +23,14 @@ public class BuildingUpgradeButton : MonoBehaviour
     public int CurrentStarLevel => currentStarLevel;
     public int MaxStarLevel => upgradeConfig ? upgradeConfig.MaxStarLevel : currentStarLevel;
     public bool IsMaxStar => currentStarLevel >= MaxStarLevel;
-    public DefenseTowerSystem DefenseTowerSystem => defenseTowerSystem;
+    public DefenseTowerCombatSystem DefenseTowerCombatSystem => defenseTowerCombatSystem;
 
     // 初始化按钮监听、初始星级和视觉状态。
     private void Start()
     {
         CacheUpgradeTargets();
         ApplyInitialStarBonusFromReward();
-        DefenseTowerTracker.RegisterUpgradeButton(this);
+        DefenseTowerRegistry.RegisterUpgradeButton(this);
 
         if (button)
         {
@@ -106,21 +107,21 @@ public class BuildingUpgradeButton : MonoBehaviour
             building = GetComponentInParent<Building>();
         }
 
-        if (!defenseTowerSystem)
+        if (!defenseTowerCombatSystem)
         {
-            defenseTowerSystem = GetComponentInParent<DefenseTowerSystem>();
+            defenseTowerCombatSystem = GetComponentInParent<DefenseTowerCombatSystem>();
         }
     }
 
     // 应用奖励提供的新建防御塔初始星级。
     private void ApplyInitialStarBonusFromReward()
     {
-        if (!RewardBonusManager.Instance || !defenseTowerSystem)
+        if (!RewardRuntimeStateManager.Instance || !defenseTowerCombatSystem)
         {
             return;
         }
 
-        ApplyInitialStarBonus(RewardBonusManager.Instance.DefenseTowerNewInitialStarBonus);
+        ApplyInitialStarBonus(RewardRuntimeStateManager.Instance.DefenseTowerNewInitialStarBonus);
     }
 
     // 将目标星级配置应用到建筑生命和战斗系统。
@@ -158,9 +159,9 @@ public class BuildingUpgradeButton : MonoBehaviour
             building.ApplyUpgradeLevel(upgradeLevel);
         }
 
-        if (defenseTowerSystem)
+        if (defenseTowerCombatSystem)
         {
-            defenseTowerSystem.ApplyUpgradeLevel(upgradeLevel);
+            defenseTowerCombatSystem.ApplyUpgradeLevel(upgradeLevel);
         }
     }
 
@@ -235,7 +236,7 @@ public class BuildingUpgradeButton : MonoBehaviour
     // 取消按钮监听，避免对象销毁后继续持有回调。
     private void OnDestroy()
     {
-        DefenseTowerTracker.UnregisterUpgradeButton(this);
+        DefenseTowerRegistry.UnregisterUpgradeButton(this);
 
         if (button)
         {

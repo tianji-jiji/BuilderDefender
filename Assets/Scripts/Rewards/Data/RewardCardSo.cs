@@ -37,7 +37,7 @@ public class RewardCardSo : ScriptableObject
     [SerializeField] private int minWaveIndex;
     [SerializeField] private int maxPickCount;
     [SerializeField] private bool isUnique;
-    [SerializeField] private List<RewardEffectConfig> effectConfigList = new();
+    [SerializeField] private List<RewardCardEffectConfig> effectConfigList = new();
 
     public string CardId => cardId;
     public string CardName => string.IsNullOrWhiteSpace(cardName) ? cardId : cardName;
@@ -48,7 +48,7 @@ public class RewardCardSo : ScriptableObject
     public int MinWaveIndex => Mathf.Max(0, minWaveIndex);
     public int MaxPickCount => isUnique ? 1 : maxPickCount <= 0 ? int.MaxValue : maxPickCount;
     public bool IsUnique => isUnique;
-    public IReadOnlyList<RewardEffectConfig> EffectConfigList => effectConfigList;
+    public IReadOnlyList<RewardCardEffectConfig> EffectConfigList => effectConfigList;
 
 #if UNITY_EDITOR
     // 在编辑器中根据资产 GUID 自动刷新卡牌 ID。

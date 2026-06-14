@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 箭矢投射物本体，负责飞行、追踪、命中判断和对象池生命周期。
@@ -11,7 +12,7 @@ public class Arrow : MonoBehaviour, IPoolable
     [SerializeField] private float lifetime = 5f;
     [SerializeField] private int defaultDamage = 10;
     [SerializeField] private ArrowVisual arrowVisual;
-    [SerializeField] private ArrowEffectSo explosiveArrowEffect;
+    [FormerlySerializedAs("explosiveArrowEffect")] [SerializeField] private ArrowHitEffectSo explosiveArrowHitEffect;
 
     private readonly Collider2D[] _effectHitResults = new Collider2D[MAX_EFFECT_HIT_COUNT];
     
@@ -19,7 +20,7 @@ public class Arrow : MonoBehaviour, IPoolable
     private Collider2D _collider;
     private PooledObject _pooledObject;
     
-    private DefenseTowerSystem _sourceDefenseTowerSystem;
+    private DefenseTowerCombatSystem _sourceDefenseTowerCombatSystem;
     private Enemy _targetEnemy;
     private Transform _targetTransform;
     private Vector2 _moveDirection;
@@ -51,7 +52,7 @@ public class Arrow : MonoBehaviour, IPoolable
         TryGetComponent(out _pooledObject);
         _collider.enabled = true;
         arrowVisual?.ResetForSpawn();
-        _sourceDefenseTowerSystem = null;
+        _sourceDefenseTowerCombatSystem = null;
         _targetEnemy = null;
         _targetTransform = null;
         _moveDirection = Vector2.zero;
@@ -68,7 +69,7 @@ public class Arrow : MonoBehaviour, IPoolable
     // 清理箭头回池前的运行状态。
     public void OnDespawned()
     {
-        _sourceDefenseTowerSystem = null;
+        _sourceDefenseTowerCombatSystem = null;
         _targetEnemy = null;
         _targetTransform = null;
         _moveDirection = Vector2.zero;
@@ -96,7 +97,7 @@ public class Arrow : MonoBehaviour, IPoolable
     // 设置箭头追踪目标。
     public void SetTarget(Enemy target)
     {
-        if (!ArrowDamageApplier.IsEnemyValid(target))
+        if (!ArrowHitDamageApplier.IsEnemyValid(target))
         {
             ReturnArrow();
             return;
@@ -114,9 +115,9 @@ public class Arrow : MonoBehaviour, IPoolable
     }
 
     // 设置本次发射携带的攻击上下文。
-    public void SetAttackContext(DefenseTowerSystem sourceDefenseTowerSystem, float armorIgnorePercent, bool isExplosiveArrow, float explosionRadius, float explosionDamageMultiplier)
+    public void SetAttackContext(DefenseTowerCombatSystem sourceDefenseTowerCombatSystem, float armorIgnorePercent, bool isExplosiveArrow, float explosionRadius, float explosionDamageMultiplier)
     {
-        _sourceDefenseTowerSystem = sourceDefenseTowerSystem;
+        _sourceDefenseTowerCombatSystem = sourceDefenseTowerCombatSystem;
         _armorIgnorePercent = Mathf.Clamp01(armorIgnorePercent);
         _isExplosiveArrow = isExplosiveArrow;
         _explosionRadius = Mathf.Max(0f, explosionRadius);
@@ -132,7 +133,7 @@ public class Arrow : MonoBehaviour, IPoolable
     // 让箭头飞向当前目标。
     private void FlyToEnemy()
     {
-        if (!ArrowDamageApplier.IsEnemyValid(_targetEnemy) || !_targetTransform)
+        if (!ArrowHitDamageApplier.IsEnemyValid(_targetEnemy) || !_targetTransform)
         {
             ContinueFlyingForward();
             return;
@@ -145,7 +146,7 @@ public class Arrow : MonoBehaviour, IPoolable
     // 处理箭头命中敌人后的命中流程和回收。
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.gameObject.TryGetComponent(out Enemy enemy) || !ArrowDamageApplier.IsEnemyValid(enemy))
+        if (!other.gameObject.TryGetComponent(out Enemy enemy) || !ArrowHitDamageApplier.IsEnemyValid(enemy))
         {
             return;
         }
@@ -155,11 +156,11 @@ public class Arrow : MonoBehaviour, IPoolable
             transform.position,
             _damage,
             _armorIgnorePercent,
-            _sourceDefenseTowerSystem,
+            _sourceDefenseTowerCombatSystem,
             _explosionRadius,
             _explosionDamageMultiplier,
             _effectHitResults);
-        ArrowHitProcessor.ApplyHit(context, _isExplosiveArrow ? explosiveArrowEffect : null);
+        ArrowHitProcessor.ApplyHit(context, _isExplosiveArrow ? explosiveArrowHitEffect : null);
         ReturnArrow();
     }
 

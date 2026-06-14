@@ -20,7 +20,7 @@ public static class RewardCardDescriptionFormatter
         }
 
         StringBuilder descriptionBuilder = new();
-        foreach (RewardEffectConfig effectConfig in rewardCard.EffectConfigList)
+        foreach (RewardCardEffectConfig effectConfig in rewardCard.EffectConfigList)
         {
             if (effectConfig == null)
             {
@@ -39,48 +39,48 @@ public static class RewardCardDescriptionFormatter
     }
 
     // 构建单个奖励效果的描述文本。
-    private static string BuildEffectDescription(RewardEffectConfig effectConfig)
+    private static string BuildEffectDescription(RewardCardEffectConfig cardEffectConfig)
     {
-        Dictionary<string, string> parameterTextDic = BuildParameterTextDic(effectConfig);
-        return effectConfig.BuildDescription(parameterTextDic);
+        Dictionary<string, string> parameterTextDic = BuildParameterTextDic(cardEffectConfig);
+        return cardEffectConfig.BuildDescription(parameterTextDic);
     }
 
     // 构建当前效果全部参数的富文本字典。
-    private static Dictionary<string, string> BuildParameterTextDic(RewardEffectConfig effectConfig)
+    private static Dictionary<string, string> BuildParameterTextDic(RewardCardEffectConfig cardEffectConfig)
     {
         Dictionary<string, string> parameterTextDic = new();
-        bool hasParameterList = effectConfig.HasParameterList();
+        bool hasParameterList = cardEffectConfig.HasParameterList();
 
         if (hasParameterList)
         {
-            foreach (RewardEffectParameterConfig parameterConfig in effectConfig.ParameterConfigList)
+            foreach (RewardEffectParameterConfig parameterConfig in cardEffectConfig.ParameterConfigList)
             {
                 if (parameterConfig == null)
                 {
                     continue;
                 }
 
-                parameterTextDic[parameterConfig.ParameterId] = BuildColoredParameterText(effectConfig, parameterConfig);
+                parameterTextDic[parameterConfig.ParameterId] = BuildColoredParameterText(cardEffectConfig, parameterConfig);
             }
 
             return parameterTextDic;
         }
 
-        string valueText = BuildColoredParameterText(effectConfig, RewardEffectParameterIds.VALUE, effectConfig.LegacyValue, effectConfig.LegacyDisplayImpact);
+        string valueText = BuildColoredParameterText(cardEffectConfig, RewardEffectParameterIds.VALUE, cardEffectConfig.LegacyValue, cardEffectConfig.LegacyDisplayImpact);
         parameterTextDic[RewardEffectParameterIds.VALUE] = valueText;
         return parameterTextDic;
     }
 
     // 构建单个参数的富文本。
-    private static string BuildColoredParameterText(RewardEffectConfig effectConfig, RewardEffectParameterConfig parameterConfig)
+    private static string BuildColoredParameterText(RewardCardEffectConfig cardEffectConfig, RewardEffectParameterConfig parameterConfig)
     {
-        return BuildColoredParameterText(effectConfig, parameterConfig.ParameterId, parameterConfig.Value, parameterConfig.DisplayImpactOverride);
+        return BuildColoredParameterText(cardEffectConfig, parameterConfig.ParameterId, parameterConfig.Value, parameterConfig.DisplayImpactOverride);
     }
 
     // 构建指定参数 ID 和值的富文本。
-    private static string BuildColoredParameterText(RewardEffectConfig effectConfig, string parameterId, float value, RewardEffectDisplayImpact displayImpactOverride)
+    private static string BuildColoredParameterText(RewardCardEffectConfig cardEffectConfig, string parameterId, float value, RewardEffectDisplayImpact displayImpactOverride)
     {
-        RewardEffectDefinitionSo effectDefinition = effectConfig.EffectDefinition;
+        RewardEffectDefinitionSo effectDefinition = cardEffectConfig.EffectDefinition;
         RewardEffectValueFormat valueFormat = effectDefinition ? effectDefinition.GetValueFormat(parameterId) : RewardEffectValueFormat.PercentWithSign;
         RewardEffectDisplayImpact displayImpact = effectDefinition
             ? effectDefinition.ResolveDisplayImpact(parameterId, value, displayImpactOverride)

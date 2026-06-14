@@ -23,7 +23,7 @@ public class ArrowEffectTests
     {
         Enemy enemy = CreateEnemy("ArrowEffectTest_Enemy", Vector3.zero, 100, 100);
 
-        int actualDamage = ArrowDamageApplier.ApplyDamage(enemy, 20, 0f, null);
+        int actualDamage = ArrowHitDamageApplier.ApplyDamage(enemy, 20, 0f, null);
 
         Assert.AreEqual(10, actualDamage);
         Assert.AreEqual(90, GetHealthSystem(enemy).CurrentHealth);
@@ -36,7 +36,7 @@ public class ArrowEffectTests
         Enemy directHitEnemy = CreateEnemy("ArrowEffectTest_Direct", Vector3.zero, 100, 0);
         Enemy splashEnemy = CreateEnemy("ArrowEffectTest_Splash", new Vector3(1f, 0f, 0f), 100, 0);
         Enemy farEnemy = CreateEnemy("ArrowEffectTest_Far", new Vector3(5f, 0f, 0f), 100, 0);
-        ExplosiveArrowEffectSo effect = ScriptableObject.CreateInstance<ExplosiveArrowEffectSo>();
+        ExplosiveArrowHitEffectSo hitEffect = ScriptableObject.CreateInstance<ExplosiveArrowHitEffectSo>();
         ArrowHitContext context = new(
             directHitEnemy,
             Vector3.zero,
@@ -47,13 +47,13 @@ public class ArrowEffectTests
             0.5f,
             new Collider2D[32]);
 
-        effect.Apply(context);
+        hitEffect.Apply(context);
 
         Assert.AreEqual(100, GetHealthSystem(directHitEnemy).CurrentHealth);
         Assert.AreEqual(90, GetHealthSystem(splashEnemy).CurrentHealth);
         Assert.AreEqual(100, GetHealthSystem(farEnemy).CurrentHealth);
 
-        Object.DestroyImmediate(effect);
+        Object.DestroyImmediate(hitEffect);
     }
 
     // 创建测试敌人并初始化生命、护甲和碰撞体。

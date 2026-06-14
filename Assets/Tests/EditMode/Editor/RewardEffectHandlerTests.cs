@@ -27,43 +27,43 @@ public class RewardEffectHandlerTests
     [Test]
     public void ApplyEffects_WithHandler_UsesHandler()
     {
-        DefenseTowerRewardModifiers defenseTowerRewardModifiers = new();
+        DefenseTowerRewardState defenseTowerRewardState = new();
         RewardEffectDefinitionSo definition = CreateDefinition();
-        TestRewardEffectHandlerSo handler = CreateHandler();
-        RewardEffectConfig config = CreateConfig(definition, 0.5f);
-        RewardEffectContext context = new(null, defenseTowerRewardModifiers, null, null, null);
-        SetField(definition, "handler", handler);
+        TestRewardEffectApplierSo applier = CreateHandler();
+        RewardCardEffectConfig config = CreateConfig(definition, 0.5f);
+        RewardEffectApplyContext applyContext = new(null, defenseTowerRewardState, null, null, null);
+        SetField(definition, "handler", applier);
 
-        DefenseTowerRewardConfigApplier.ApplyEffects(new[] { config }, defenseTowerRewardModifiers, context);
+        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerRewardState, applyContext);
 
-        Assert.AreEqual(1, handler.ApplyCount);
-        Assert.AreSame(context, handler.LastContext);
-        Assert.AreSame(config, handler.LastConfig);
-        Assert.AreEqual(1f, defenseTowerRewardModifiers.AttackDamageMultiplier);
+        Assert.AreEqual(1, applier.ApplyCount);
+        Assert.AreSame(applyContext, applier.LastApplyContext);
+        Assert.AreSame(config, applier.LastConfig);
+        Assert.AreEqual(1f, defenseTowerRewardState.AttackDamageMultiplier);
     }
 
     // 验证没有 Handler 的效果不会再进入旧 switch fallback。
     [Test]
     public void ApplyEffects_WithoutHandler_DoesNotApplyLegacyFallback()
     {
-        DefenseTowerRewardModifiers defenseTowerRewardModifiers = new();
+        DefenseTowerRewardState defenseTowerRewardState = new();
         RewardEffectDefinitionSo definition = CreateDefinition();
-        RewardEffectConfig config = CreateConfig(definition, 0.25f);
+        RewardCardEffectConfig config = CreateConfig(definition, 0.25f);
 
-        DefenseTowerRewardConfigApplier.ApplyEffects(new[] { config }, defenseTowerRewardModifiers);
+        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerRewardState);
 
-        Assert.AreEqual(1f, defenseTowerRewardModifiers.AttackDamageMultiplier);
+        Assert.AreEqual(1f, defenseTowerRewardState.AttackDamageMultiplier);
     }
 
     // 验证旧效果枚举和旧参数枚举已经从程序集里移除。
     [Test]
     public void LegacyEffectEnums_AreRemoved()
     {
-        Assembly rewardAssembly = typeof(RewardEffectConfig).Assembly;
+        Assembly rewardAssembly = typeof(RewardCardEffectConfig).Assembly;
 
         Assert.IsNull(rewardAssembly.GetType("RewardEffectType"));
         Assert.IsNull(rewardAssembly.GetType("RewardEffectParameterKey"));
-        Assert.IsNull(typeof(RewardEffectConfig).GetProperty("EffectType"));
+        Assert.IsNull(typeof(RewardCardEffectConfig).GetProperty("EffectType"));
         Assert.IsNull(typeof(RewardEffectDefinitionSo).GetProperty("EffectType"));
     }
 
@@ -71,7 +71,7 @@ public class RewardEffectHandlerTests
     [Test]
     public void ParameterReader_CustomParameterId_ReadsWithoutEnumChange()
     {
-        RewardEffectConfig config = new();
+        RewardCardEffectConfig config = new();
         RewardEffectParameterConfig parameterConfig = new();
         SetField(parameterConfig, "parameterId", "MaxStack");
         SetField(parameterConfig, "value", 7f);
@@ -113,7 +113,7 @@ public class RewardEffectHandlerTests
         {
             string assetPath = AssetDatabase.GUIDToAssetPath(definitionGuid);
             RewardEffectDefinitionSo definition = AssetDatabase.LoadAssetAtPath<RewardEffectDefinitionSo>(assetPath);
-            if (definition && !definition.Handler)
+            if (definition && !definition.Applier)
             {
                 missingHandlerPathList.Add(assetPath);
             }
@@ -132,20 +132,20 @@ public class RewardEffectHandlerTests
     }
 
     // 创建测试用效果配置。
-    private RewardEffectConfig CreateConfig(RewardEffectDefinitionSo definition, float value)
+    private RewardCardEffectConfig CreateConfig(RewardEffectDefinitionSo definition, float value)
     {
-        RewardEffectConfig config = new();
+        RewardCardEffectConfig config = new();
         SetField(config, "effectDefinition", definition);
         SetField(config, "value", value);
         return config;
     }
 
     // 创建测试用 Handler。
-    private TestRewardEffectHandlerSo CreateHandler()
+    private TestRewardEffectApplierSo CreateHandler()
     {
-        TestRewardEffectHandlerSo handler = ScriptableObject.CreateInstance<TestRewardEffectHandlerSo>();
-        _createdScriptableObjectList.Add(handler);
-        return handler;
+        TestRewardEffectApplierSo applier = ScriptableObject.CreateInstance<TestRewardEffectApplierSo>();
+        _createdScriptableObjectList.Add(applier);
+        return applier;
     }
 
     // 设置私有序列化字段以构建测试数据。
@@ -159,17 +159,17 @@ public class RewardEffectHandlerTests
     /// <summary>
     /// 测试用 Reward Handler，记录运行时调用参数。
     /// </summary>
-    private class TestRewardEffectHandlerSo : RewardEffectHandlerSo
+    private class TestRewardEffectApplierSo : RewardEffectApplierSo
     {
         public int ApplyCount { get; private set; }
-        public RewardEffectContext LastContext { get; private set; }
-        public RewardEffectConfig LastConfig { get; private set; }
+        public RewardEffectApplyContext LastApplyContext { get; private set; }
+        public RewardCardEffectConfig LastConfig { get; private set; }
 
         // 记录 Handler 调用信息。
-        public override void Apply(RewardEffectContext context, RewardEffectConfig config)
+        public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
         {
             ApplyCount++;
-            LastContext = context;
+            LastApplyContext = applyContext;
             LastConfig = config;
         }
     }
