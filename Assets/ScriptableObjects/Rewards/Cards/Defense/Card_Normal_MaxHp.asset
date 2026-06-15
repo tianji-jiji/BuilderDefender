@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: RewardCard_9d7e6fa4cd740374587660f1193c63a8
   cardName: "\u7A33\u56FA\u5854\u57FA"
   cardPrefab: {fileID: 27244437810418193, guid: e549ace408f6d84449c9a5a41da944b5, type: 3}
-  weight: 1
+  weight: 0
   rarity: 0
   category: 0
   minWaveIndex: 0

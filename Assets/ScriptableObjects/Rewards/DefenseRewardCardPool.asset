@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: DefenseRewardCardPool
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardPoolSo
   rewardCardList:
-  - {fileID: 11400000, guid: 93828d1aa8c73cc47a4adc3a4fe58dda, type: 2}
+  - {fileID: 11400000, guid: bb95c3c8871c5ff4bbfaf50e2c0c3117, type: 2}
   - {fileID: 11400000, guid: 82e0d94ccf165cb48b5fc4038e1b596d, type: 2}
   - {fileID: 11400000, guid: 05f37f456baefdc49b38bc6b20cb5dfb, type: 2}
   - {fileID: 11400000, guid: bb95c3c8871c5ff4bbfaf50e2c0c3117, type: 2}
   - {fileID: 11400000, guid: 9d7e6fa4cd740374587660f1193c63a8, type: 2}
-  - {fileID: 11400000, guid: 73e75eac1914bea4abbeffd29d58f55c, type: 2}
   - {fileID: 11400000, guid: 2d14518e6ab83b04597550e74b6a8c42, type: 2}
-  - {fileID: 11400000, guid: b1268efbf5d3f3341bd022991f117984, type: 2}
   - {fileID: 11400000, guid: e24d4ae5af4f4a7298277df79dd437f6, type: 2}
+  - {fileID: 11400000, guid: 3465abf6a9304c2e8c65d958f4ddc8e8, type: 2}
+  - {fileID: 11400000, guid: 73e75eac1914bea4abbeffd29d58f55c, type: 2}
   - {fileID: 11400000, guid: 4f5cfa49f7874d8ca427f2d0b9427511, type: 2}
   - {fileID: 11400000, guid: 3465abf6a9304c2e8c65d958f4ddc8e8, type: 2}
   - {fileID: 11400000, guid: 77bd55fef832e1d4f9211d72ecd68c32, type: 2}
