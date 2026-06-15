@@ -116,12 +116,12 @@ public class BuildingUpgradeButton : MonoBehaviour
     // 应用奖励提供的新建防御塔初始星级。
     private void ApplyInitialStarBonusFromReward()
     {
-        if (!RewardRuntimeStateManager.Instance || !defenseTowerCombatSystem)
+        if (!RewardRuntimeCoordinator.Instance || !defenseTowerCombatSystem)
         {
             return;
         }
 
-        ApplyInitialStarBonus(RewardRuntimeStateManager.Instance.DefenseTowerNewInitialStarBonus);
+        ApplyInitialStarBonus(RewardRuntimeCoordinator.Instance.DefenseTowerRewards.ActiveRewards.NewTowerInitialStarBonus);
     }
 
     // 将目标星级配置应用到建筑生命和战斗系统。

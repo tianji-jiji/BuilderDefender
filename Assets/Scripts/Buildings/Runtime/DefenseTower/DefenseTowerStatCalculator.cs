@@ -20,6 +20,9 @@ public class DefenseTowerStatCalculator
 
     public int CurrentStarLevel { get; private set; } = DEFAULT_STAR_LEVEL;
     public bool SuperArrowUnlocked { get; private set; }
+    private DefenseTowerActiveRewards ActiveRewards => RewardRuntimeCoordinator.Instance
+        ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.ActiveRewards
+        : null;
 
     public DefenseTowerStatCalculator(DefenseTowerCombatSystem sourceDefenseTowerCombatSystem, int baseAttackDamage, float baseArrowGenerateRate, float baseDetectRadius)
     {
@@ -63,9 +66,8 @@ public class DefenseTowerStatCalculator
     // 计算当前攻击伤害。
     public int GetCurrentAttackDamage(bool includeRandomDoubleDamage = true)
     {
-        float rewardAttackDamageMultiplier = RewardRuntimeStateManager.Instance
-            ? RewardRuntimeStateManager.Instance.DefenseTowerAttackDamageMultiplier
-            : 1f;
+        DefenseTowerActiveRewards activeRewards = ActiveRewards;
+        float rewardAttackDamageMultiplier = activeRewards != null ? activeRewards.AttackDamageMultiplier : 1f;
         float damage = _baseAttackDamage
                        * _upgradeAttackDamageMultiplier
                        * rewardAttackDamageMultiplier
@@ -83,14 +85,11 @@ public class DefenseTowerStatCalculator
     // 计算当前攻击间隔。
     private float GetCurrentArrowGenerateRate()
     {
-        float rewardAttackIntervalMultiplier = RewardRuntimeStateManager.Instance
-            ? RewardRuntimeStateManager.Instance.DefenseTowerAttackIntervalMultiplier
-            : 1f;
-        float overloadAttackIntervalMultiplier = RewardRuntimeStateManager.Instance
-            ? RewardRuntimeStateManager.Instance.DefenseTowerOverloadAttackIntervalMultiplier
-            : 1f;
-        float linkedAttackIntervalMultiplier = ShouldApplyLinkedAttackSpeed() && RewardRuntimeStateManager.Instance
-            ? RewardRuntimeStateManager.Instance.DefenseTowerLinkedAttackIntervalMultiplier
+        DefenseTowerActiveRewards activeRewards = ActiveRewards;
+        float rewardAttackIntervalMultiplier = activeRewards != null ? activeRewards.AttackIntervalMultiplier : 1f;
+        float overloadAttackIntervalMultiplier = activeRewards != null ? activeRewards.OverloadAttackIntervalMultiplier : 1f;
+        float linkedAttackIntervalMultiplier = ShouldApplyLinkedAttackSpeed() && activeRewards != null
+            ? activeRewards.LinkedAttackIntervalMultiplier
             : 1f;
 
         return Mathf.Max(
@@ -105,35 +104,35 @@ public class DefenseTowerStatCalculator
     // 获取本次箭矢护甲穿透比例。
     public float GetArmorIgnorePercent()
     {
-        return RewardRuntimeStateManager.Instance ? RewardRuntimeStateManager.Instance.DefenseTowerArmorIgnorePercent : 0f;
+        return ActiveRewards != null ? ActiveRewards.ArmorIgnorePercent : 0f;
     }
 
     // 判断本次箭矢是否启用三星爆裂箭。
     public bool ShouldUseExplosiveArrow()
     {
+        DefenseTowerActiveRewards activeRewards = ActiveRewards;
         return CurrentStarLevel >= STAR_LEVEL_THREE
-               && RewardRuntimeStateManager.Instance
-               && RewardRuntimeStateManager.Instance.DefenseTowerThreeStarExplosiveArrowEnabled;
+               && activeRewards != null
+               && activeRewards.ThreeStarExplosiveArrowEnabled;
     }
 
     // 获取爆裂箭爆炸半径。
     public float GetExplosionRadius()
     {
-        return RewardRuntimeStateManager.Instance ? RewardRuntimeStateManager.Instance.DefenseTowerExplosionRadius : 0f;
+        return ActiveRewards != null ? ActiveRewards.ExplosionRadius : 0f;
     }
 
     // 获取爆裂箭范围伤害倍率。
     public float GetExplosionDamageMultiplier()
     {
-        return RewardRuntimeStateManager.Instance ? RewardRuntimeStateManager.Instance.DefenseTowerExplosionDamageMultiplier : 0f;
+        return ActiveRewards != null ? ActiveRewards.ExplosionDamageMultiplier : 0f;
     }
 
     // 计算当前索敌半径。
     private float GetCurrentDetectRadius()
     {
-        float rewardDetectRadiusMultiplier = RewardRuntimeStateManager.Instance
-            ? RewardRuntimeStateManager.Instance.DefenseTowerDetectRadiusMultiplier
-            : 1f;
+        DefenseTowerActiveRewards activeRewards = ActiveRewards;
+        float rewardDetectRadiusMultiplier = activeRewards != null ? activeRewards.DetectRadiusMultiplier : 1f;
 
         return Mathf.Max(0.01f, _baseDetectRadius * _upgradeDetectRadiusMultiplier * rewardDetectRadiusMultiplier);
     }
@@ -141,37 +140,40 @@ public class DefenseTowerStatCalculator
     // 计算星级共鸣提供的攻击力倍率。
     private float GetThreeStarResonanceMultiplier()
     {
-        if (!RewardRuntimeStateManager.Instance)
+        DefenseTowerActiveRewards activeRewards = ActiveRewards;
+        if (activeRewards == null)
         {
             return 1f;
         }
 
         int threeStarCount = DefenseTowerRegistry.GetThreeStarDefenseTowerCount();
-        return 1f + threeStarCount * RewardRuntimeStateManager.Instance.DefenseTowerAttackDamagePerThreeStarTower;
+        return 1f + threeStarCount * activeRewards.AttackDamagePerThreeStarTower;
     }
 
     // 计算最终防线提供的攻击力倍率。
     private float GetFinalDefenseTowerAttackDamageMultiplier()
     {
-        return RewardRuntimeStateManager.Instance
-            ? RewardRuntimeStateManager.Instance.GetFinalDefenseTowerAttackDamageMultiplier()
+        return RewardRuntimeCoordinator.Instance
+            ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.GetFinalDefenseTowerAttackDamageMultiplier()
             : 1f;
     }
 
     // 判断防线联动攻速是否生效。
     private bool ShouldApplyLinkedAttackSpeed()
     {
+        DefenseTowerActiveRewards activeRewards = ActiveRewards;
         return _sourceDefenseTowerCombatSystem
-               && RewardRuntimeStateManager.Instance
-               && RewardRuntimeStateManager.Instance.DefenseTowerLinkRadius > 0f
-               && DefenseTowerRegistry.HasNearbyDefenseTower(_sourceDefenseTowerCombatSystem, RewardRuntimeStateManager.Instance.DefenseTowerLinkRadius);
+               && activeRewards != null
+               && activeRewards.LinkRadius > 0f
+               && DefenseTowerRegistry.HasNearbyDefenseTower(_sourceDefenseTowerCombatSystem, activeRewards.LinkRadius);
     }
 
     // 判断本次攻击是否触发双倍伤害。
     private bool ShouldApplyDoubleDamage()
     {
-        return RewardRuntimeStateManager.Instance
-               && RewardRuntimeStateManager.Instance.DefenseTowerDoubleDamageChance > 0f
-               && Random.value < RewardRuntimeStateManager.Instance.DefenseTowerDoubleDamageChance;
+        DefenseTowerActiveRewards activeRewards = ActiveRewards;
+        return activeRewards != null
+               && activeRewards.DoubleDamageChance > 0f
+               && Random.value < activeRewards.DoubleDamageChance;
     }
 }

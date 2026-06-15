@@ -37,7 +37,7 @@ public class DefenseTowerActiveRewards
 
     public float AttackDamageMultiplier => GetAttributeMultiplier(_attackDamageBonus);
     public float AttackIntervalMultiplier => GetAttackIntervalMultiplier(_attackSpeedBonus);
-    public float RewardRuntimeStateManager => GetAttributeMultiplier(_detectRadiusBonus);
+    public float DetectRadiusMultiplier => GetAttributeMultiplier(_detectRadiusBonus);
     public float MaxHealthMultiplier => GetAttributeMultiplier(_maxHealthBonus);
     public float BuildCostMultiplier => GetCostMultiplier();
     public float ArmorIgnorePercent => Mathf.Clamp01(_armorIgnorePercent);

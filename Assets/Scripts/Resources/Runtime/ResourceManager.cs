@@ -90,7 +90,7 @@ public class ResourceManager : MonoBehaviour
                 return false;
             }
 
-            int adjustedAmount = RewardRuntimeStateManager.GetAdjustedBuildCostAmount(buildingSo, resourceCost);
+            int adjustedAmount = GetAdjustedBuildCostAmount(buildingSo, resourceCost);
             if (currentAmount < adjustedAmount)
             {
                 return false;
@@ -131,9 +131,17 @@ public class ResourceManager : MonoBehaviour
                 continue;
             }
 
-            _resourcesDic[resourceCost.resourceSo] -= RewardRuntimeStateManager.GetAdjustedBuildCostAmount(buildingSo, resourceCost);
+            _resourcesDic[resourceCost.resourceSo] -= GetAdjustedBuildCostAmount(buildingSo, resourceCost);
         }
 
         OnResourceAmountChanged?.Invoke();
+    }
+
+    // 获取建筑经过奖励修正后的单项资源消耗。
+    private int GetAdjustedBuildCostAmount(BuildingSo buildingSo, ResourceCost resourceCost)
+    {
+        return RewardRuntimeCoordinator.Instance
+            ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.GetAdjustedBuildCostAmount(buildingSo, resourceCost)
+            : resourceCost.amount;
     }
 }

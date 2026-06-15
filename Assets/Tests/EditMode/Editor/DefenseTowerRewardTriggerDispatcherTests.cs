@@ -49,7 +49,7 @@ public class DefenseTowerRewardTriggerDispatcherTests
         RewardEffectDefinitionSo definition = CreateDefinition();
         DefenseTowerAttackSpeedApplierSo applier = CreateEffect<DefenseTowerAttackSpeedApplierSo>();
         RewardCardEffectConfig config = CreateConfig(definition, RewardEffectParameterIds.VALUE, 0.25f);
-        SetField(definition, "handler", applier);
+        SetField(definition, "applier", applier);
         RewardEffectApplyContext applyContext = new(null, defenseTowerActiveRewards, null, null, null, dispatcher);
 
         DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerActiveRewards, applyContext);

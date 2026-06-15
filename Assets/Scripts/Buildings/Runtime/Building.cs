@@ -156,9 +156,8 @@ public class Building : MonoBehaviour
     // 计算当前建筑应该拥有的最大生命值。
     private int CalculateMaxHealth()
     {
-        float rewardMaxHealthMultiplier = RewardRuntimeStateManager.Instance
-            ? RewardRuntimeStateManager.Instance.DefenseTowerMaxHealthMultiplier
-            : 1f;
+        DefenseTowerActiveRewards activeRewards = GetDefenseTowerActiveRewards();
+        float rewardMaxHealthMultiplier = activeRewards != null ? activeRewards.MaxHealthMultiplier : 1f;
 
         if (!IsDefenseBuilding)
         {
@@ -171,12 +170,21 @@ public class Building : MonoBehaviour
     // 计算当前建筑受到伤害时使用的伤害倍率。
     private float CalculateDamageTakenMultiplier()
     {
-        if (!IsDefenseBuilding || !RewardRuntimeStateManager.Instance)
+        if (!IsDefenseBuilding || !RewardRuntimeCoordinator.Instance)
         {
             return 1f;
         }
 
-        return RewardRuntimeStateManager.Instance.DefenseTowerDamageTakenMultiplier;
+        DefenseTowerActiveRewards activeRewards = GetDefenseTowerActiveRewards();
+        return activeRewards != null ? activeRewards.DamageTakenMultiplier : 1f;
+    }
+
+    // 获取当前防御塔奖励状态。
+    private DefenseTowerActiveRewards GetDefenseTowerActiveRewards()
+    {
+        return RewardRuntimeCoordinator.Instance
+            ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.ActiveRewards
+            : null;
     }
 
     // 订阅建筑生命值死亡事件。
@@ -211,7 +219,7 @@ public class Building : MonoBehaviour
             return;
         }
 
-        RewardRuntimeStateManager.OnRewardBonusChanged += RefreshRewardBonuses;
+        RewardRuntimeCoordinator.OnActiveRewardsChanged += RefreshRewardBonuses;
         _isSubscribedToRewardBonuses = true;
     }
 
@@ -223,7 +231,7 @@ public class Building : MonoBehaviour
             return;
         }
 
-        RewardRuntimeStateManager.OnRewardBonusChanged -= RefreshRewardBonuses;
+        RewardRuntimeCoordinator.OnActiveRewardsChanged -= RefreshRewardBonuses;
         _isSubscribedToRewardBonuses = false;
     }
 

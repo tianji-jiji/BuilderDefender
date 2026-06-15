@@ -124,8 +124,8 @@ public class RewardSummaryPanel : MonoBehaviour
         }
 
         totalBonusText.richText = true;
-        totalBonusText.text = RewardRuntimeStateManager.Instance
-            ? RewardRuntimeStateManager.Instance.BuildDefenseTowerRewardSummaryText()
+        totalBonusText.text = RewardRuntimeCoordinator.Instance
+            ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.BuildSummaryText()
             : EMPTY_BONUS_TEXT;
     }
 

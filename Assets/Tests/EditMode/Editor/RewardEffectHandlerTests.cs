@@ -32,7 +32,7 @@ public class RewardEffectHandlerTests
         TestRewardEffectApplierSo applier = CreateHandler();
         RewardCardEffectConfig config = CreateConfig(definition, 0.5f);
         RewardEffectApplyContext applyContext = new(null, defenseTowerActiveRewards, null, null, null);
-        SetField(definition, "handler", applier);
+        SetField(definition, "applier", applier);
 
         DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerActiveRewards, applyContext);
 

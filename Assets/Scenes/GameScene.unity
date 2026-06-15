@@ -2733,9 +2733,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f88055a6249cb24097ade17fa67d438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waveIndex: 0
   stateTimer: 0
   aliveEnemyCount: 0
-  waveIndex: 0
   nextWaveTimer: 10
   firstWaveTimer: 2
   spawnSystem: {fileID: 1541652669}
@@ -15064,7 +15064,7 @@ GameObject:
   - component: {fileID: 1230617013}
   - component: {fileID: 1230617014}
   m_Layer: 0
-  m_Name: RewardSelectionHistory
+  m_Name: RewardCardAcquisitionHistory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20949,7 +20949,7 @@ GameObject:
   - component: {fileID: 1867853066}
   - component: {fileID: 1867853067}
   m_Layer: 0
-  m_Name: BuildManager
+  m_Name: BuildPlacementManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21799,7 +21799,7 @@ GameObject:
   - component: {fileID: 1913140493}
   - component: {fileID: 1913140494}
   m_Layer: 0
-  m_Name: RewardBonusManager
+  m_Name: RewardRuntimeCoordinator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21961,8 +21961,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc9d0875bd1c6cc4fad96900fd46109f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardRewardController
-  rewardCardPool: {fileID: 11400000, guid: a1ab93ce804f8f84c8295aee236ed86b, type: 2}
-  cardRewardCanvasGroup: {fileID: 1915550785}
+  rewardCardDrawPool: {fileID: 11400000, guid: a1ab93ce804f8f84c8295aee236ed86b, type: 2}
+  rewardCardCanvasGroup: {fileID: 1915550785}
   cardOptionRoot: {fileID: 1850959220}
   showFeedbacks: {fileID: 1915550787}
   pauseGameDuringSelection: 1

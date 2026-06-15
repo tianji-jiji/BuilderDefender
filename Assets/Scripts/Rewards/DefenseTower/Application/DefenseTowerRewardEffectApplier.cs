@@ -1,39 +1,18 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// 把卡牌配置应用到奖励系统的入口，拿到一张卡上的效果配置，然后交给对应的 Applier 去执行
+/// 防御塔奖励效果应用入口，兼容旧调用并转交给通用奖励效果路由器。
 /// </summary>
 public static class DefenseTowerRewardEffectApplier
 {
     // 批量应用奖励效果配置。
     public static void ApplyEffects(IReadOnlyList<RewardCardEffectConfig> effectConfigList, DefenseTowerActiveRewards defenseTowerActiveRewards, RewardEffectApplyContext applyContext = null)
     {
-        if (effectConfigList == null || defenseTowerActiveRewards == null)
+        if (effectConfigList == null || applyContext == null)
         {
             return;
         }
 
-        RewardEffectApplyContext activeApplyContext = applyContext ?? new RewardEffectApplyContext(null, defenseTowerActiveRewards, ResourceManager.Instance, EnemyWaveManager.Instance, BuildingPlacementManager.Instance);
-        foreach (RewardCardEffectConfig effectConfig in effectConfigList)
-        {
-            ApplyEffect(effectConfig, activeApplyContext);
-        }
-    }
-
-    // 将单个效果交给定义资产上的 Applier 执行。
-    private static void ApplyEffect(RewardCardEffectConfig cardEffectConfig, RewardEffectApplyContext applyContext)
-    {
-        if (cardEffectConfig == null || !cardEffectConfig.EffectDefinition || !cardEffectConfig.EffectDefinition.Applier)
-        {
-            return;
-        }
-
-        RewardEffectApplierSo applier = cardEffectConfig.EffectDefinition.Applier;
-        applier.Apply(applyContext, cardEffectConfig);
-
-        if (applier is IDefenseTowerRewardTrigger defenseCardEffect)
-        {
-            applyContext.DefenseTowerRewardTriggerDispatcher?.RegisterEffect(defenseCardEffect, cardEffectConfig);
-        }
+        RewardEffectApplicationRouter.ApplyEffects(effectConfigList, applyContext);
     }
 }

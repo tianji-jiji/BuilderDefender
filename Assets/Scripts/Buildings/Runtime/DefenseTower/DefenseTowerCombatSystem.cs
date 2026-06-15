@@ -18,7 +18,9 @@ public class DefenseTowerCombatSystem : MonoBehaviour
     private DefenseTowerCombatStats _currentStats;
 
     public int CurrentStarLevel => _statCalculator?.CurrentStarLevel ?? 1;
-    private DefenseTowerRewardTriggerDispatcher ActiveDefenseTowerRewardTriggerDispatcher => RewardRuntimeStateManager.Instance ? RewardRuntimeStateManager.Instance.DefenseTowerRewardTriggerDispatcher : null;
+    private DefenseTowerRewardTriggerDispatcher ActiveDefenseTowerRewardTriggerDispatcher => RewardRuntimeCoordinator.Instance
+        ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.TriggerDispatcher
+        : null;
 
     private void Awake()
     {
@@ -30,13 +32,13 @@ public class DefenseTowerCombatSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        RewardRuntimeStateManager.OnRewardBonusChanged += RefreshRewardBonuses;
+        RewardRuntimeCoordinator.OnActiveRewardsChanged += RefreshRewardBonuses;
         DefenseTowerRegistry.RegisterDefenseTowerSystem(this);
     }
 
     private void OnDisable()
     {
-        RewardRuntimeStateManager.OnRewardBonusChanged -= RefreshRewardBonuses;
+        RewardRuntimeCoordinator.OnActiveRewardsChanged -= RefreshRewardBonuses;
         DefenseTowerRegistry.UnregisterDefenseTowerSystem(this);
         CancelInvoke();
         _hasEnemy = false;

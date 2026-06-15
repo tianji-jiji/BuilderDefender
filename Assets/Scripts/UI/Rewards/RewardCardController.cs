@@ -63,9 +63,9 @@ public class RewardCardController : MonoBehaviour
         _canSelectCard = false;
         SetCanvasInteraction(false, true);
 
-        if (RewardRuntimeStateManager.Instance)
+        if (RewardRuntimeCoordinator.Instance)
         {
-            RewardRuntimeStateManager.Instance.ApplyReward(rewardCard);
+            RewardRuntimeCoordinator.Instance.ApplyReward(rewardCard);
         }
 
         CloseRewardChoices();
