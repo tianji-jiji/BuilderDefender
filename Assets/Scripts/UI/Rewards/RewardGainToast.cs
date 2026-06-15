@@ -22,6 +22,7 @@ public class RewardGainToast : MonoBehaviour
     [SerializeField] private Color rareRarityColor = new(0.3f, 0.65f, 1f, 1f);
     [SerializeField] private Color epicRarityColor = new(0.75f, 0.35f, 1f, 1f);
     [SerializeField] private Color legendaryRarityColor = new(1f, 0.7f, 0.2f, 1f);
+    [SerializeField] private Color mythicRarityColor = new(1f, 0.18f, 0.18f, 1f);
 
     private Coroutine _hideCoroutine;
 
@@ -185,6 +186,8 @@ public class RewardGainToast : MonoBehaviour
                 return epicRarityColor;
             case RewardCardRarity.Legendary:
                 return legendaryRarityColor;
+            case RewardCardRarity.Mythic:
+                return mythicRarityColor;
             default:
                 return normalRarityColor;
         }

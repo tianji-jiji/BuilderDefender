@@ -4,14 +4,21 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
+/// <summary>
+/// 奖励卡牌稀有度。
+/// </summary>
 public enum RewardCardRarity
 {
     Normal,
     Rare,
     Epic,
-    Legendary
+    Legendary,
+    Mythic
 }
 
+/// <summary>
+/// 奖励卡牌所属类别。
+/// </summary>
 public enum RewardCardCategory
 {
     Defense,

@@ -5,8 +5,6 @@ using UnityEngine;
 public class RewardCardDrawPoolSo : ScriptableObject
 {
     private const int DEFAULT_CHOICE_COUNT = 3;
-    private const int EARLY_RARE_UNLOCK_WAVE = 6;
-    private const int BUILD_UNLOCK_WAVE = 11;
 
     [SerializeField] private List<RewardCardSo> rewardCardList = new();
     [SerializeField] private int choiceCount = DEFAULT_CHOICE_COUNT;
@@ -90,7 +88,7 @@ public class RewardCardDrawPoolSo : ScriptableObject
                 continue;
             }
 
-            totalWeight += GetContextualWeight(rewardCard, context.CurrentWaveIndex);
+            totalWeight += GetDrawWeight(rewardCard);
         }
 
         if (totalWeight <= 0)
@@ -108,7 +106,7 @@ public class RewardCardDrawPoolSo : ScriptableObject
                 continue;
             }
 
-            accumulatedWeight += GetContextualWeight(rewardCard, context.CurrentWaveIndex);
+            accumulatedWeight += GetDrawWeight(rewardCard);
             if (roll < accumulatedWeight)
             {
                 return rewardCard;
@@ -134,31 +132,14 @@ public class RewardCardDrawPoolSo : ScriptableObject
         return context.GetSelectedCount(rewardCard) < rewardCard.MaxPickCount;
     }
 
-    // 根据波次和稀有度计算本次抽取权重。
-    private int GetContextualWeight(RewardCardSo rewardCard, int currentWaveIndex)
+    // 根据卡牌配置计算本次抽取权重。
+    private int GetDrawWeight(RewardCardSo rewardCard)
     {
         if (!rewardCard)
         {
             return 0;
         }
 
-        float rarityMultiplier = GetRarityWeightMultiplier(rewardCard.Rarity, currentWaveIndex);
-        return Mathf.Max(0, Mathf.RoundToInt(rewardCard.Weight * rarityMultiplier));
-    }
-
-    // 获取当前波次下指定稀有度的权重倍率。
-    private float GetRarityWeightMultiplier(RewardCardRarity rarity, int currentWaveIndex)
-    {
-        switch (rarity)
-        {
-            case RewardCardRarity.Rare:
-                return currentWaveIndex < EARLY_RARE_UNLOCK_WAVE ? 0.35f : 1.6f;
-            case RewardCardRarity.Epic:
-                return currentWaveIndex < BUILD_UNLOCK_WAVE ? 0.15f : 1.25f;
-            case RewardCardRarity.Legendary:
-                return currentWaveIndex < BUILD_UNLOCK_WAVE ? 0f : 0.8f;
-            default:
-                return currentWaveIndex < EARLY_RARE_UNLOCK_WAVE ? 1.4f : 1f;
-        }
+        return rewardCard.Weight;
     }
 }

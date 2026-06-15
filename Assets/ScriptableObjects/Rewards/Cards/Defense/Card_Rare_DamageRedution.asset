@@ -18,7 +18,7 @@ MonoBehaviour:
   weight: 1
   rarity: 1
   category: 0
-  minWaveIndex: 6
+  minWaveIndex: 0
   maxPickCount: 3
   isUnique: 0
   effectConfigList:

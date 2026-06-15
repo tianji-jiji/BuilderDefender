@@ -4389,7 +4389,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 34}
-  m_SizeDelta: {x: 660, y: 470}
+  m_SizeDelta: {x: 660, y: 427.829}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &379487796
 MonoBehaviour:
@@ -10764,6 +10764,8 @@ MonoBehaviour:
   recordItemPrefab: {fileID: 7287576710160457129, guid: 645ac3ad2cdca9640b7f0d1866be13a8, type: 3}
   totalBonusText: {fileID: 1821364062}
   closeButton: {fileID: 1037561444}
+  maxBonusLinesPerColumn: 8
+  bonusColumnSpacing: 24
 --- !u!225 &904731041
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -15317,8 +15319,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1256221067}
-  - component: {fileID: 1256221069}
   - component: {fileID: 1256221068}
+  - component: {fileID: 1256221069}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -15368,23 +15370,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1256221066}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
     m_Left: 8
     m_Right: 8
     m_Top: 8
     m_Bottom: 8
   m_ChildAlignment: 0
-  m_Spacing: 10
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 309, y: 140}
+  m_Spacing: {x: 8, y: 2}
+  m_Constraint: 1
+  m_ConstraintCount: 2
 --- !u!1001 &1257729407
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19528,6 +19528,7 @@ MonoBehaviour:
   rareRarityColor: {r: 0.3, g: 0.65, b: 1, a: 1}
   epicRarityColor: {r: 0.75, g: 0.35, b: 1, a: 1}
   legendaryRarityColor: {r: 1, g: 0.7, b: 0.2, a: 1}
+  mythicRarityColor: {r: 1, g: 0.18, b: 0.18, a: 1}
 --- !u!225 &1763041837
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -20153,9 +20154,9 @@ MonoBehaviour:
   m_fontSize: 20
   m_fontSizeBase: 20
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 14
+  m_fontSizeMax: 20
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512

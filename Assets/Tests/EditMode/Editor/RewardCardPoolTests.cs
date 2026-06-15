@@ -67,6 +67,36 @@ public class RewardCardPoolTests
         Assert.AreSame(fallbackCard, resultList[0]);
     }
 
+    // 验证稀有卡会使用自身配置的抽取权重。
+    [Test]
+    public void DrawCards_UsesConfiguredWeightForRareCard()
+    {
+        RewardCardDrawPoolSo rewardCardDrawPool = CreatePool();
+        RewardCardSo rareCard = CreateCard("RareCard", 0, false, 0);
+        SetField(rareCard, "rarity", RewardCardRarity.Rare);
+        SetField(rewardCardDrawPool, "rewardCardList", new List<RewardCardSo> { rareCard });
+
+        List<RewardCardSo> resultList = rewardCardDrawPool.DrawCards(1, RewardCardDrawContext.Default(0));
+
+        Assert.AreEqual(1, resultList.Count);
+        Assert.AreSame(rareCard, resultList[0]);
+    }
+
+    // 验证稀有度不会覆盖卡牌自身配置的最小波次。
+    [Test]
+    public void DrawCards_DoesNotLockRarityBehindHiddenWaveMultiplier()
+    {
+        RewardCardDrawPoolSo rewardCardDrawPool = CreatePool();
+        RewardCardSo legendaryCard = CreateCard("LegendaryCard", 0, false, 0);
+        SetField(legendaryCard, "rarity", RewardCardRarity.Legendary);
+        SetField(rewardCardDrawPool, "rewardCardList", new List<RewardCardSo> { legendaryCard });
+
+        List<RewardCardSo> resultList = rewardCardDrawPool.DrawCards(1, RewardCardDrawContext.Default(0));
+
+        Assert.AreEqual(1, resultList.Count);
+        Assert.AreSame(legendaryCard, resultList[0]);
+    }
+
     // 创建测试用奖励池。
     private RewardCardDrawPoolSo CreatePool()
     {
