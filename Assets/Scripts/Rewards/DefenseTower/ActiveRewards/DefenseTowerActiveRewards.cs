@@ -5,7 +5,7 @@ using UnityEngine;
 /// 奖励账本，保存本局所有防御塔奖励
 /// 防御塔有哪些全局 buff，并且它的总配置是多少
 /// </summary>
-public class DefenseTowerRewardState
+public class DefenseTowerActiveRewards
 {
     private const float MIN_ATTRIBUTE_MULTIPLIER = 0.01f;
     private const float MIN_COST_MULTIPLIER = 0f;

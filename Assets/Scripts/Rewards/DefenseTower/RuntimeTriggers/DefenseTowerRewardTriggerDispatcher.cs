@@ -3,21 +3,21 @@ using System.Collections.Generic;
 /// <summary>
 /// 防御塔卡牌效果分发器，持有那些需要在运行时特定时机被执行的防御塔卡牌效果
 /// </summary>
-public class DefenseTowerRuntimeEffectDispatcher
+public class DefenseTowerRewardTriggerDispatcher
 {
-    private readonly List<DefenseTowerRuntimeEffectInstance> _effectInstanceList = new();
+    private readonly List<DefenseTowerRewardTriggerInstance> _effectInstanceList = new();
 
     public int Count => _effectInstanceList.Count;
 
     // 注册一条可运行时生效的防御塔卡牌效果。
-    public void RegisterEffect(IDefenseTowerRuntimeEffect effect, RewardCardEffectConfig config)
+    public void RegisterEffect(IDefenseTowerRewardTrigger effect, RewardCardEffectConfig config)
     {
         if (effect == null || !effect.ShouldRegisterRuntimeEffect)
         {
             return;
         }
 
-        _effectInstanceList.Add(new DefenseTowerRuntimeEffectInstance(effect, config));
+        _effectInstanceList.Add(new DefenseTowerRewardTriggerInstance(effect, config));
     }
 
     // 依次修改防御塔当前战斗属性。
@@ -28,7 +28,7 @@ public class DefenseTowerRuntimeEffectDispatcher
             return;
         }
 
-        foreach (DefenseTowerRuntimeEffectInstance instance in _effectInstanceList)
+        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
         {
             instance.Effect.ModifyStats(instance, context);
         }
@@ -42,7 +42,7 @@ public class DefenseTowerRuntimeEffectDispatcher
             return;
         }
 
-        foreach (DefenseTowerRuntimeEffectInstance instance in _effectInstanceList)
+        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
         {
             instance.Effect.OnBeforeAttack(instance, context);
         }
@@ -56,7 +56,7 @@ public class DefenseTowerRuntimeEffectDispatcher
             return;
         }
 
-        foreach (DefenseTowerRuntimeEffectInstance instance in _effectInstanceList)
+        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
         {
             instance.Effect.OnAfterAttack(instance, context);
         }
@@ -70,7 +70,7 @@ public class DefenseTowerRuntimeEffectDispatcher
             return;
         }
 
-        foreach (DefenseTowerRuntimeEffectInstance instance in _effectInstanceList)
+        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
         {
             instance.Effect.ModifyArrow(instance, context);
         }
@@ -84,7 +84,7 @@ public class DefenseTowerRuntimeEffectDispatcher
             return;
         }
 
-        foreach (DefenseTowerRuntimeEffectInstance instance in _effectInstanceList)
+        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
         {
             instance.Effect.OnEnemyHit(instance, context);
         }
@@ -98,7 +98,7 @@ public class DefenseTowerRuntimeEffectDispatcher
             return;
         }
 
-        foreach (DefenseTowerRuntimeEffectInstance instance in _effectInstanceList)
+        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
         {
             instance.Effect.OnEnemyKilled(instance, context);
         }
@@ -112,7 +112,7 @@ public class DefenseTowerRuntimeEffectDispatcher
             return;
         }
 
-        foreach (DefenseTowerRuntimeEffectInstance instance in _effectInstanceList)
+        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
         {
             instance.Effect.OnWaveCompleted(instance, context);
         }

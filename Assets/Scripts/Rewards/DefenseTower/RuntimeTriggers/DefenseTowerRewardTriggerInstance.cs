@@ -4,16 +4,16 @@ using System.Collections.Generic;
 /// 卡牌中某一个“需要运行时参与战斗流程”的效果
 /// 例如：额外箭、击杀升星、波末回血
 /// </summary>
-public class DefenseTowerRuntimeEffectInstance
+public class DefenseTowerRewardTriggerInstance
 {
     // 运行时效果用的计数器
     private readonly Dictionary<string, int> _counterDic = new();
     // 这是什么效果逻辑
-    public IDefenseTowerRuntimeEffect Effect { get; }
+    public IDefenseTowerRewardTrigger Effect { get; }
     // 这次效果用的具体参数
     public RewardCardEffectConfig Config { get; }
 
-    public DefenseTowerRuntimeEffectInstance(IDefenseTowerRuntimeEffect effect, RewardCardEffectConfig config)
+    public DefenseTowerRewardTriggerInstance(IDefenseTowerRewardTrigger effect, RewardCardEffectConfig config)
     {
         Effect = effect;
         Config = config;

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 防御塔额外攻击规则 Handler。
+/// 防御塔额外箭奖励应用器，负责记录并执行攻击若干次后额外射箭的规则。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Extra Arrow Handler")]
 public class DefenseTowerExtraArrowApplierSo : DefenseTowerRewardApplierSo
@@ -13,7 +13,7 @@ public class DefenseTowerExtraArrowApplierSo : DefenseTowerRewardApplierSo
     // 应用额外攻击规则。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerRewardState state))
+        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
         {
             return;
         }
@@ -24,7 +24,7 @@ public class DefenseTowerExtraArrowApplierSo : DefenseTowerRewardApplierSo
     }
 
     // 按攻击次数触发额外普通箭。
-    public override void OnAfterAttack(DefenseTowerRuntimeEffectInstance instance, DefenseTowerAttackContext context)
+    public override void OnAfterAttack(DefenseTowerRewardTriggerInstance instance, DefenseTowerAttackContext context)
     {
         int triggerAttackCount = RewardEffectParameterReader.GetInt(instance.Config, RewardEffectParameterIds.TRIGGER_ATTACK_COUNT, 0);
         int extraAttackCount = RewardEffectParameterReader.GetInt(instance.Config, RewardEffectParameterIds.EXTRA_ATTACK_COUNT, 1);

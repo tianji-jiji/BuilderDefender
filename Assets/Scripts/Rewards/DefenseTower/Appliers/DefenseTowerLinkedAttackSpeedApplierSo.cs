@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 防御塔联动攻速 Handler。
+/// 防线联动攻速奖励应用器，负责让附近有其他防御塔时获得攻速加成。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Linked Attack Speed Handler")]
 public class DefenseTowerLinkedAttackSpeedApplierSo : DefenseTowerRewardApplierSo
@@ -9,7 +9,7 @@ public class DefenseTowerLinkedAttackSpeedApplierSo : DefenseTowerRewardApplierS
     // 应用联动攻速规则。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerRewardState state))
+        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
         {
             return;
         }

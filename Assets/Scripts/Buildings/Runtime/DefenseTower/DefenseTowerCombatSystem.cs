@@ -18,7 +18,7 @@ public class DefenseTowerCombatSystem : MonoBehaviour
     private DefenseTowerCombatStats _currentStats;
 
     public int CurrentStarLevel => _statCalculator?.CurrentStarLevel ?? 1;
-    private DefenseTowerRuntimeEffectDispatcher ActiveDefenseTowerRuntimeEffectDispatcher => RewardRuntimeStateManager.Instance ? RewardRuntimeStateManager.Instance.DefenseTowerRuntimeEffectDispatcher : null;
+    private DefenseTowerRewardTriggerDispatcher ActiveDefenseTowerRewardTriggerDispatcher => RewardRuntimeStateManager.Instance ? RewardRuntimeStateManager.Instance.DefenseTowerRewardTriggerDispatcher : null;
 
     private void Awake()
     {
@@ -80,13 +80,13 @@ public class DefenseTowerCombatSystem : MonoBehaviour
     // 通知运行时卡牌效果本防御塔命中了敌人。
     public void NotifyEnemyHit(Enemy hitEnemy, int actualDamage)
     {
-        ActiveDefenseTowerRuntimeEffectDispatcher?.OnEnemyHit(new DefenseTowerEnemyHitContext(this, hitEnemy, actualDamage));
+        ActiveDefenseTowerRewardTriggerDispatcher?.OnEnemyHit(new DefenseTowerEnemyHitContext(this, hitEnemy, actualDamage));
     }
 
     // 通知运行时卡牌效果本防御塔击杀了敌人。
     public void NotifyEnemyKilled(Enemy killedEnemy)
     {
-        ActiveDefenseTowerRuntimeEffectDispatcher?.OnEnemyKilled(new DefenseTowerEnemyKillContext(this, killedEnemy));
+        ActiveDefenseTowerRewardTriggerDispatcher?.OnEnemyKilled(new DefenseTowerEnemyKillContext(this, killedEnemy));
     }
 
     // 缓存防御塔战斗子组件。
@@ -118,11 +118,11 @@ public class DefenseTowerCombatSystem : MonoBehaviour
             return;
         }
 
-        ActiveDefenseTowerRuntimeEffectDispatcher?.OnBeforeAttack(new DefenseTowerAttackContext(this, _healthSystem));
-        bool hasFired = arrowLauncher.FirePrimaryShotGroup(this, targetSelector, _statCalculator, ActiveDefenseTowerRuntimeEffectDispatcher);
+        ActiveDefenseTowerRewardTriggerDispatcher?.OnBeforeAttack(new DefenseTowerAttackContext(this, _healthSystem));
+        bool hasFired = arrowLauncher.FirePrimaryShotGroup(this, targetSelector, _statCalculator, ActiveDefenseTowerRewardTriggerDispatcher);
         if (!hasFired && TryRefreshTargetsForImmediateShot())
         {
-            hasFired = arrowLauncher.FirePrimaryShotGroup(this, targetSelector, _statCalculator, ActiveDefenseTowerRuntimeEffectDispatcher);
+            hasFired = arrowLauncher.FirePrimaryShotGroup(this, targetSelector, _statCalculator, ActiveDefenseTowerRewardTriggerDispatcher);
         }
 
         if (!hasFired)
@@ -146,8 +146,8 @@ public class DefenseTowerCombatSystem : MonoBehaviour
     private void HandleAttackTriggeredRewards()
     {
         DefenseTowerAttackContext attackContext = new(this, _healthSystem);
-        ActiveDefenseTowerRuntimeEffectDispatcher?.OnAfterAttack(attackContext);
-        arrowLauncher.FireExtraAttackArrows(attackContext.ExtraAttackCount, this, targetSelector, _statCalculator, ActiveDefenseTowerRuntimeEffectDispatcher);
+        ActiveDefenseTowerRewardTriggerDispatcher?.OnAfterAttack(attackContext);
+        arrowLauncher.FireExtraAttackArrows(attackContext.ExtraAttackCount, this, targetSelector, _statCalculator, ActiveDefenseTowerRewardTriggerDispatcher);
     }
 
     // 根据升星倍率和全局奖励倍率刷新防御塔战斗属性。
@@ -158,7 +158,7 @@ public class DefenseTowerCombatSystem : MonoBehaviour
             return;
         }
 
-        _currentStats = _statCalculator.RefreshStats(ActiveDefenseTowerRuntimeEffectDispatcher);
+        _currentStats = _statCalculator.RefreshStats(ActiveDefenseTowerRewardTriggerDispatcher);
         attackDamage = _currentStats.AttackDamage;
         arrowGenerateRate = _currentStats.ArrowGenerateRate;
         detectRadius = _currentStats.DetectRadius;

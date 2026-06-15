@@ -3,7 +3,7 @@ using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 
-public class DefenseTowerRuntimeEffectDispatcherTests
+public class DefenseTowerRewardTriggerDispatcherTests
 {
     private readonly List<ScriptableObject> _createdScriptableObjectList = new();
 
@@ -26,7 +26,7 @@ public class DefenseTowerRuntimeEffectDispatcherTests
     [Test]
     public void RuntimeEffect_ExecutesInRegisteredOrder()
     {
-        DefenseTowerRuntimeEffectDispatcher dispatcher = new();
+        DefenseTowerRewardTriggerDispatcher dispatcher = new();
         OrderedDefenseTowerEffect firstEffect = CreateEffect<OrderedDefenseTowerEffect>();
         OrderedDefenseTowerEffect secondEffect = CreateEffect<OrderedDefenseTowerEffect>();
         List<string> executionOrderList = new();
@@ -44,25 +44,25 @@ public class DefenseTowerRuntimeEffectDispatcherTests
     [Test]
     public void ApplyEffects_PureStatHandler_DoesNotRegisterRuntimeEffect()
     {
-        DefenseTowerRewardState defenseTowerRewardState = new();
-        DefenseTowerRuntimeEffectDispatcher dispatcher = new();
+        DefenseTowerActiveRewards defenseTowerActiveRewards = new();
+        DefenseTowerRewardTriggerDispatcher dispatcher = new();
         RewardEffectDefinitionSo definition = CreateDefinition();
         DefenseTowerAttackSpeedApplierSo applier = CreateEffect<DefenseTowerAttackSpeedApplierSo>();
         RewardCardEffectConfig config = CreateConfig(definition, RewardEffectParameterIds.VALUE, 0.25f);
         SetField(definition, "handler", applier);
-        RewardEffectApplyContext applyContext = new(null, defenseTowerRewardState, null, null, null, dispatcher);
+        RewardEffectApplyContext applyContext = new(null, defenseTowerActiveRewards, null, null, null, dispatcher);
 
-        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerRewardState, applyContext);
+        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerActiveRewards, applyContext);
 
         Assert.AreEqual(0, dispatcher.Count);
-        Assert.Less(defenseTowerRewardState.AttackIntervalMultiplier, 1f);
+        Assert.Less(defenseTowerActiveRewards.AttackIntervalMultiplier, 1f);
     }
 
     // 验证同一效果多次获得时会按多条实例堆叠执行。
     [Test]
     public void RuntimeEffect_CanRegisterSameEffectMultipleTimes()
     {
-        DefenseTowerRuntimeEffectDispatcher dispatcher = new();
+        DefenseTowerRewardTriggerDispatcher dispatcher = new();
         OrderedDefenseTowerEffect effect = CreateEffect<OrderedDefenseTowerEffect>();
         List<string> executionOrderList = new();
         effect.Init("Stacked", executionOrderList);
@@ -129,7 +129,7 @@ public class DefenseTowerRuntimeEffectDispatcherTests
         }
 
         // 记录攻击后钩子执行顺序。
-        public override void OnAfterAttack(DefenseTowerRuntimeEffectInstance instance, DefenseTowerAttackContext context)
+        public override void OnAfterAttack(DefenseTowerRewardTriggerInstance instance, DefenseTowerAttackContext context)
         {
             _executionOrderList.Add(_label);
         }

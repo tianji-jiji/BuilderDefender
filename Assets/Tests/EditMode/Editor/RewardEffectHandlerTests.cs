@@ -27,32 +27,32 @@ public class RewardEffectHandlerTests
     [Test]
     public void ApplyEffects_WithHandler_UsesHandler()
     {
-        DefenseTowerRewardState defenseTowerRewardState = new();
+        DefenseTowerActiveRewards defenseTowerActiveRewards = new();
         RewardEffectDefinitionSo definition = CreateDefinition();
         TestRewardEffectApplierSo applier = CreateHandler();
         RewardCardEffectConfig config = CreateConfig(definition, 0.5f);
-        RewardEffectApplyContext applyContext = new(null, defenseTowerRewardState, null, null, null);
+        RewardEffectApplyContext applyContext = new(null, defenseTowerActiveRewards, null, null, null);
         SetField(definition, "handler", applier);
 
-        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerRewardState, applyContext);
+        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerActiveRewards, applyContext);
 
         Assert.AreEqual(1, applier.ApplyCount);
         Assert.AreSame(applyContext, applier.LastApplyContext);
         Assert.AreSame(config, applier.LastConfig);
-        Assert.AreEqual(1f, defenseTowerRewardState.AttackDamageMultiplier);
+        Assert.AreEqual(1f, defenseTowerActiveRewards.AttackDamageMultiplier);
     }
 
     // 验证没有 Handler 的效果不会再进入旧 switch fallback。
     [Test]
     public void ApplyEffects_WithoutHandler_DoesNotApplyLegacyFallback()
     {
-        DefenseTowerRewardState defenseTowerRewardState = new();
+        DefenseTowerActiveRewards defenseTowerActiveRewards = new();
         RewardEffectDefinitionSo definition = CreateDefinition();
         RewardCardEffectConfig config = CreateConfig(definition, 0.25f);
 
-        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerRewardState);
+        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerActiveRewards);
 
-        Assert.AreEqual(1f, defenseTowerRewardState.AttackDamageMultiplier);
+        Assert.AreEqual(1f, defenseTowerActiveRewards.AttackDamageMultiplier);
     }
 
     // 验证旧效果枚举和旧参数枚举已经从程序集里移除。

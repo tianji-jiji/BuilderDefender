@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 防御塔攻击范围加成 Handler。
+/// 防御塔索敌范围奖励应用器，负责提高防御塔探测和攻击范围。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Detect Radius Handler")]
 public class DefenseTowerDetectRadiusApplierSo : DefenseTowerRewardApplierSo
@@ -9,7 +9,7 @@ public class DefenseTowerDetectRadiusApplierSo : DefenseTowerRewardApplierSo
     // 应用攻击范围加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerRewardState state))
+        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
         {
             state.AddDetectRadiusBonus(GetValue(config));
         }

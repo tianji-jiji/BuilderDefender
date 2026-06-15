@@ -34,7 +34,7 @@ public class DefenseTowerCardEffectBehaviorTests
     [Test]
     public void ExtraArrowEffect_RequestsExtraAttackOnTriggerCount()
     {
-        DefenseTowerRuntimeEffectDispatcher dispatcher = CreateDispatcherWithHandler(
+        DefenseTowerRewardTriggerDispatcher dispatcher = CreateDispatcherWithHandler(
             CreateEffect<DefenseTowerExtraArrowApplierSo>(),
             new Dictionary<string, float>
             {
@@ -57,7 +57,7 @@ public class DefenseTowerCardEffectBehaviorTests
     public void AttackHealthCostEffect_LosesHealthOnTriggerCount()
     {
         HealthSystem healthSystem = CreateHealthSystem(10);
-        DefenseTowerRuntimeEffectDispatcher dispatcher = CreateDispatcherWithHandler(
+        DefenseTowerRewardTriggerDispatcher dispatcher = CreateDispatcherWithHandler(
             CreateEffect<DefenseTowerAttackHealthCostApplierSo>(),
             new Dictionary<string, float>
             {
@@ -77,7 +77,7 @@ public class DefenseTowerCardEffectBehaviorTests
     {
         HealthSystem healthSystem = CreateRegisteredDefenseBuilding(10);
         healthSystem.LoseHealth(5);
-        DefenseTowerRuntimeEffectDispatcher dispatcher = CreateDispatcherWithHandler(
+        DefenseTowerRewardTriggerDispatcher dispatcher = CreateDispatcherWithHandler(
             CreateEffect<DefenseTowerWaveEndHealApplierSo>(),
             new Dictionary<string, float>
             {
@@ -90,16 +90,16 @@ public class DefenseTowerCardEffectBehaviorTests
     }
 
     // 创建并注册指定 Handler 到运行时。
-    private DefenseTowerRuntimeEffectDispatcher CreateDispatcherWithHandler(DefenseTowerRewardApplierSo applier, Dictionary<string, float> parameterDic)
+    private DefenseTowerRewardTriggerDispatcher CreateDispatcherWithHandler(DefenseTowerRewardApplierSo applier, Dictionary<string, float> parameterDic)
     {
-        DefenseTowerRewardState defenseTowerRewardState = new();
-        DefenseTowerRuntimeEffectDispatcher dispatcher = new();
+        DefenseTowerActiveRewards defenseTowerActiveRewards = new();
+        DefenseTowerRewardTriggerDispatcher dispatcher = new();
         RewardEffectDefinitionSo definition = CreateEffect<RewardEffectDefinitionSo>();
         RewardCardEffectConfig config = CreateConfig(definition, parameterDic);
         SetField(definition, "handler", applier);
-        RewardEffectApplyContext applyContext = new(null, defenseTowerRewardState, null, null, null, dispatcher);
+        RewardEffectApplyContext applyContext = new(null, defenseTowerActiveRewards, null, null, null, dispatcher);
 
-        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerRewardState, applyContext);
+        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerActiveRewards, applyContext);
         return dispatcher;
     }
 

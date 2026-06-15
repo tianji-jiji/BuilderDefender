@@ -14,7 +14,7 @@ public class DefenseTowerArrowLauncher : MonoBehaviour
         DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
         DefenseTowerTargetSelector targetSelector,
         DefenseTowerStatCalculator statCalculator,
-        DefenseTowerRuntimeEffectDispatcher activeDispatcher)
+        DefenseTowerRewardTriggerDispatcher activeDispatcher)
     {
         if (statCalculator == null)
         {
@@ -38,7 +38,7 @@ public class DefenseTowerArrowLauncher : MonoBehaviour
         DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
         DefenseTowerTargetSelector targetSelector,
         DefenseTowerStatCalculator statCalculator,
-        DefenseTowerRuntimeEffectDispatcher activeDispatcher)
+        DefenseTowerRewardTriggerDispatcher activeDispatcher)
     {
         for (int i = 0; i < extraAttackCount; i++)
         {
@@ -51,7 +51,7 @@ public class DefenseTowerArrowLauncher : MonoBehaviour
         DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
         DefenseTowerTargetSelector targetSelector,
         DefenseTowerStatCalculator statCalculator,
-        DefenseTowerRuntimeEffectDispatcher activeDispatcher,
+        DefenseTowerRewardTriggerDispatcher activeDispatcher,
         int index,
         DefenseTowerTargetLane targetLane)
     {
@@ -68,7 +68,7 @@ public class DefenseTowerArrowLauncher : MonoBehaviour
         DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
         DefenseTowerTargetSelector targetSelector,
         DefenseTowerStatCalculator statCalculator,
-        DefenseTowerRuntimeEffectDispatcher activeDispatcher,
+        DefenseTowerRewardTriggerDispatcher activeDispatcher,
         Transform spawnPoint,
         DefenseTowerTargetLane targetLane)
     {

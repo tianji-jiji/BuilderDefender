@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 防御塔攻击扣血规则 Handler。
+/// 防御塔攻击扣血奖励应用器，负责记录并执行攻击若干次后损失生命的规则。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Attack Health Cost Handler")]
 public class DefenseTowerAttackHealthCostApplierSo : DefenseTowerRewardApplierSo
@@ -13,7 +13,7 @@ public class DefenseTowerAttackHealthCostApplierSo : DefenseTowerRewardApplierSo
     // 应用攻击扣血规则。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerRewardState state))
+        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
         {
             return;
         }
@@ -24,7 +24,7 @@ public class DefenseTowerAttackHealthCostApplierSo : DefenseTowerRewardApplierSo
     }
 
     // 按攻击次数扣除防御塔生命。
-    public override void OnAfterAttack(DefenseTowerRuntimeEffectInstance instance, DefenseTowerAttackContext context)
+    public override void OnAfterAttack(DefenseTowerRewardTriggerInstance instance, DefenseTowerAttackContext context)
     {
         if (context.SourceHealthSystem == null)
         {

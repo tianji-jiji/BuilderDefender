@@ -45,7 +45,7 @@ public class DefenseTowerStatCalculator
     }
 
     // 重新计算当前防御塔属性并允许卡牌运行时修改结果。
-    public DefenseTowerCombatStats RefreshStats(DefenseTowerRuntimeEffectDispatcher activeDispatcher)
+    public DefenseTowerCombatStats RefreshStats(DefenseTowerRewardTriggerDispatcher activeDispatcher)
     {
         DefenseTowerStatsContext statsContext = new(
             _sourceDefenseTowerCombatSystem,

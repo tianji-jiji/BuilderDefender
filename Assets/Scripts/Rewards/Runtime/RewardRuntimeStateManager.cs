@@ -18,32 +18,32 @@ public class RewardRuntimeStateManager : MonoBehaviour
     // 奖励数值发生变化时通知所有需要刷新属性的对象。
     public static event Action OnRewardBonusChanged;
 
-    private readonly DefenseTowerRewardState _defenseTowerRewardState = new();
-    private readonly DefenseTowerRuntimeEffectDispatcher _defenseTowerRuntimeEffectDispatcher = new();
+    private readonly DefenseTowerActiveRewards _defenseTowerActiveRewards = new();
+    private readonly DefenseTowerRewardTriggerDispatcher _defenseTowerRewardTriggerDispatcher = new();
 
     private EnemyWaveManager _waveManager;
 
-    public float DefenseTowerAttackDamageMultiplier => _defenseTowerRewardState.AttackDamageMultiplier;
-    public float DefenseTowerAttackIntervalMultiplier => _defenseTowerRewardState.AttackIntervalMultiplier;
-    public float DefenseTowerDetectRadiusMultiplier => _defenseTowerRewardState.RewardRuntimeStateManager;
-    public float DefenseTowerMaxHealthMultiplier => _defenseTowerRewardState.MaxHealthMultiplier;
-    public float DefenseTowerBuildCostMultiplier => _defenseTowerRewardState.BuildCostMultiplier;
-    public float DefenseTowerArmorIgnorePercent => _defenseTowerRewardState.ArmorIgnorePercent;
-    public IReadOnlyList<DefenseTowerExtraAttackRule> DefenseTowerExtraAttackRuleList => _defenseTowerRewardState.ExtraAttackRuleList;
-    public float DefenseTowerDamageTakenMultiplier => _defenseTowerRewardState.DamageTakenMultiplier;
-    public float DefenseTowerWaveEndHealPercent => _defenseTowerRewardState.WaveEndHealPercent;
-    public int DefenseTowerKillCountAutoUpgrade => _defenseTowerRewardState.KillCountAutoUpgrade;
-    public float DefenseTowerOverloadAttackIntervalMultiplier => _defenseTowerRewardState.OverloadAttackIntervalMultiplier;
-    public IReadOnlyList<DefenseTowerAttackHealthCostRule> DefenseTowerAttackHealthCostRuleList => _defenseTowerRewardState.AttackHealthCostRuleList;
-    public float DefenseTowerAttackDamagePerThreeStarTower => _defenseTowerRewardState.AttackDamagePerThreeStarTower;
-    public float DefenseTowerDoubleDamageChance => _defenseTowerRewardState.DoubleDamageChance;
-    public float DefenseTowerLinkedAttackIntervalMultiplier => _defenseTowerRewardState.LinkedAttackIntervalMultiplier;
-    public float DefenseTowerLinkRadius => _defenseTowerRewardState.LinkRadius;
-    public int DefenseTowerNewInitialStarBonus => _defenseTowerRewardState.NewTowerInitialStarBonus;
-    public bool DefenseTowerThreeStarExplosiveArrowEnabled => _defenseTowerRewardState.ThreeStarExplosiveArrowEnabled;
-    public float DefenseTowerExplosionRadius => _defenseTowerRewardState.ExplosionRadius;
-    public float DefenseTowerExplosionDamageMultiplier => _defenseTowerRewardState.ExplosionDamageMultiplier;
-    public DefenseTowerRuntimeEffectDispatcher DefenseTowerRuntimeEffectDispatcher => _defenseTowerRuntimeEffectDispatcher;
+    public float DefenseTowerAttackDamageMultiplier => _defenseTowerActiveRewards.AttackDamageMultiplier;
+    public float DefenseTowerAttackIntervalMultiplier => _defenseTowerActiveRewards.AttackIntervalMultiplier;
+    public float DefenseTowerDetectRadiusMultiplier => _defenseTowerActiveRewards.RewardRuntimeStateManager;
+    public float DefenseTowerMaxHealthMultiplier => _defenseTowerActiveRewards.MaxHealthMultiplier;
+    public float DefenseTowerBuildCostMultiplier => _defenseTowerActiveRewards.BuildCostMultiplier;
+    public float DefenseTowerArmorIgnorePercent => _defenseTowerActiveRewards.ArmorIgnorePercent;
+    public IReadOnlyList<DefenseTowerExtraAttackRule> DefenseTowerExtraAttackRuleList => _defenseTowerActiveRewards.ExtraAttackRuleList;
+    public float DefenseTowerDamageTakenMultiplier => _defenseTowerActiveRewards.DamageTakenMultiplier;
+    public float DefenseTowerWaveEndHealPercent => _defenseTowerActiveRewards.WaveEndHealPercent;
+    public int DefenseTowerKillCountAutoUpgrade => _defenseTowerActiveRewards.KillCountAutoUpgrade;
+    public float DefenseTowerOverloadAttackIntervalMultiplier => _defenseTowerActiveRewards.OverloadAttackIntervalMultiplier;
+    public IReadOnlyList<DefenseTowerAttackHealthCostRule> DefenseTowerAttackHealthCostRuleList => _defenseTowerActiveRewards.AttackHealthCostRuleList;
+    public float DefenseTowerAttackDamagePerThreeStarTower => _defenseTowerActiveRewards.AttackDamagePerThreeStarTower;
+    public float DefenseTowerDoubleDamageChance => _defenseTowerActiveRewards.DoubleDamageChance;
+    public float DefenseTowerLinkedAttackIntervalMultiplier => _defenseTowerActiveRewards.LinkedAttackIntervalMultiplier;
+    public float DefenseTowerLinkRadius => _defenseTowerActiveRewards.LinkRadius;
+    public int DefenseTowerNewInitialStarBonus => _defenseTowerActiveRewards.NewTowerInitialStarBonus;
+    public bool DefenseTowerThreeStarExplosiveArrowEnabled => _defenseTowerActiveRewards.ThreeStarExplosiveArrowEnabled;
+    public float DefenseTowerExplosionRadius => _defenseTowerActiveRewards.ExplosionRadius;
+    public float DefenseTowerExplosionDamageMultiplier => _defenseTowerActiveRewards.ExplosionDamageMultiplier;
+    public DefenseTowerRewardTriggerDispatcher DefenseTowerRewardTriggerDispatcher => _defenseTowerRewardTriggerDispatcher;
 
     private void Awake()
     {
@@ -68,8 +68,8 @@ public class RewardRuntimeStateManager : MonoBehaviour
             return;
         }
 
-        RewardEffectApplyContext applyContext = new RewardEffectApplyContext(this, _defenseTowerRewardState, ResourceManager.Instance, EnemyWaveManager.Instance, BuildingPlacementManager.Instance, _defenseTowerRuntimeEffectDispatcher);
-        DefenseTowerRewardEffectApplier.ApplyEffects(rewardCard.EffectConfigList, _defenseTowerRewardState, applyContext);
+        RewardEffectApplyContext applyContext = new RewardEffectApplyContext(this, _defenseTowerActiveRewards, ResourceManager.Instance, EnemyWaveManager.Instance, BuildingPlacementManager.Instance, _defenseTowerRewardTriggerDispatcher);
+        DefenseTowerRewardEffectApplier.ApplyEffects(rewardCard.EffectConfigList, _defenseTowerActiveRewards, applyContext);
         RecordRewardCardSelection(rewardCard);
         OnRewardBonusChanged?.Invoke();
     }
@@ -119,7 +119,7 @@ public class RewardRuntimeStateManager : MonoBehaviour
     // 判断最终防线奖励当前是否处于激活状态。
     public bool IsFinalDefenseActive()
     {
-        return _defenseTowerRewardState.IsFinalDefenseActive();
+        return _defenseTowerActiveRewards.IsFinalDefenseActive();
     }
 
     // 获取当前防御体系战力快照，供敌人成长系统软响应玩家强度。
@@ -129,15 +129,15 @@ public class RewardRuntimeStateManager : MonoBehaviour
             DefenseTowerAttackDamageMultiplier,
             GetAttackSpeedPowerMultiplier(),
             DefenseTowerArmorIgnorePercent,
-            _defenseTowerRewardState.GetExtraAttackPowerMultiplier(),
-            _defenseTowerRewardState.GetCriticalPowerMultiplier(),
-            _defenseTowerRewardState.GetExplosivePowerMultiplier());
+            _defenseTowerActiveRewards.GetExtraAttackPowerMultiplier(),
+            _defenseTowerActiveRewards.GetCriticalPowerMultiplier(),
+            _defenseTowerActiveRewards.GetExplosivePowerMultiplier());
     }
 
     // 获取最终防线激活后的攻击力倍率。
     public float GetFinalDefenseTowerAttackDamageMultiplier()
     {
-        return _defenseTowerRewardState.GetFinalDefenseTowerAttackDamageMultiplier();
+        return _defenseTowerActiveRewards.GetFinalDefenseTowerAttackDamageMultiplier();
     }
 
     // 将攻击间隔倍率转换为战力倍率。
@@ -193,7 +193,7 @@ public class RewardRuntimeStateManager : MonoBehaviour
     // 波次结束时应用波次结算型奖励。
     private void HandleWaveCompleted(int waveIndex)
     {
-        _defenseTowerRuntimeEffectDispatcher.OnWaveCompleted(new DefenseTowerWaveContext(waveIndex));
+        _defenseTowerRewardTriggerDispatcher.OnWaveCompleted(new DefenseTowerWaveContext(waveIndex));
     }
 
     // 追加倍率型奖励摘要行。

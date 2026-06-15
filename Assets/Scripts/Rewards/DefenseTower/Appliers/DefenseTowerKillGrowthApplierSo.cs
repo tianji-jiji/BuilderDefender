@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 防御塔击杀成长 Handler，当前接入已有击杀自动升星奖励状态。
+/// 防御塔击杀成长奖励应用器，负责按击杀次数自动提升防御塔星级。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Tower Kill Growth Handler")]
 public class DefenseTowerKillGrowthApplierSo : DefenseTowerRewardApplierSo
@@ -13,7 +13,7 @@ public class DefenseTowerKillGrowthApplierSo : DefenseTowerRewardApplierSo
     // 应用防御塔击杀成长配置。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerRewardState state) || config == null)
+        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state) || config == null)
         {
             return;
         }
@@ -23,7 +23,7 @@ public class DefenseTowerKillGrowthApplierSo : DefenseTowerRewardApplierSo
     }
 
     // 按击杀次数自动提升防御塔星级。
-    public override void OnEnemyKilled(DefenseTowerRuntimeEffectInstance instance, DefenseTowerEnemyKillContext context)
+    public override void OnEnemyKilled(DefenseTowerRewardTriggerInstance instance, DefenseTowerEnemyKillContext context)
     {
         int killCountToUpgrade = RewardEffectParameterReader.GetInt(instance.Config, RewardEffectParameterIds.KILL_COUNT_TO_UPGRADE, 0);
         if (killCountToUpgrade <= 0 || !context.SourceDefenseTowerCombatSystem)

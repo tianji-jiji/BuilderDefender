@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 基地低血量防御塔攻击加成 Handler。
+/// 最终防线奖励应用器，负责在基地低血量时提高防御塔攻击力。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Final Defense Attack Damage Handler")]
 public class DefenseTowerFinalDefenseAttackDamageApplierSo : DefenseTowerRewardApplierSo
@@ -9,7 +9,7 @@ public class DefenseTowerFinalDefenseAttackDamageApplierSo : DefenseTowerRewardA
     // 应用最终防线攻击加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerRewardState state))
+        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
         {
             float threshold = RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.HOME_HEALTH_THRESHOLD, 0f, true);
             state.AddFinalDefense(GetValue(config), threshold);

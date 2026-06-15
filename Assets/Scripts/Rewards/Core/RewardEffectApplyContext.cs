@@ -4,8 +4,8 @@
 public sealed class RewardEffectApplyContext
 {
     public RewardRuntimeStateManager RewardRuntimeStateManager { get; }
-    public DefenseTowerRewardState DefenseTowerRewardState { get; }
-    public DefenseTowerRuntimeEffectDispatcher DefenseTowerRuntimeEffectDispatcher { get; }
+    public DefenseTowerActiveRewards DefenseTowerActiveRewards { get; }
+    public DefenseTowerRewardTriggerDispatcher DefenseTowerRewardTriggerDispatcher { get; }
     public ResourceManager ResourceManager { get; }
     public EnemyWaveManager EnemyWaveManager { get; }
     public BuildingPlacementManager BuildingPlacementManager { get; }
@@ -13,15 +13,15 @@ public sealed class RewardEffectApplyContext
     // 创建 Reward 效果运行时上下文。
     public RewardEffectApplyContext(
         RewardRuntimeStateManager rewardRuntimeStateManager,
-        DefenseTowerRewardState defenseTowerRewardState,
+        DefenseTowerActiveRewards defenseTowerActiveRewards,
         ResourceManager resourceManager,
         EnemyWaveManager enemyWaveManager,
         BuildingPlacementManager buildingPlacementManager,
-        DefenseTowerRuntimeEffectDispatcher defenseTowerRuntimeEffectDispatcher = null)
+        DefenseTowerRewardTriggerDispatcher defenseTowerRewardTriggerDispatcher = null)
     {
         RewardRuntimeStateManager = rewardRuntimeStateManager;
-        DefenseTowerRewardState = defenseTowerRewardState;
-        DefenseTowerRuntimeEffectDispatcher = defenseTowerRuntimeEffectDispatcher;
+        DefenseTowerActiveRewards = defenseTowerActiveRewards;
+        DefenseTowerRewardTriggerDispatcher = defenseTowerRewardTriggerDispatcher;
         ResourceManager = resourceManager;
         EnemyWaveManager = enemyWaveManager;
         BuildingPlacementManager = buildingPlacementManager;
