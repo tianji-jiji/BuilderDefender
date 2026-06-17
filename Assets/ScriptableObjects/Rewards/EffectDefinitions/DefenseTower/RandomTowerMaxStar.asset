@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
+  m_Name: RandomTowerMaxStar
+  m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
+  displayName: "\u968F\u673A\u9632\u5FA1\u5854\u5347\u6EE1\u661F"
+  useCustomDescription: 0
+  descriptionTemplate: "\u968F\u673A\u4E00\u5EA7\u9632\u5FA1\u5854\u5347\u5230\u6EE1\u661F"
+  autoImpactRule: 2
+  applier: {fileID: 11400000, guid: 95ee65d93914a2344998cd92472722b3, type: 2}
+  parameterDisplayDefinitionList: []

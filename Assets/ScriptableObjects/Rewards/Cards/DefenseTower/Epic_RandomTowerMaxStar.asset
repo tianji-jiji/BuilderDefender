@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
+  m_Name: Epic_RandomTowerMaxStar
+  m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
+  cardId: RewardCard_095c076aabaf7ca4abae027389b4e6dc
+  cardName: "\u5B88\u671B\u6838\u5FC3"
+  cardPrefab: {fileID: 7890445990647289101, guid: c91fb2388ca031e49ba1a55aa9b3cf3d, type: 3}
+  weight: 1
+  rarity: 2
+  category: 0
+  minWaveIndex: 0
+  maxPickCount: 10
+  isUnique: 0
+  effectConfigList:
+  - effectDefinition: {fileID: 11400000, guid: 88d7424fb95747a1bd059755760705dd, type: 2}
+    parameterConfigList: []
+    value: 0.2
+    displayImpact: 0

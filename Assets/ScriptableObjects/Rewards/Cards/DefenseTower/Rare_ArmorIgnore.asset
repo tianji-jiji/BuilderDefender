@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
+  m_Name: Rare_ArmorIgnore
+  m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
+  cardId: RewardCard_73e75eac1914bea4abbeffd29d58f55c
+  cardName: "\u7A7F\u7532\u7BAD\u5934"
+  cardPrefab: {fileID: 1718243946197525723, guid: de0831fcfc3a5fc43843c94a1d8922c6, type: 3}
+  weight: 1
+  rarity: 1
+  category: 0
+  minWaveIndex: 0
+  maxPickCount: 3
+  isUnique: 0
+  effectConfigList:
+  - effectDefinition: {fileID: 11400000, guid: 9b1d0c1a2f4e4a73b9d0116cc4d15901, type: 2}
+    parameterConfigList:
+    - parameterId: ArmorIgnorePercent
+      value: 0.15
+      displayImpactOverride: 0
+    value: 0.2
+    displayImpact: 0

@@ -261,7 +261,7 @@ public class RewardCardSoEditor : Editor
 
         if (!effectDefinition.Applier)
         {
-            validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 没有绑定 Handler，不会产生玩法效果。", MessageType.Warning));
+            validationMessageList.Add(new ValidationMessage($"{effectDefinition.DisplayName} 没有绑定 Applier，不会产生玩法效果。", MessageType.Warning));
         }
 
         SerializedProperty parameterConfigListProp = effectConfigProp.FindPropertyRelative("parameterConfigList");

@@ -10,7 +10,7 @@ public class RewardEffectDefinitionSoEditor : Editor
 {
     private SerializedProperty _displayNameProp;
     private SerializedProperty _descriptionTemplateProp;
-    private SerializedProperty _handlerProp;
+    private SerializedProperty _applierProp;
     private SerializedProperty _parameterDisplayDefinitionListProp;
 
     // 缓存序列化字段引用。
@@ -18,7 +18,7 @@ public class RewardEffectDefinitionSoEditor : Editor
     {
         _displayNameProp = serializedObject.FindProperty("displayName");
         _descriptionTemplateProp = serializedObject.FindProperty("descriptionTemplate");
-        _handlerProp = serializedObject.FindProperty("handler");
+        _applierProp = serializedObject.FindProperty("applier");
         _parameterDisplayDefinitionListProp = serializedObject.FindProperty("parameterDisplayDefinitionList");
     }
 
@@ -43,7 +43,7 @@ public class RewardEffectDefinitionSoEditor : Editor
     {
         EditorGUILayout.LabelField("基础信息", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(_displayNameProp, new GUIContent("显示名称"));
-        EditorGUILayout.PropertyField(_handlerProp, new GUIContent("效果 Handler"));
+        EditorGUILayout.PropertyField(_applierProp, new GUIContent("效果 Applier"));
     }
 
     // 绘制描述模板设置。
@@ -153,9 +153,9 @@ public class RewardEffectDefinitionSoEditor : Editor
     {
         List<string> validationMessageList = new();
 
-        if (_handlerProp.objectReferenceValue == null)
+        if (_applierProp.objectReferenceValue == null)
         {
-            validationMessageList.Add("没有绑定效果 Handler，这个效果不会产生实际玩法效果。");
+            validationMessageList.Add("没有绑定效果 Applier，这个效果不会产生实际玩法效果。");
         }
 
         HashSet<string> parameterIdSet = new();

@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Legendary_
       objectReference: {fileID: 0}
+    - target: {fileID: 3288689950369848633, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+      propertyPath: m_text
+      value: "\u6240\u6709\u4E09\u661F\u9632\u5FA1\u5854\u52A0\u6210"
+      objectReference: {fileID: 0}
     - target: {fileID: 3899811367039833858, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -130,7 +134,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569189041600005469, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_text
-      value: "\u5B88\u671B\u6838\u5FC3"
+      value: "\u4E09\u661F\u8054\u52A8"
       objectReference: {fileID: 0}
     - target: {fileID: 4569189041600005469, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_fontColor.b

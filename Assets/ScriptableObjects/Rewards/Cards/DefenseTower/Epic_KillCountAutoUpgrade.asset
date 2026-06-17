@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
+  m_Name: Epic_KillCountAutoUpgrade
+  m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
+  cardId: RewardCard_494763044c5161e4cb11a0e4d5d06f82
+  cardName: "\u6218\u6597\u7ECF\u9A8C"
+  cardPrefab: {fileID: 7890445990647289101, guid: ad418cb81a8d77b448fe061472146da5, type: 3}
+  weight: 1
+  rarity: 2
+  category: 0
+  minWaveIndex: 0
+  maxPickCount: 1
+  isUnique: 0
+  effectConfigList:
+  - effectDefinition: {fileID: 11400000, guid: 8dc92816d2e74d4fac4316d6359bc203, type: 2}
+    parameterConfigList:
+    - parameterId: KillCountToUpgrade
+      value: 150
+      displayImpactOverride: 0
+    value: 0.2
+    displayImpact: 0

@@ -96,7 +96,7 @@ public class RewardEffectDefinitionSo : ScriptableObject
     [SerializeField] private bool useCustomDescription;
     [SerializeField] private string descriptionTemplate = DEFAULT_DESCRIPTION_TEMPLATE;
     [SerializeField] private RewardEffectAutoImpactRule autoImpactRule = RewardEffectAutoImpactRule.GreaterThanZeroIsPositive;
-    [FormerlySerializedAs("handler")] [SerializeField] private RewardEffectApplierSo applier;
+    [SerializeField] private RewardEffectApplierSo applier;
     [SerializeField] private List<RewardEffectParameterDisplayDefinition> parameterDisplayDefinitionList = new();
 
     public string DisplayName => displayName;
