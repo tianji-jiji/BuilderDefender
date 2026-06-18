@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2124716354034765845, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
       propertyPath: m_Name
-      value: Mythic_Base
+      value: Mythic_Base Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3899811367039833858, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
       propertyPath: m_Pivot.x
@@ -92,8 +92,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4194189618573558525, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
+      propertyPath: pointerExitFeedbacks
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194189618573558525, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
+      propertyPath: pointerEnterFeedbacks
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7295698882233196496, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
+    - {fileID: 8412348827072550673, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
+    - {fileID: 65126817992030017, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
+    - {fileID: 8193005425605401031, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
+    - {fileID: 8897237687463123960, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
+    - {fileID: 5790681386464917543, guid: e271e2327ec0351408bc89fbecef288c, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e271e2327ec0351408bc89fbecef288c, type: 3}

@@ -25,6 +25,12 @@ All code should prioritize:
 
 The project is a 2D tower defense / RTS-style game. Core systems include building placement, resource collection, enemy waves, towers, projectiles, rewards, card effects, UI tooltips, floating popups, object pooling, and game progression.
 
+## Feel Feedback Rules
+
+* The Feel plugin version used by this project is 4.3.
+* Feedback effects in this project should be implemented with the Feel plugin, including but not limited to camera shake, sound effects, particles, UI animations, TMP number counting, floating text, object scale/rotation/position changes, flash effects, material changes, post-processing, slow motion, mobile vibration, and lighting.
+* When implementing feedback effects, proactively search the official Feel documentation to confirm the correct implementation approach.
+
 ## Unity Version and Compatibility Requirements
 
 * Target Unity version: Unity 6.3 LTS.

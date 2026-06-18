@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2124716354034765845, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_Name
-      value: Normal_Cheaper
+      value: Normal_BuildCostCheaper
       objectReference: {fileID: 0}
     - target: {fileID: 3288689950369848633, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
       propertyPath: m_text
@@ -105,7 +105,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 461a40775e9b5124faa65f3bd86c87df, type: 3}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7079958581517329456, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+    - {fileID: 1301759947958928600, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+    - {fileID: 9159106745765310995, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
+    - {fileID: 1918646061007051712, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b06cd6fc807721a4ebe2220c2d7156dd, type: 3}

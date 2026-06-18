@@ -1,18 +1,14 @@
-using MoreMountains.Feedbacks;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
 /// 奖励卡牌选项组件，负责处理卡牌点击选择和鼠标悬浮交互。
 /// </summary>
-public class RewardCardOption : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class RewardCardOption : MonoBehaviour
 {
     [SerializeField] private Button selectButton;
     [SerializeField] private RewardCardView cardView;
-    [SerializeField] private MMF_Player pointerEnterFeedbacks;
-    [SerializeField] private MMF_Player pointerExitFeedbacks;
-
+ 
     private RewardCardSo _rewardCard;
     private RewardCardController _controller;
 
@@ -54,23 +50,7 @@ public class RewardCardOption : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
     }
 
-    // 处理鼠标进入卡牌区域时的悬浮反馈。
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (pointerEnterFeedbacks)
-        {
-            pointerEnterFeedbacks.PlayFeedbacks();
-        }
-    }
-
-    // 处理鼠标离开卡牌区域时的恢复反馈。
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (pointerExitFeedbacks)
-        {
-            pointerExitFeedbacks.PlayFeedbacks();
-        }
-    }
+    
 
     // 缓存卡牌选项依赖的组件。
     private void CacheReferences()
