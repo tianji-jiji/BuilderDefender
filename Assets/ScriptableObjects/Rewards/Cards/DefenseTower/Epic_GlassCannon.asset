@@ -16,7 +16,7 @@ MonoBehaviour:
   cardName: "\u73BB\u7483\u5F29\u673A"
   cardPrefab: {fileID: 3604556784056914498, guid: 7d7cba8f31b55fa40b304ac6ba07ef35, type: 3}
   weight: 1
-  rarity: 1
+  rarity: 2
   category: 0
   minWaveIndex: 0
   maxPickCount: 0
