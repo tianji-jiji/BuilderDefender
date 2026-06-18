@@ -9,7 +9,7 @@ public class DefenseTowerBuildCostApplierSo : DefenseTowerRewardApplierSo
     // 应用建造成本变化。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             state.AddBuildCostBonus(GetValue(config));
         }

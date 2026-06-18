@@ -9,7 +9,7 @@ public class DefenseTowerAttackBonusApplierSo : DefenseTowerRewardApplierSo
     // 应用防御塔攻击力加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state) || config == null)
+        if (!TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state) || config == null)
         {
             return;
         }

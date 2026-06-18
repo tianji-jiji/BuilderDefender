@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: RewardCard_4f5cfa49f7874d8ca427f2d0b9427511
   cardName: "\u8D85\u8F7D\u6838\u5FC3"
-  cardPrefab: {fileID: 2152048384221396196, guid: 997f74c83e92b88469ef7c9cd0837dc4, type: 3}
+  cardPrefab: {fileID: 1735142577949895926, guid: 1933476c382b78a4883c1c910c58d676, type: 3}
   weight: 1
   rarity: 2
   category: 0
@@ -27,8 +27,6 @@ MonoBehaviour:
     - parameterId: Value
       value: 0.35
       displayImpactOverride: 0
-    value: 0.35
-    displayImpact: 0
   - effectDefinition: {fileID: 11400000, guid: fbadf42043384e66a779c1b642af38cf, type: 2}
     parameterConfigList:
     - parameterId: TriggerAttackCount
@@ -37,5 +35,3 @@ MonoBehaviour:
     - parameterId: AttackHealthCost
       value: 2
       displayImpactOverride: 0
-    value: 5
-    displayImpact: 0

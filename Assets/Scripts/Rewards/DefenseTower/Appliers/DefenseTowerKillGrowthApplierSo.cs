@@ -11,7 +11,7 @@ public class DefenseTowerKillGrowthApplierSo : DefenseTowerRuntimeRewardApplierS
     // 应用防御塔击杀成长配置。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state) || config == null)
+        if (!TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state) || config == null)
         {
             return;
         }

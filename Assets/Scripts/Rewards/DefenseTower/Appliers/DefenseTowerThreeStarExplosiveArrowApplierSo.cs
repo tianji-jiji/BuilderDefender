@@ -9,7 +9,7 @@ public class DefenseTowerThreeStarExplosiveArrowApplierSo : DefenseTowerRewardAp
     // 应用三星爆裂箭配置。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (!TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             return;
         }

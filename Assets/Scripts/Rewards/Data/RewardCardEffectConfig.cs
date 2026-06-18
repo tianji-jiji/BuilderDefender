@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 卡牌奖励参数的显示倾向，用于决定富文本颜色。
+/// 卡牌富文本颜色。
 /// </summary>
 public enum RewardEffectDisplayImpact
 {
@@ -54,23 +54,19 @@ public class RewardEffectParameterConfig
 /// <summary>
 /// 一张卡里的单个效果配置，保存效果定义和这张卡上的参数列表。
 /// </summary>
-[Serializable]
-public class RewardCardEffectConfig
-{
-    [SerializeField] private RewardEffectDefinitionSo effectDefinition;
-    [SerializeField] private List<RewardEffectParameterConfig> parameterConfigList = new();
-    [HideInInspector] [SerializeField] private float value;
-    [HideInInspector] [SerializeField] private RewardEffectDisplayImpact displayImpact = RewardEffectDisplayImpact.Auto;
-
-    public RewardEffectDefinitionSo EffectDefinition => effectDefinition;
-    public IReadOnlyList<RewardEffectParameterConfig> ParameterConfigList => parameterConfigList;
-    public float LegacyValue => value;
-    public RewardEffectDisplayImpact LegacyDisplayImpact => displayImpact;
-
-    // 判断当前效果是否已经迁移到参数列表配置。
-    public bool HasParameterList()
+    [Serializable]
+    public class RewardCardEffectConfig
     {
-        return parameterConfigList != null && parameterConfigList.Count > 0;
+        [SerializeField] private RewardEffectDefinitionSo effectDefinition;
+        [SerializeField] private List<RewardEffectParameterConfig> parameterConfigList = new();
+
+        public RewardEffectDefinitionSo EffectDefinition => effectDefinition;
+        public IReadOnlyList<RewardEffectParameterConfig> ParameterConfigList => parameterConfigList;
+
+        // 判断当前效果是否已经迁移到参数列表配置。
+        public bool HasParameterList()
+        {
+        return parameterConfigList is { Count: > 0 };
     }
 
     // 构建当前效果配置的显示描述。
@@ -99,8 +95,7 @@ public static class RewardEffectParameterReader
         {
             return value;
         }
-
-        LogMissingParameter(cardEffectConfig, parameterId, logMissingWarning);
+        
         return defaultValue;
     }
 
@@ -111,13 +106,12 @@ public static class RewardEffectParameterReader
         {
             return Mathf.RoundToInt(value);
         }
-
-        LogMissingParameter(cardEffectConfig, parameterId, logMissingWarning);
+        
         return defaultValue;
     }
 
     // 尝试读取浮点参数。
-    public static bool TryGetFloat(RewardCardEffectConfig cardEffectConfig, string parameterId, out float value)
+    private static bool TryGetFloat(RewardCardEffectConfig cardEffectConfig, string parameterId, out float value)
     {
         value = 0f;
         if (cardEffectConfig == null)
@@ -139,26 +133,9 @@ public static class RewardEffectParameterReader
             }
         }
 
-        if (IsSameParameterId(parameterId, RewardEffectParameterIds.VALUE) && !cardEffectConfig.HasParameterList())
-        {
-            value = cardEffectConfig.LegacyValue;
-            return true;
-        }
-
         return false;
     }
-
-    // 在需要时输出缺失参数警告。
-    private static void LogMissingParameter(RewardCardEffectConfig cardEffectConfig, string parameterId, bool shouldLog)
-    {
-        if (!shouldLog)
-        {
-            return;
-        }
-
-        string effectName = cardEffectConfig != null && cardEffectConfig.EffectDefinition ? cardEffectConfig.EffectDefinition.name : "NullEffect";
-        Debug.LogWarning($"Reward effect parameter missing: {effectName}.{parameterId}");
-    }
+    
 
     // 判断两个参数 ID 是否一致。
     private static bool IsSameParameterId(string leftId, string rightId)

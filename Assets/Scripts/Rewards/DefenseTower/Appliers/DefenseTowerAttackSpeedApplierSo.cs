@@ -9,7 +9,7 @@ public class DefenseTowerAttackSpeedApplierSo : DefenseTowerRewardApplierSo
     // 应用攻击速度加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             state.AddAttackSpeedBonus(GetValue(config));
         }

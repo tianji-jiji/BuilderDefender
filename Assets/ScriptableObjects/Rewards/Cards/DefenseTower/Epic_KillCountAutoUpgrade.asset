@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: RewardCard_494763044c5161e4cb11a0e4d5d06f82
   cardName: "\u6218\u6597\u7ECF\u9A8C"
-  cardPrefab: {fileID: 7890445990647289101, guid: ad418cb81a8d77b448fe061472146da5, type: 3}
+  cardPrefab: {fileID: 2124716354034765845, guid: c6ddbd727ea761f4bb3140d1f9019805, type: 3}
   weight: 1
   rarity: 2
   category: 0
@@ -25,7 +25,5 @@ MonoBehaviour:
   - effectDefinition: {fileID: 11400000, guid: 8dc92816d2e74d4fac4316d6359bc203, type: 2}
     parameterConfigList:
     - parameterId: KillCountToUpgrade
-      value: 150
+      value: 100
       displayImpactOverride: 0
-    value: 0.2
-    displayImpact: 0

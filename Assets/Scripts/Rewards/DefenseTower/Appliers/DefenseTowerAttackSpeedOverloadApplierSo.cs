@@ -9,7 +9,7 @@ public class DefenseTowerAttackSpeedOverloadApplierSo : DefenseTowerRewardApplie
     // 应用超载攻速变化。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             float attackSpeedBonus = RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.ATTACK_SPEED_MULTIPLIER, GetValue(config));
             state.AddAttackSpeedOverloadBonus(attackSpeedBonus);

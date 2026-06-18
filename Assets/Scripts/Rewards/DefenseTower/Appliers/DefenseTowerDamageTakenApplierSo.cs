@@ -9,7 +9,7 @@ public class DefenseTowerDamageTakenApplierSo : DefenseTowerRewardApplierSo
     // 应用受到伤害变化。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             float damageTakenBonus = RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.DAMAGE_TAKEN_MULTIPLIER, GetValue(config));
             state.AddDamageTakenBonus(damageTakenBonus);

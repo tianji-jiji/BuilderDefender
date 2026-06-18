@@ -9,7 +9,7 @@ public class DefenseTowerDoubleDamageChanceApplierSo : DefenseTowerRewardApplier
     // 应用双倍伤害概率。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             float doubleDamageChance = RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.DOUBLE_DAMAGE_CHANCE, GetValue(config));
             state.AddDoubleDamageChance(doubleDamageChance);

@@ -14,18 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: RewardCard_77bd55fef832e1d4f9211d72ecd68c32
   cardName: "\u9AD8\u6548\u7EF4\u62A4"
-  cardPrefab: {fileID: 404475039923801044, guid: 2975377833d08ba4cbaca25c742b28f9, type: 3}
+  cardPrefab: {fileID: 1171473911398189612, guid: dd5db069a8823cb41b4270a78f535980, type: 3}
   weight: 1
   rarity: 1
   category: 0
   minWaveIndex: 0
-  maxPickCount: 2
+  maxPickCount: 1
   isUnique: 0
   effectConfigList:
   - effectDefinition: {fileID: 11400000, guid: bc9f6f7e6f934b49a0db65dc1efda5a5, type: 2}
     parameterConfigList:
     - parameterId: WaveEndHealPercent
-      value: 0.3
+      value: 0.15
       displayImpactOverride: 0
-    value: 0.2
-    displayImpact: 0

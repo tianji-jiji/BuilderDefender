@@ -9,7 +9,7 @@ public class DefenseTowerFinalDefenseAttackDamageApplierSo : DefenseTowerRewardA
     // 应用最终防线攻击加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             float threshold = RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.HOME_HEALTH_THRESHOLD, 0f, true);
             state.AddFinalDefense(GetValue(config), threshold);

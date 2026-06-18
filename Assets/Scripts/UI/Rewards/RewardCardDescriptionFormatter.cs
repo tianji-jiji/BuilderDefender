@@ -49,25 +49,21 @@ public static class RewardCardDescriptionFormatter
     private static Dictionary<string, string> BuildParameterTextDic(RewardCardEffectConfig cardEffectConfig)
     {
         Dictionary<string, string> parameterTextDic = new();
-        bool hasParameterList = cardEffectConfig.HasParameterList();
-
-        if (hasParameterList)
+        if (!cardEffectConfig.HasParameterList())
         {
-            foreach (RewardEffectParameterConfig parameterConfig in cardEffectConfig.ParameterConfigList)
-            {
-                if (parameterConfig == null)
-                {
-                    continue;
-                }
-
-                parameterTextDic[parameterConfig.ParameterId] = BuildColoredParameterText(cardEffectConfig, parameterConfig);
-            }
-
             return parameterTextDic;
         }
 
-        string valueText = BuildColoredParameterText(cardEffectConfig, RewardEffectParameterIds.VALUE, cardEffectConfig.LegacyValue, cardEffectConfig.LegacyDisplayImpact);
-        parameterTextDic[RewardEffectParameterIds.VALUE] = valueText;
+        foreach (RewardEffectParameterConfig parameterConfig in cardEffectConfig.ParameterConfigList)
+        {
+            if (parameterConfig == null)
+            {
+                continue;
+            }
+
+            parameterTextDic[parameterConfig.ParameterId] = BuildColoredParameterText(cardEffectConfig, parameterConfig);
+        }
+
         return parameterTextDic;
     }
 

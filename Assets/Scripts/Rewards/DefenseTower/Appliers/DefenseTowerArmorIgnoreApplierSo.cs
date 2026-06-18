@@ -9,7 +9,7 @@ public class DefenseTowerArmorIgnoreApplierSo : DefenseTowerRewardApplierSo
     // 应用护甲穿透加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             float armorIgnorePercent = RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.ARMOR_IGNORE_PERCENT, GetValue(config));
             state.AddArmorIgnorePercent(armorIgnorePercent);

@@ -9,7 +9,7 @@ public class DefenseTowerNewInitialStarApplierSo : DefenseTowerRewardApplierSo
     // 应用新塔初始星级加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             int starBonus = RewardEffectParameterReader.GetInt(config, RewardEffectParameterIds.INITIAL_STAR_BONUS, Mathf.RoundToInt(GetValue(config)));
             state.AddNewTowerInitialStarBonus(starBonus);

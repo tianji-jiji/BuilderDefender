@@ -9,7 +9,7 @@ public class DefenseTowerWaveEndHealApplierSo : DefenseTowerRuntimeRewardApplier
     // 应用波末回血比例。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             float healPercent = RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.WAVE_END_HEAL_PERCENT, GetValue(config));
             state.AddWaveEndHealPercent(healPercent);

@@ -9,7 +9,7 @@ public class DefenseTowerAttackDamagePerThreeStarApplierSo : DefenseTowerRewardA
     // 应用每座三星塔攻击加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             float damageBonus = RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.DAMAGE_BONUS_PER_THREE_STAR_TOWER, GetValue(config));
             state.AddAttackDamagePerThreeStarTower(damageBonus);

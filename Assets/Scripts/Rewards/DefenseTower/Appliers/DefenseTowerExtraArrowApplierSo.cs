@@ -11,7 +11,7 @@ public class DefenseTowerExtraArrowApplierSo : DefenseTowerRuntimeRewardApplierS
     // 应用额外攻击规则。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (!TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             return;
         }

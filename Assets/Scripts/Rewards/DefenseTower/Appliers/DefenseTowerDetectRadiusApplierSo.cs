@@ -9,7 +9,7 @@ public class DefenseTowerDetectRadiusApplierSo : DefenseTowerRewardApplierSo
     // 应用攻击范围加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             state.AddDetectRadiusBonus(GetValue(config));
         }

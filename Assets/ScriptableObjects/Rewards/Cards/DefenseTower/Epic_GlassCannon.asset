@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: RewardCard_e24d4ae5af4f4a7298277df79dd437f6
   cardName: "\u73BB\u7483\u5F29\u673A"
-  cardPrefab: {fileID: 6724876850464802490, guid: 7d7cba8f31b55fa40b304ac6ba07ef35, type: 3}
+  cardPrefab: {fileID: 3604556784056914498, guid: 7d7cba8f31b55fa40b304ac6ba07ef35, type: 3}
   weight: 1
   rarity: 1
   category: 0
   minWaveIndex: 0
-  maxPickCount: 2
+  maxPickCount: 0
   isUnique: 0
   effectConfigList:
   - effectDefinition: {fileID: 11400000, guid: 6fb7a66701004c4fb8e2f677b88af4bd, type: 2}
@@ -27,12 +27,8 @@ MonoBehaviour:
     - parameterId: Value
       value: 0.4
       displayImpactOverride: 0
-    value: 0.45
-    displayImpact: 0
   - effectDefinition: {fileID: 11400000, guid: 61a04610d237462681dd6679738e3284, type: 2}
     parameterConfigList:
     - parameterId: DamageTakenMultiplier
       value: 0.4
       displayImpactOverride: 0
-    value: 0.35
-    displayImpact: 0

@@ -9,7 +9,7 @@ public class DefenseTowerMaxHealthApplierSo : DefenseTowerRewardApplierSo
     // 应用最大生命加成。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             state.AddMaxHealthBonus(GetValue(config));
         }

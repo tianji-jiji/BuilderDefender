@@ -11,7 +11,7 @@ public class DefenseTowerAttackHealthCostApplierSo : DefenseTowerRuntimeRewardAp
     // 应用攻击扣血规则。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {
-        if (!TryGetDefenseTowerRewardState(applyContext, out DefenseTowerActiveRewards state))
+        if (!TryGetDefenseTowerActiveRewards(applyContext, out DefenseTowerActiveRewards state))
         {
             return;
         }
