@@ -26,4 +26,3 @@ MonoBehaviour:
   maxHarvestAmount: 5
   resourceSo: {fileID: 11400000, guid: f489fea6d82836a4ebd8e3de9c2ca696, type: 2}
   size: {x: 3, y: 2}
-  popupUIPrefab: {fileID: 7229861339150195600, guid: 13186c6467f14424693e8414cf84cb9e, type: 3}

@@ -16,7 +16,7 @@ public static class ArrowHitDamageApplier
         bool wasAlive = enemy.IsAlive;
         int adjustedDamage = ArmorDamageCalculator.CalculateDamage(rawDamage, enemy.Armor, armorIgnorePercent);
         int actualDamage = healthSystem.TakeDamage(adjustedDamage);
-        DamageFloatingTextService.ShowEnemyDamage(enemy.DamageFloatingTextPosition, actualDamage);
+        DamageFloatingTextEvent.ShowDamage(enemy.DamageFloatingTextPosition, actualDamage);
 
         if (actualDamage > 0 && sourceDefenseTowerCombatSystem)
         {

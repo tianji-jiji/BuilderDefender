@@ -36,6 +36,4 @@ public class BuildingSo : ScriptableObject
     public ResourceSo resourceSo;
     // 建筑体积
     public Vector2 size;
-    // UI 飘字预制体
-    public GameObject popupUIPrefab;
 }

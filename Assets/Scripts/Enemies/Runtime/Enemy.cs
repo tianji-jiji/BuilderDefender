@@ -229,7 +229,7 @@ public class Enemy : MonoBehaviour, IPoolable
         if (other.gameObject.TryGetComponent(out HealthSystem targetHealthSystem))
         {
             int actualDamage = targetHealthSystem.TakeDamage(_runtimeStats.AttackDamage);
-            DamageFloatingTextService.ShowBuildingDamage(other.transform.position, actualDamage);
+            DamageFloatingTextEvent.ShowDamage(other.transform.position, actualDamage);
         }
 
         Death();

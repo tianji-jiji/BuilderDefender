@@ -25,7 +25,7 @@ public class ResourceHarvester : MonoBehaviour
     private bool _isHarvestAnimationPlaying = true;
 
     // 一次采集行为共获得了多少资源
-    public event Action<int, Vector3, BuildingSo> OnResourceHarvestedOneTime;
+    public event Action<int, Vector3, ResourceSo> OnResourceHarvestedOneTime;
 
     // 新资源采集器被创建时触发
     public static event Action<ResourceHarvester> OnHarvesterCreated;
@@ -108,7 +108,7 @@ public class ResourceHarvester : MonoBehaviour
 
         // 飘字UI
         int amount = harvestedCount * buildingSo.resourceSo.amountOnceHarvest;
-        OnResourceHarvestedOneTime?.Invoke(amount, popupUITransform.position, buildingSo);
+        OnResourceHarvestedOneTime?.Invoke(amount, popupUITransform.position, buildingSo.resourceSo);
     }
 
     // 判断碰撞体是否挂载了当前采集器需要的资源节点。

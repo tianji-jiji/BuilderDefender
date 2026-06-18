@@ -53,7 +53,7 @@ MonoBehaviour:
   lifetime: 3
   defaultDamage: 10
   arrowVisual: {fileID: 8489479532261054745}
-  explosiveArrowEffect: {fileID: 11400000, guid: 49f3899c598440acbfaad97949f5ac91, type: 2}
+  explosiveArrowHitEffect: {fileID: 11400000, guid: 49f3899c598440acbfaad97949f5ac91, type: 2}
 --- !u!114 &8489479532261054745
 MonoBehaviour:
   m_ObjectHideFlags: 0

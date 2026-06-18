@@ -30,4 +30,3 @@ MonoBehaviour:
   maxHarvestAmount: 0
   resourceSo: {fileID: 0}
   size: {x: 4.5, y: 6}
-  popupUIPrefab: {fileID: 0}

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 
 
@@ -7,13 +8,17 @@ public class PopupManager : MonoBehaviour
 {
     private const float SCREEN_CENTER_RATIO = 0.5f;
     private const string UPGRADE_WARNING_PREFIX = "升级需要:";
+    private const float DEFAULT_INTENSITY = 1f;
+    private const float UPGRADE_WARNING_INTENSITY = 1f;
+    private const int WOOD_POPUP_CHANNEL = 1;
+    private const int STONE_POPUP_CHANNEL = 2;
+    private const int GOLD_POPUP_CHANNEL = 3;
+    private const int UPGRADE_WARNING_CHANNEL = 4;
 
     public static PopupManager Instance;
-    [SerializeField] private GameObject goldPopupPrefab;
-    [SerializeField] private GameObject stonePopupPrefab;
-    [SerializeField] private GameObject woodPopupPrefab;
-    [SerializeField] private GameObject upgradeWarningPopupPrefab;
-    [SerializeField] private Transform floatingPopupRoot;
+    [SerializeField] private ResourceSo woodResourceSo;
+    [SerializeField] private ResourceSo stoneResourceSo;
+    [SerializeField] private ResourceSo goldResourceSo;
 
     // 初始化漂浮提示管理器单例。
     private void Awake()
@@ -41,72 +46,82 @@ public class PopupManager : MonoBehaviour
     // 注册资源采集完成时的漂浮提示回调。
     private void Register(ResourceHarvester harvester)
     {
-        harvester.OnResourceHarvestedOneTime += SpawnPopUI;
+        harvester.OnResourceHarvestedOneTime += ShowResourcePopup;
     }
     
-    // 生成资源采集漂浮提示。
-    private void SpawnPopUI(int amount, Vector3 position, BuildingSo type)
+    // 生成资源采集浮动文字。
+    private void ShowResourcePopup(int amount, Vector3 position, ResourceSo resourceSo)
     {
-        GameObject popupUI = SpawnPopup(type.popupUIPrefab, position);
-
-        if (popupUI && popupUI.TryGetComponent(out PopupUI popup))
+        if (!TryGetResourcePopupChannel(resourceSo, out int channel))
         {
-            popup.SetText($"+{amount}");
+            return;
         }
+
+        TriggerFloatingText(channel, position, $"+{amount}", DEFAULT_INTENSITY);
     }
 
     // 在屏幕中央显示升星资源不足提示。
     public void ShowUpgradeResourceWarning(IReadOnlyList<ResourceCost> upgradeCost)
     {
-        if (!upgradeWarningPopupPrefab || !floatingPopupRoot)
-        {
-            return;
-        }
-
-        GameObject popupUI = SpawnPopup(upgradeWarningPopupPrefab, GetScreenCenterWorldPosition());
-
-        if (popupUI && popupUI.TryGetComponent(out PopupUI popup))
-        {
-            popup.SetText(FormatUpgradeResourceWarning(upgradeCost));
-        }
+        TriggerFloatingText(
+            UPGRADE_WARNING_CHANNEL,
+            GetScreenCenterWorldPosition(),
+            FormatUpgradeResourceWarning(upgradeCost),
+            UPGRADE_WARNING_INTENSITY);
     }
 
-    // 生成一个漂浮提示对象。
-    private GameObject SpawnPopup(GameObject popupPrefab, Vector3 position)
+    // 获取资源浮动文字频道。
+    private bool TryGetResourcePopupChannel(ResourceSo resourceSo, out int channel)
     {
-        if (!popupPrefab)
+        if (resourceSo == woodResourceSo)
         {
-            return null;
+            channel = WOOD_POPUP_CHANNEL;
+            return true;
         }
 
-        if (PoolManager.Instance)
+        if (resourceSo == stoneResourceSo)
         {
-            return PoolManager.Instance.Spawn(popupPrefab, position, Quaternion.identity, floatingPopupRoot);
+            channel = STONE_POPUP_CHANNEL;
+            return true;
         }
 
-        GameObject popupUI = Instantiate(popupPrefab, floatingPopupRoot);
-        popupUI.transform.position = position;
-        return popupUI;
+        if (resourceSo == goldResourceSo)
+        {
+            channel = GOLD_POPUP_CHANNEL;
+            return true;
+        }
+
+        channel = 0;
+        return false;
     }
 
     // 获取屏幕中心在漂浮提示画布中的世界坐标。
     private Vector3 GetScreenCenterWorldPosition()
     {
-        if (floatingPopupRoot is RectTransform rootRect)
-        {
-            Vector2 screenCenter = new Vector2(Screen.width * SCREEN_CENTER_RATIO, Screen.height * SCREEN_CENTER_RATIO);
-            Canvas canvas = rootRect.GetComponentInParent<Canvas>();
-            Camera uiCamera = canvas && canvas.renderMode != RenderMode.ScreenSpaceOverlay
-                ? canvas.worldCamera ? canvas.worldCamera : Camera.main
-                : null;
+        Camera mainCamera = Camera.main;
 
-            if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rootRect, screenCenter, uiCamera, out Vector3 worldPosition))
-            {
-                return worldPosition;
-            }
+        if (!mainCamera)
+        {
+            return Vector3.zero;
         }
 
-        return floatingPopupRoot.position;
+        Vector3 screenCenter = new Vector3(
+            Screen.width * SCREEN_CENTER_RATIO,
+            Screen.height * SCREEN_CENTER_RATIO,
+            Mathf.Abs(mainCamera.transform.position.z));
+
+        return mainCamera.ScreenToWorldPoint(screenCenter);
+    }
+
+    // 触发 More Mountains 浮动文字生成事件。
+    private static void TriggerFloatingText(int channel, Vector3 position, string text, float intensity)
+    {
+        MMFloatingTextSpawnEvent.Trigger(
+            new MMChannelData(MMChannelModes.Int, channel, null),
+            position,
+            text,
+            Vector3.up,
+            intensity);
     }
 
     // 格式化升星消耗提示文本。
