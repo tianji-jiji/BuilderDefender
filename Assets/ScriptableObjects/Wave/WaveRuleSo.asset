@@ -21,12 +21,12 @@ MonoBehaviour:
     hardWeight: 0.2
     bossWeight: 0
   hardWaveWeights:
-    normalWeight: 0.65
-    hardWeight: 0.3
-    bossWeight: 0.05
+    normalWeight: 0.5
+    hardWeight: 0.48
+    bossWeight: 0.02
   bossWaveWeights:
-    normalWeight: 0.3
-    hardWeight: 0.5
+    normalWeight: 0.4
+    hardWeight: 0.4
     bossWeight: 0.2
   enemyCountByWave:
     serializedVersion: 2

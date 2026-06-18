@@ -23,7 +23,7 @@ public class RewardSummaryRecordItem : MonoBehaviour
     [SerializeField] private Color mythicRarityColor = new(1f, 0.18f, 0.18f, 1f);
 
     // 刷新单条奖励记录的 UI 文本。
-    public void SetRecord(RewardCardAcquisitionRecord rewardRecord)
+    public void SetRecord(RewardCardAcquiredRecord rewardRecord)
     {
         if (rewardRecord == null)
         {
@@ -36,7 +36,7 @@ public class RewardSummaryRecordItem : MonoBehaviour
     }
 
     // 刷新有效奖励记录的所有文本。
-    private void RefreshText(RewardCardAcquisitionRecord rewardRecord)
+    private void RefreshText(RewardCardAcquiredRecord rewardRecord)
     {
         if (cardNameText)
         {

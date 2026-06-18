@@ -14,6 +14,13 @@ All code should prioritize:
 * Low coupling between systems.
 * Safe refactoring as the project grows.
 
+## Git Operation Rules
+
+* Do not perform any Git state-changing operation without explicit permission from the user.
+* Git state-changing operations include, but are not limited to: creating branches, switching branches, deleting branches, staging files, committing, merging, rebasing, resetting, stashing, pushing, opening pull requests, and modifying Git history.
+* Before performing any Git state-changing operation, ask the user and wait for clear approval or a clear direct instruction.
+* Read-only Git inspection commands are allowed only when they are necessary for the current task.
+
 ## Project Context
 
 The project is a 2D tower defense / RTS-style game. Core systems include building placement, resource collection, enemy waves, towers, projectiles, rewards, card effects, UI tooltips, floating popups, object pooling, and game progression.
@@ -49,6 +56,13 @@ The project is a 2D tower defense / RTS-style game. Core systems include buildin
 * Prefer composition over inheritance.
 * Do not use magic numbers.
 * In Unity scripts, lifecycle methods should be placed before custom methods, and their preferred order is `Awake`, `OnEnable`, `OnDisable`, `Start`, `Update`, `FixedUpdate`.
+
+## Refactoring Rules
+
+* Do not keep unused compatibility wrappers, fallback code, or legacy indirection unless there is a confirmed active dependency.
+* When obsolete production code is only referenced by tests, update the tests to the current API and remove the obsolete production code.
+* Avoid preserving code only because it might be useful in the future.
+* If compatibility code must be kept, clearly explain the active dependency and the condition for removing it later.
 
 ## Chinese Comments and Documentation Standards
 

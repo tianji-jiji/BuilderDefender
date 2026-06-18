@@ -34,7 +34,7 @@ public class ActiveRewardHud : MonoBehaviour
             openSummaryButton.onClick.AddListener(OpenSummaryPanel);
         }
 
-        RewardCardAcquisitionHistory.OnRewardCardApplied += HandleRewardCardApplied;
+        RewardCardAcquiredHistory.OnRewardCardApplied += HandleRewardCardApplied;
     }
 
     // 取消订阅按钮和奖励生效事件。
@@ -45,13 +45,13 @@ public class ActiveRewardHud : MonoBehaviour
             openSummaryButton.onClick.RemoveListener(OpenSummaryPanel);
         }
 
-        RewardCardAcquisitionHistory.OnRewardCardApplied -= HandleRewardCardApplied;
+        RewardCardAcquiredHistory.OnRewardCardApplied -= HandleRewardCardApplied;
     }
 
     // 处理奖励生效事件并刷新 HUD。
     private void HandleRewardCardApplied(RewardCardAcquiredContext context)
     {
-        if (context == null || context.AcquisitionRecord == null)
+        if (context == null || context.AcquiredRecord == null)
         {
             return;
         }
@@ -93,7 +93,7 @@ public class ActiveRewardHud : MonoBehaviour
 
         if (latestCardNameText)
         {
-            latestCardNameText.text = string.Format(LATEST_CARD_FORMAT, context.AcquisitionRecord.CardName);
+            latestCardNameText.text = string.Format(LATEST_CARD_FORMAT, context.AcquiredRecord.CardName);
         }
     }
 

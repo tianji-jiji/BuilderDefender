@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// 奖励运行时协调器，负责应用奖励卡牌并协调各奖励模块的运行时状态。
+/// 奖励运行时协调器，负责应用奖励卡牌并协调各奖励运行时状态。
 /// </summary>
 public class RewardRuntimeCoordinator : MonoBehaviour
 {
@@ -11,15 +11,13 @@ public class RewardRuntimeCoordinator : MonoBehaviour
     // 当前生效奖励发生变化时通知所有需要刷新属性的对象。
     public static event Action OnActiveRewardsChanged;
 
-    private readonly DefenseTowerRewardModule _defenseTowerRewards = new();
-    private readonly ResourceRewardModule _resourceRewards = new();
-    private readonly HomeRewardModule _homeRewards = new();
+    private readonly DefenseTowerRewardRuntime _defenseTowerRewards = new();
+    private readonly ResourceRewardRuntime _resourceRewards = new();
+    private readonly HomeRewardRuntime _homeRewards = new();
 
     private EnemyWaveManager _waveManager;
 
-    public DefenseTowerRewardModule DefenseTowerRewards => _defenseTowerRewards;
-    public ResourceRewardModule ResourceRewards => _resourceRewards;
-    public HomeRewardModule HomeRewards => _homeRewards;
+    public DefenseTowerRewardRuntime DefenseTowerRewards => _defenseTowerRewards;
 
     private void Awake()
     {
@@ -36,14 +34,15 @@ public class RewardRuntimeCoordinator : MonoBehaviour
         UnbindWaveManager();
     }
 
-    // 应用一张奖励卡中配置的全部效果。
+    // 应用一整张奖励卡
     public void ApplyReward(RewardCardSo rewardCard)
     {
         if (!rewardCard)
         {
             return;
         }
-
+        
+        // 创建上下文
         RewardEffectApplyContext applyContext = new(
             this,
             _defenseTowerRewards,
@@ -52,18 +51,20 @@ public class RewardRuntimeCoordinator : MonoBehaviour
             ResourceManager.Instance,
             EnemyWaveManager.Instance,
             BuildingPlacementManager.Instance);
-
-        RewardEffectApplicationRouter.ApplyEffects(rewardCard.EffectConfigList, applyContext);
+        // 应用卡牌效果
+        RewardEffectApplicationService.ApplyEffects(rewardCard.EffectConfigList, applyContext);
+        // 记录这张卡被选择过
         RecordRewardCardSelection(rewardCard);
+        // 通知奖励发生变化
         OnActiveRewardsChanged?.Invoke();
     }
 
     // 记录本次奖励选择，缺少历史组件时只输出警告而不阻断数值生效。
     private void RecordRewardCardSelection(RewardCardSo rewardCard)
     {
-        if (RewardCardAcquisitionHistory.Instance)
+        if (RewardCardAcquiredHistory.Instance)
         {
-            RewardCardAcquisitionHistory.Instance.RecordRewardCard(rewardCard);
+            RewardCardAcquiredHistory.Instance.RecordRewardCard(rewardCard);
             return;
         }
 

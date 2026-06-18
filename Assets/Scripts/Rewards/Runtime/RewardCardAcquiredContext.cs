@@ -6,17 +6,17 @@ using System.Collections.Generic;
 public class RewardCardAcquiredContext
 {
     public RewardCardSo RewardCard { get; }
-    public RewardCardAcquisitionRecord AcquisitionRecord { get; }
-    public IReadOnlyList<RewardCardAcquisitionRecord> AllRecordList { get; }
+    public RewardCardAcquiredRecord AcquiredRecord { get; }
+    public IReadOnlyList<RewardCardAcquiredRecord> AllRecordList { get; }
     public int TotalCardCount { get; }
     public string LatestDescriptionText { get; }
 
-    public RewardCardAcquiredContext(RewardCardSo rewardCard, RewardCardAcquisitionRecord acquisitionRecord, IReadOnlyList<RewardCardAcquisitionRecord> allRecordList, int totalCardCount)
+    public RewardCardAcquiredContext(RewardCardSo rewardCard, RewardCardAcquiredRecord acquiredRecord, IReadOnlyList<RewardCardAcquiredRecord> allRecordList, int totalCardCount)
     {
         RewardCard = rewardCard;
-        AcquisitionRecord = acquisitionRecord;
+        AcquiredRecord = acquiredRecord;
         AllRecordList = allRecordList;
         TotalCardCount = totalCardCount;
-        LatestDescriptionText = acquisitionRecord != null ? acquisitionRecord.DescriptionText : string.Empty;
+        LatestDescriptionText = acquiredRecord != null ? acquiredRecord.DescriptionText : string.Empty;
     }
 }

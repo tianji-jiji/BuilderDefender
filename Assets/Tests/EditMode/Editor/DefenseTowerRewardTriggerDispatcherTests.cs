@@ -52,7 +52,7 @@ public class DefenseTowerRewardTriggerDispatcherTests
         SetField(definition, "applier", applier);
         RewardEffectApplyContext applyContext = new(null, defenseTowerActiveRewards, null, null, null, dispatcher);
 
-        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerActiveRewards, applyContext);
+        RewardEffectApplicationService.ApplyEffects(new[] { config }, applyContext);
 
         Assert.AreEqual(0, dispatcher.Count);
         Assert.Less(defenseTowerActiveRewards.AttackIntervalMultiplier, 1f);

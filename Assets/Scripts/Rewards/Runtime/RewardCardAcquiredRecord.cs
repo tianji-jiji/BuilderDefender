@@ -1,7 +1,7 @@
 /// <summary>
 /// 某一张奖励卡的获得记录
 /// </summary>
-public class RewardCardAcquisitionRecord
+public class RewardCardAcquiredRecord
 {
     public string CardId { get; }
     public string CardName { get; }
@@ -11,7 +11,7 @@ public class RewardCardAcquisitionRecord
     public int AcquiredWaveIndex { get; }
     public int StackCount { get; private set; }
 
-    public RewardCardAcquisitionRecord(string cardId, string cardName, RewardCardRarity rarity, RewardCardCategory category, string descriptionText, int acquiredWaveIndex)
+    public RewardCardAcquiredRecord(string cardId, string cardName, RewardCardRarity rarity, RewardCardCategory category, string descriptionText, int acquiredWaveIndex)
     {
         CardId = cardId;
         CardName = cardName;

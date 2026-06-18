@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
   displayName: "\u9632\u7EBF\u8054\u52A8"
   useCustomDescription: 0
-  descriptionTemplate: "{LinkRadius} \u8303\u56F4\u5185\u6709\u9632\u5FA1\u5854\u65F6\uFF0C\u653B\u51FB\u901F\u5EA6
-    {AttackSpeedMultiplier}"
+  descriptionTemplate: "\u4E24\u5EA7\u9632\u5FA1\u5854\u8DDD\u79BB\u8F83\u8FD1\u65F6
+    \uFF0C\u653B\u51FB\u901F\u5EA6 {AttackSpeedMultiplier}"
   autoImpactRule: 0
   applier: {fileID: 11400000, guid: d6c101f18d9b1d444aec1b42caab97f5, type: 2}
   parameterDisplayDefinitionList:

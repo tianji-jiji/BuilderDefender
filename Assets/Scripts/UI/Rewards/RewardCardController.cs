@@ -124,8 +124,8 @@ public class RewardCardController : MonoBehaviour
         }
 
         ClearOptions();
-        RewardCardDrawContext drawContext = RewardCardAcquisitionHistory.Instance
-            ? RewardCardAcquisitionHistory.Instance.BuildRewardCardOfferContext()
+        RewardCardDrawContext drawContext = RewardCardAcquiredHistory.Instance
+            ? RewardCardAcquiredHistory.Instance.BuildRewardCardOfferContext()
             : RewardCardDrawContext.Default(_waveManager ? _waveManager.waveIndex : 0);
         List<RewardCardSo> rewardCardList = rewardCardDrawPool.DrawCards(drawContext);
         if (rewardCardList.Count <= 0)

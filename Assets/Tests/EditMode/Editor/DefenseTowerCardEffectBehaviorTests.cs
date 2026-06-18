@@ -99,7 +99,7 @@ public class DefenseTowerCardEffectBehaviorTests
         SetField(definition, "applier", applier);
         RewardEffectApplyContext applyContext = new(null, defenseTowerActiveRewards, null, null, null, dispatcher);
 
-        DefenseTowerRewardEffectApplier.ApplyEffects(new[] { config }, defenseTowerActiveRewards, applyContext);
+        RewardEffectApplicationService.ApplyEffects(new[] { config }, applyContext);
         return dispatcher;
     }
 

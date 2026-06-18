@@ -36,26 +36,26 @@ public class RewardGainToast : MonoBehaviour
     // 订阅奖励生效事件。
     private void OnEnable()
     {
-        RewardCardAcquisitionHistory.OnRewardCardApplied += HandleRewardCardApplied;
+        RewardCardAcquiredHistory.OnRewardCardApplied += HandleRewardCardApplied;
     }
 
     // 取消订阅奖励生效事件。
     private void OnDisable()
     {
-        RewardCardAcquisitionHistory.OnRewardCardApplied -= HandleRewardCardApplied;
+        RewardCardAcquiredHistory.OnRewardCardApplied -= HandleRewardCardApplied;
         StopHideCoroutine();
     }
 
     // 处理奖励生效事件并刷新提示内容。
     private void HandleRewardCardApplied(RewardCardAcquiredContext context)
     {
-        if (context == null || context.AcquisitionRecord == null)
+        if (context == null || context.AcquiredRecord == null)
         {
             return;
         }
 
-        RefreshText(context.AcquisitionRecord);
-        RefreshRarityColor(context.AcquisitionRecord.Rarity);
+        RefreshText(context.AcquiredRecord);
+        RefreshRarityColor(context.AcquiredRecord.Rarity);
         PlayFeedback();
         RestartAutoHide();
     }
@@ -80,18 +80,18 @@ public class RewardGainToast : MonoBehaviour
     }
 
     // 刷新本次获得奖励的文本。
-    private void RefreshText(RewardCardAcquisitionRecord acquisitionRecord)
+    private void RefreshText(RewardCardAcquiredRecord acquiredRecord)
     {
         if (cardNameText)
         {
             cardNameText.richText = true;
-            cardNameText.text = $"{CARD_NAME_PREFIX}{acquisitionRecord.CardName}";
+            cardNameText.text = $"{CARD_NAME_PREFIX}{acquiredRecord.CardName}";
         }
 
         if (descriptionText)
         {
             descriptionText.richText = true;
-            descriptionText.text = acquisitionRecord.DescriptionText;
+            descriptionText.text = acquiredRecord.DescriptionText;
         }
     }
 

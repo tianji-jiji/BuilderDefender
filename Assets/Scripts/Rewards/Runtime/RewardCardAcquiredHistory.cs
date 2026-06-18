@@ -5,15 +5,15 @@ using UnityEngine;
 /// <summary>
 /// 本局玩家获得过哪些奖励卡的历史管理器
 /// </summary>
-public class RewardCardAcquisitionHistory : MonoBehaviour
+public class RewardCardAcquiredHistory : MonoBehaviour
 {
-    public static RewardCardAcquisitionHistory Instance { get; private set; }
+    public static RewardCardAcquiredHistory Instance { get; private set; }
 
     // 当玩家选择的奖励卡牌已经被记录并生效时触发。
     public static event Action<RewardCardAcquiredContext> OnRewardCardApplied;
 
-    private readonly List<RewardCardAcquisitionRecord> _rewardCardRecordList = new();
-    private readonly Dictionary<string, RewardCardAcquisitionRecord> _recordByCardIdDic = new();
+    private readonly List<RewardCardAcquiredRecord> _rewardCardRecordList = new();
+    private readonly Dictionary<string, RewardCardAcquiredRecord> _recordByCardIdDic = new();
 
     private void Awake()
     {
@@ -42,14 +42,14 @@ public class RewardCardAcquisitionHistory : MonoBehaviour
             return null;
         }
 
-        RewardCardAcquisitionRecord acquisitionRecord = GetOrCreateRecord(rewardCard);
-        RewardCardAcquiredContext context = new(rewardCard, acquisitionRecord, GetRecordList(), GetTotalCardCount());
+        RewardCardAcquiredRecord acquiredRecord = GetOrCreateRecord(rewardCard);
+        RewardCardAcquiredContext context = new(rewardCard, acquiredRecord, GetRecordList(), GetTotalCardCount());
         OnRewardCardApplied?.Invoke(context);
         return context;
     }
 
     // 获取当前全部奖励卡牌选择记录。
-    public IReadOnlyList<RewardCardAcquisitionRecord> GetRecordList()
+    public IReadOnlyList<RewardCardAcquiredRecord> GetRecordList()
     {
         return _rewardCardRecordList.AsReadOnly();
     }
@@ -68,16 +68,16 @@ public class RewardCardAcquisitionHistory : MonoBehaviour
     }
 
     // 获取或创建指定卡牌对应的选择记录。
-    private RewardCardAcquisitionRecord GetOrCreateRecord(RewardCardSo rewardCard)
+    private RewardCardAcquiredRecord GetOrCreateRecord(RewardCardSo rewardCard)
     {
         string cardId = GetStableCardId(rewardCard);
-        if (_recordByCardIdDic.TryGetValue(cardId, out RewardCardAcquisitionRecord existingRecord))
+        if (_recordByCardIdDic.TryGetValue(cardId, out RewardCardAcquiredRecord existingRecord))
         {
             existingRecord.AddStack();
             return existingRecord;
         }
 
-        RewardCardAcquisitionRecord newRecord = new(
+        RewardCardAcquiredRecord newRecord = new(
             cardId,
             rewardCard.CardName,
             rewardCard.Rarity,
@@ -111,7 +111,7 @@ public class RewardCardAcquisitionHistory : MonoBehaviour
     private Dictionary<string, int> BuildSelectedCardCountDic()
     {
         Dictionary<string, int> selectedCardCountDic = new Dictionary<string, int>();
-        foreach (RewardCardAcquisitionRecord rewardCardRecord in _rewardCardRecordList)
+        foreach (RewardCardAcquiredRecord rewardCardRecord in _rewardCardRecordList)
         {
             if (rewardCardRecord == null || string.IsNullOrWhiteSpace(rewardCardRecord.CardId))
             {
@@ -128,7 +128,7 @@ public class RewardCardAcquisitionHistory : MonoBehaviour
     private int GetTotalCardCount()
     {
         int totalCardCount = 0;
-        foreach (RewardCardAcquisitionRecord rewardCardRecord in _rewardCardRecordList)
+        foreach (RewardCardAcquiredRecord rewardCardRecord in _rewardCardRecordList)
         {
             totalCardCount += rewardCardRecord.StackCount;
         }

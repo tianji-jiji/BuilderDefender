@@ -1,18 +1,18 @@
 /// <summary>
-/// 防御塔奖励运行时模块，集中持有防御塔生效奖励和触发器。
+/// 防御塔奖励运行时，集中持有防御塔生效奖励和触发器。
 /// </summary>
-public class DefenseTowerRewardModule
+public class DefenseTowerRewardRuntime
 {
     public DefenseTowerActiveRewards ActiveRewards { get; }
     public DefenseTowerRewardTriggerDispatcher TriggerDispatcher { get; }
 
-    // 创建默认防御塔奖励运行时模块。
-    public DefenseTowerRewardModule() : this(new DefenseTowerActiveRewards(), new DefenseTowerRewardTriggerDispatcher())
+    // 创建默认防御塔奖励运行时。
+    public DefenseTowerRewardRuntime() : this(new DefenseTowerActiveRewards(), new DefenseTowerRewardTriggerDispatcher())
     {
     }
 
-    // 创建使用指定账本和触发器的防御塔奖励运行时模块。
-    public DefenseTowerRewardModule(DefenseTowerActiveRewards activeRewards, DefenseTowerRewardTriggerDispatcher triggerDispatcher)
+    // 创建使用指定账本和触发器的防御塔奖励运行时。
+    public DefenseTowerRewardRuntime(DefenseTowerActiveRewards activeRewards, DefenseTowerRewardTriggerDispatcher triggerDispatcher)
     {
         ActiveRewards = activeRewards ?? new DefenseTowerActiveRewards();
         TriggerDispatcher = triggerDispatcher ?? new DefenseTowerRewardTriggerDispatcher();
