@@ -3,12 +3,10 @@ using UnityEngine;
 /// <summary>
 /// 防御塔攻击扣血奖励应用器，负责记录并执行攻击若干次后损失生命的规则。
 /// </summary>
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Attack Health Cost Handler")]
-public class DefenseTowerAttackHealthCostApplierSo : DefenseTowerRewardApplierSo
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Attack Health Cost Applier")]
+public class DefenseTowerAttackHealthCostApplierSo : DefenseTowerRuntimeRewardApplierSo
 {
     private const string ATTACK_COUNTER_ID = "AttackHealthCost";
-
-    public override bool ShouldRegisterRuntimeEffect => true;
 
     // 应用攻击扣血规则。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)

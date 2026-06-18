@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 防御塔双倍伤害奖励应用器，负责记录箭矢触发双倍伤害的概率。
 /// </summary>
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Double Damage Chance Handler")]
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Double Damage Chance Applier")]
 public class DefenseTowerDoubleDamageChanceApplierSo : DefenseTowerRewardApplierSo
 {
     // 应用双倍伤害概率。

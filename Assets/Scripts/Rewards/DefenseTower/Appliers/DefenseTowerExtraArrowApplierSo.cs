@@ -3,12 +3,10 @@ using UnityEngine;
 /// <summary>
 /// 防御塔额外箭奖励应用器，负责记录并执行攻击若干次后额外射箭的规则。
 /// </summary>
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Extra Arrow Handler")]
-public class DefenseTowerExtraArrowApplierSo : DefenseTowerRewardApplierSo
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Extra Arrow Applier")]
+public class DefenseTowerExtraArrowApplierSo : DefenseTowerRuntimeRewardApplierSo
 {
     private const string ATTACK_COUNTER_ID = "ExtraArrowAttack";
-
-    public override bool ShouldRegisterRuntimeEffect => true;
 
     // 应用额外攻击规则。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)

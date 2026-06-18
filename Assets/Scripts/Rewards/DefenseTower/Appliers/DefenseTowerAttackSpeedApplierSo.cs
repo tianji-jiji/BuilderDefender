@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 防御塔攻速奖励应用器，负责把攻击速度加成写入防御塔奖励状态。
 /// </summary>
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Attack Speed Handler")]
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Attack Speed Applier")]
 public class DefenseTowerAttackSpeedApplierSo : DefenseTowerRewardApplierSo
 {
     // 应用攻击速度加成。

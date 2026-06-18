@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 防线联动攻速奖励应用器，负责让附近有其他防御塔时获得攻速加成。
 /// </summary>
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Linked Attack Speed Handler")]
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Linked Attack Speed Applier")]
 public class DefenseTowerLinkedAttackSpeedApplierSo : DefenseTowerRewardApplierSo
 {
     // 应用联动攻速规则。

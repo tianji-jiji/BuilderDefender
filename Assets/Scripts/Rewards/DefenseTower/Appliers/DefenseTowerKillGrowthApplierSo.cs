@@ -3,12 +3,10 @@ using UnityEngine;
 /// <summary>
 /// 防御塔击杀成长奖励应用器，负责按击杀次数自动提升防御塔星级。
 /// </summary>
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Tower Kill Growth Handler")]
-public class DefenseTowerKillGrowthApplierSo : DefenseTowerRewardApplierSo
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Tower Kill Growth Applier")]
+public class DefenseTowerKillGrowthApplierSo : DefenseTowerRuntimeRewardApplierSo
 {
     private const string KILL_COUNTER_ID = "KillAutoUpgrade";
-
-    public override bool ShouldRegisterRuntimeEffect => true;
 
     // 应用防御塔击杀成长配置。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)

@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 防御塔索敌范围奖励应用器，负责提高防御塔探测和攻击范围。
 /// </summary>
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Detect Radius Handler")]
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Detect Radius Applier")]
 public class DefenseTowerDetectRadiusApplierSo : DefenseTowerRewardApplierSo
 {
     // 应用攻击范围加成。

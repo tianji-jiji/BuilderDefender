@@ -3,11 +3,9 @@ using UnityEngine;
 /// <summary>
 /// 防御塔波末回血奖励应用器，负责在波次结束时治疗所有防御塔。
 /// </summary>
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Wave End Heal Handler")]
-public class DefenseTowerWaveEndHealApplierSo : DefenseTowerRewardApplierSo
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Wave End Heal Applier")]
+public class DefenseTowerWaveEndHealApplierSo : DefenseTowerRuntimeRewardApplierSo
 {
-    public override bool ShouldRegisterRuntimeEffect => true;
-
     // 应用波末回血比例。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
     {

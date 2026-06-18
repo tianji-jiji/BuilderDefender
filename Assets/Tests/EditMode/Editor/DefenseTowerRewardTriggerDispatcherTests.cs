@@ -58,6 +58,15 @@ public class DefenseTowerRewardTriggerDispatcherTests
         Assert.Less(defenseTowerActiveRewards.AttackIntervalMultiplier, 1f);
     }
 
+    // 验证纯数值 Applier 不暴露运行时触发接口。
+    [Test]
+    public void PureStatApplier_DoesNotExposeRuntimeTriggerInterface()
+    {
+        DefenseTowerAttackSpeedApplierSo applier = CreateEffect<DefenseTowerAttackSpeedApplierSo>();
+
+        Assert.IsFalse(applier is IDefenseTowerRewardTrigger);
+    }
+
     // 验证同一效果多次获得时会按多条实例堆叠执行。
     [Test]
     public void RuntimeEffect_CanRegisterSameEffectMultipleTimes()
@@ -114,12 +123,10 @@ public class DefenseTowerRewardTriggerDispatcherTests
     /// <summary>
     /// 测试用防御塔运行时效果，记录攻击后钩子执行顺序。
     /// </summary>
-    private class OrderedDefenseTowerEffect : DefenseTowerRewardApplierSo
+    private class OrderedDefenseTowerEffect : DefenseTowerRuntimeRewardApplierSo
     {
         private string _label;
         private List<string> _executionOrderList;
-
-        public override bool ShouldRegisterRuntimeEffect => true;
 
         // 初始化测试记录目标。
         public void Init(string label, List<string> executionOrderList)

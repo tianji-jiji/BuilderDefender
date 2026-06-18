@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 三星爆裂箭奖励应用器，负责让三星防御塔箭矢获得爆炸伤害能力。
 /// </summary>
-[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Handlers/Defense Tower Three Star Explosive Arrow Handler")]
+[CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Three Star Explosive Arrow Applier")]
 public class DefenseTowerThreeStarExplosiveArrowApplierSo : DefenseTowerRewardApplierSo
 {
     // 应用三星爆裂箭配置。
