@@ -138,13 +138,21 @@ public class RewardCardOption : MonoBehaviour, IPointerEnterHandler, IPointerExi
     // 等待选择反馈完成。
     private IEnumerator WaitForSelectFeedbackComplete(Action onComplete)
     {
-        while (selectFeedback && selectFeedback.IsPlaying)
+        yield return null;
+
+        while (IsSelectFeedbackPlaying())
         {
             yield return null;
         }
 
         _selectFeedbackCoroutine = null;
         onComplete?.Invoke();
+    }
+
+    // 判断选中反馈播放器或内部任意反馈是否仍在播放。
+    private bool IsSelectFeedbackPlaying()
+    {
+        return selectFeedback && (selectFeedback.IsPlaying || selectFeedback.HasFeedbackStillPlaying());
     }
 
     // 停止选择反馈等待协程。
