@@ -695,6 +695,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1981944552563201732, guid: c6ddbd727ea761f4bb3140d1f9019805, type: 3}
+      propertyPath: managedReferences[5171955794962022478].AnimateScaleTarget
+      value: 
+      objectReference: {fileID: 8158900596932797176}
     - target: {fileID: 2124716354034765845, guid: c6ddbd727ea761f4bb3140d1f9019805, type: 3}
       propertyPath: m_Name
       value: Epic_RandomTowerMaxStar
@@ -779,6 +783,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5073192483196901074, guid: c6ddbd727ea761f4bb3140d1f9019805, type: 3}
+      propertyPath: managedReferences[5171955782452249064].AnimateScaleTarget
+      value: 
+      objectReference: {fileID: 8158900596932797176}
     - target: {fileID: 8625149637442101261, guid: c6ddbd727ea761f4bb3140d1f9019805, type: 3}
       propertyPath: cardNameText
       value: 

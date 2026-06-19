@@ -131,19 +131,19 @@ MonoBehaviour:
         m_Calls: []
   DebugActive: 0
   FeedbacksList:
-  - rid: 5171955782452249063
+  - rid: 5171955794962022478
   KeepPlayModeChanges: 0
   PerformanceMode: 0
   StopFeedbacksOnDisable: 0
-  PlayCount: 8
+  PlayCount: 45
   references:
     version: 2
     RefIds:
-    - rid: 5171955782452249063
+    - rid: 5171955794962022478
       type: {class: MMF_Scale, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
-        Active: 0
-        UniqueID: 71242760
+        Active: 1
+        UniqueID: 1970421720
         Label: Scale
         ChannelMode: 0
         Channel: 0
@@ -160,7 +160,7 @@ MonoBehaviour:
           NumberOfRepeats: 0
           RepeatForever: 0
           DelayBetweenRepeats: 1
-          PlayCount: 8
+          PlayCount: 10
           LimitPlayCount: 0
           MaxPlayCount: 3
           SetPlayCountToZeroOnReset: 0
@@ -213,15 +213,15 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 2938704953920172072}
         DebugActive: 0
-        Mode: 2
-        AnimateScaleTarget: {fileID: 3899811367039833858}
-        AnimateScaleDuration: 0.12
+        Mode: 0
+        AnimateScaleTarget: {fileID: 4286167365898456538}
+        AnimateScaleDuration: 0.2
         RemapCurveZero: 1
-        RemapCurveOne: 2
+        RemapCurveOne: 1.02
         Offset: 0
         AnimateX: 1
         AnimateScaleTweenX:
-          MMTweenDefinitionType: 1
+          MMTweenDefinitionType: 0
           MMTweenCurve: 4
           Curve:
             serializedVersion: 2
@@ -236,17 +236,8 @@ MonoBehaviour:
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
-              time: 0.3
-              value: 1.5
-              inSlope: 0
-              outSlope: 0
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            - serializedVersion: 3
               time: 1
-              value: 0
+              value: 1
               inSlope: 0
               outSlope: 0
               tangentMode: 0
@@ -259,7 +250,7 @@ MonoBehaviour:
           Initialized: 0
         AnimateY: 1
         AnimateScaleTweenY:
-          MMTweenDefinitionType: 1
+          MMTweenDefinitionType: 0
           MMTweenCurve: 4
           Curve:
             serializedVersion: 2
@@ -274,17 +265,8 @@ MonoBehaviour:
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
-              time: 0.3
-              value: 1.5
-              inSlope: 0
-              outSlope: 0
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            - serializedVersion: 3
               time: 1
-              value: 0
+              value: 1
               inSlope: 0
               outSlope: 0
               tangentMode: 0
@@ -333,10 +315,10 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
           Initialized: 0
-        UniformScaling: 0
+        UniformScaling: 1
         AllowAdditivePlays: 0
-        DetermineScaleOnPlay: 1
-        DestinationScale: {x: 1.06, y: 1.06, z: 1}
+        DetermineScaleOnPlay: 0
+        DestinationScale: {x: 0.5, y: 0.5, z: 0.5}
         AnimateScaleX:
           serializedVersion: 2
           m_Curve: []
@@ -381,7 +363,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0592668, y: 1.0592668, z: 1.0592668}
+  m_LocalScale: {x: 1.0084608, y: 1.0084608, z: 1.0084608}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5937719737721294029}
@@ -635,7 +617,7 @@ RectTransform:
   m_GameObject: {fileID: 2124716354034765845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.84, y: 0.84, z: 1}
+  m_LocalScale: {x: 1.01, y: 1.01, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4286167365898456538}
@@ -917,14 +899,14 @@ MonoBehaviour:
   KeepPlayModeChanges: 0
   PerformanceMode: 0
   StopFeedbacksOnDisable: 0
-  PlayCount: 2
+  PlayCount: 10
   references:
     version: 2
     RefIds:
     - rid: 5171955782452249064
       type: {class: MMF_Scale, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
-        Active: 0
+        Active: 1
         UniqueID: 1931122100
         Label: Scale
         ChannelMode: 0
@@ -942,7 +924,7 @@ MonoBehaviour:
           NumberOfRepeats: 0
           RepeatForever: 0
           DelayBetweenRepeats: 1
-          PlayCount: 2
+          PlayCount: 8
           LimitPlayCount: 0
           MaxPlayCount: 3
           SetPlayCountToZeroOnReset: 0
@@ -995,15 +977,15 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 3901092678129825354}
         DebugActive: 0
-        Mode: 2
-        AnimateScaleTarget: {fileID: 3899811367039833858}
-        AnimateScaleDuration: 0.1
-        RemapCurveZero: 1
-        RemapCurveOne: 2
+        Mode: 0
+        AnimateScaleTarget: {fileID: 4286167365898456538}
+        AnimateScaleDuration: 0.2
+        RemapCurveZero: 1.02
+        RemapCurveOne: 1
         Offset: 0
         AnimateX: 1
         AnimateScaleTweenX:
-          MMTweenDefinitionType: 1
+          MMTweenDefinitionType: 0
           MMTweenCurve: 4
           Curve:
             serializedVersion: 2
@@ -1041,7 +1023,7 @@ MonoBehaviour:
           Initialized: 0
         AnimateY: 1
         AnimateScaleTweenY:
-          MMTweenDefinitionType: 1
+          MMTweenDefinitionType: 0
           MMTweenCurve: 4
           Curve:
             serializedVersion: 2
@@ -1115,9 +1097,9 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
           Initialized: 0
-        UniformScaling: 0
+        UniformScaling: 1
         AllowAdditivePlays: 0
-        DetermineScaleOnPlay: 1
+        DetermineScaleOnPlay: 0
         DestinationScale: {x: 1, y: 1, z: 1}
         AnimateScaleX:
           serializedVersion: 2
