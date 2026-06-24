@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: Epic_PiercingArrow
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: RewardCard_c0400000000000000000000000000004
-  cardName: 破阵箭
+  cardName: "\u7A7F\u7532\u7BAD\u5934"
   cardPrefab: {fileID: 238558288862614153, guid: 17f4c7fb7895b0a4bb64ebfbd53101df, type: 3}
   weight: 1
   rarity: 2
   category: 0
   minWaveIndex: 0
   maxPickCount: 0
-  isUnique: 0
+  isUnique: 1
   effectConfigList:
   - effectDefinition: {fileID: 11400000, guid: b0400000000000000000000000000004, type: 2}
     parameterConfigList:
     - parameterId: TriggerChance
-      value: 0.2
+      value: 1
       displayImpactOverride: 0
     - parameterId: PierceCount
       value: 2

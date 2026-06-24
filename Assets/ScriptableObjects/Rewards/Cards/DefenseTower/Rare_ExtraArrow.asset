@@ -20,7 +20,7 @@ MonoBehaviour:
   category: 0
   minWaveIndex: 0
   maxPickCount: 0
-  isUnique: 0
+  isUnique: 1
   effectConfigList:
   - effectDefinition: {fileID: 11400000, guid: 7fbd39c6571d41c08f6cb1b2dcb0a1f2, type: 2}
     parameterConfigList:

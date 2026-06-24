@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e953d8cdf4bd5b446b3ed9d5d2c7dfc6
+guid: 9b99405b9231bca4d938432227339002
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6651745660385181533
-    second: CardTag_RiskReward_0
+      213: -5979239864328732896
+    second: "ChatGPT Image 2026\u5E746\u670824\u65E5 19_09_18 (1)_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,7 +52,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 148, y: 55, z: 276, w: 57}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -126,23 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CardTag_RiskReward_0
+      name: "ChatGPT Image 2026\u5E746\u670824\u65E5 19_09_18 (1)_0"
       rect:
         serializedVersion: 2
-        x: 6
-        y: 0
-        width: 506
-        height: 144
+        x: 37
+        y: 92
+        width: 1192
+        height: 1123
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d5f31878f6fbf4c50800000000000000
-      internalID: 6651745660385181533
+      spriteID: 02fb4d3d509750da0800000000000000
+      internalID: -5979239864328732896
       vertices: []
       indices: 
       edges: []
@@ -152,7 +152,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      CardTag_RiskReward_0: 6651745660385181533
+      "ChatGPT Image 2026\u5E746\u670824\u65E5 19_09_18 (1)_0": -5979239864328732896
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

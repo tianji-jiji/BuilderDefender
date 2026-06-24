@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Rare_PoisonArrow
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: RewardCard_c0100000000000000000000000000001
-  cardName: 淬毒箭头
+  cardName: "\u6DEC\u6BD2\u7BAD\u5934"
   cardPrefab: {fileID: 1471311803384588315, guid: 7d02feb8006761348bc6554da2cfdebc, type: 3}
   weight: 1
   rarity: 1
   category: 0
   minWaveIndex: 0
   maxPickCount: 0
-  isUnique: 0
+  isUnique: 1
   effectConfigList:
   - effectDefinition: {fileID: 11400000, guid: b0100000000000000000000000000001, type: 2}
     parameterConfigList:
