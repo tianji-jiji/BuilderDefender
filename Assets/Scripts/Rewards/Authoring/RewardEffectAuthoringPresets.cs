@@ -44,7 +44,7 @@ public static class RewardEffectAuthoringPresets
         { RewardEffectParameterIds.TRIGGER_CHANCE, "触发概率" },
         { RewardEffectParameterIds.STATUS_DURATION, "状态持续时间" },
         { RewardEffectParameterIds.TICK_INTERVAL, "跳伤间隔" },
-        { RewardEffectParameterIds.TICK_DAMAGE, "跳伤伤害" },
+        { RewardEffectParameterIds.TICK_DAMAGE, "跳伤百分比" },
         { RewardEffectParameterIds.EXPLOSION_DAMAGE, "爆炸伤害" },
         { RewardEffectParameterIds.PIERCE_COUNT, "穿透数量" }
     };
@@ -74,12 +74,12 @@ public static class RewardEffectAuthoringPresets
             case RewardEffectParameterIds.HOME_HEALTH_THRESHOLD:
             case RewardEffectParameterIds.EXPLOSION_DAMAGE_MULTIPLIER:
             case RewardEffectParameterIds.TRIGGER_CHANCE:
+            case RewardEffectParameterIds.TICK_DAMAGE:
                 return RewardEffectValueFormat.PercentWithoutSign;
             case RewardEffectParameterIds.TRIGGER_ATTACK_COUNT:
             case RewardEffectParameterIds.EXTRA_ATTACK_COUNT:
             case RewardEffectParameterIds.KILL_COUNT_TO_UPGRADE:
             case RewardEffectParameterIds.ATTACK_HEALTH_COST:
-            case RewardEffectParameterIds.TICK_DAMAGE:
             case RewardEffectParameterIds.EXPLOSION_DAMAGE:
             case RewardEffectParameterIds.PIERCE_COUNT:
                 return RewardEffectValueFormat.IntegerWithoutSign;
@@ -119,6 +119,7 @@ public static class RewardEffectAuthoringPresets
             case RewardEffectParameterIds.DOUBLE_DAMAGE_CHANCE:
             case RewardEffectParameterIds.HOME_HEALTH_THRESHOLD:
             case RewardEffectParameterIds.TRIGGER_CHANCE:
+            case RewardEffectParameterIds.TICK_DAMAGE:
                 return true;
             default:
                 return false;
@@ -134,7 +135,6 @@ public static class RewardEffectAuthoringPresets
             case RewardEffectParameterIds.EXTRA_ATTACK_COUNT:
             case RewardEffectParameterIds.KILL_COUNT_TO_UPGRADE:
             case RewardEffectParameterIds.ATTACK_HEALTH_COST:
-            case RewardEffectParameterIds.TICK_DAMAGE:
             case RewardEffectParameterIds.EXPLOSION_DAMAGE:
             case RewardEffectParameterIds.PIERCE_COUNT:
                 return true;
@@ -158,6 +158,7 @@ public static class RewardEffectAuthoringPresets
             case RewardEffectParameterIds.EXPLOSION_RADIUS:
             case RewardEffectParameterIds.STATUS_DURATION:
             case RewardEffectParameterIds.TICK_INTERVAL:
+            case RewardEffectParameterIds.TICK_DAMAGE:
                 return true;
             default:
                 return false;

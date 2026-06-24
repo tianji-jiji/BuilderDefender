@@ -78,6 +78,18 @@ public class HealthSystem : MonoBehaviour
         return actualHealthLoss;
     }
 
+    // 按最大生命值百分比扣除生命值，并返回实际扣除值。
+    public int LoseMaxHealthPercent(float damagePercent)
+    {
+        if (damagePercent <= 0f)
+        {
+            return 0;
+        }
+
+        int damage = Mathf.Max(1, Mathf.RoundToInt(maxHealth * damagePercent));
+        return LoseHealth(damage);
+    }
+
     // 按最大生命值百分比治疗。
     public void HealByMaxHealthPercent(float healPercent)
     {

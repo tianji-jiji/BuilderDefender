@@ -87,6 +87,24 @@ public class CombatStatusEffectTests
         UnityEngine.Object.DestroyImmediate(enemy.gameObject);
     }
 
+    // 状态跳伤按敌人最大生命值百分比扣血。
+    [Test]
+    public void TickStatuses_DealsPercentOfMaxHealth()
+    {
+        Component enemy = CreateEnemy("Enemy", 250);
+        Component controller = enemy.GetComponent(GetRequiredType("EnemyStatusEffectController"));
+        Type effectType = GetRequiredType("EnemyStatusEffectType");
+        Type floatingTextStyleType = GetRequiredType("DamageFloatingTextStyle");
+        object burnSpec = CreateStatusSpec(Enum.Parse(effectType, "Burn"), 5f, 1f, 0.04f, Enum.Parse(floatingTextStyleType, "Burn"));
+
+        controller.GetType().GetMethod("ApplyStatus")!.Invoke(controller, new[] { burnSpec });
+        TickStatuses(controller, 1f);
+
+        Assert.AreEqual(240, GetEnemyCurrentHealth(enemy));
+
+        UnityEngine.Object.DestroyImmediate(enemy.gameObject);
+    }
+
     // 重复刷新同类状态时保留下一次跳伤计时，避免连续命中导致跳伤被一直延后。
     [Test]
     public void ApplyStatus_WhenRefreshingExistingStatus_PreservesNextTickTimer()
@@ -95,15 +113,15 @@ public class CombatStatusEffectTests
         Component controller = enemy.GetComponent(GetRequiredType("EnemyStatusEffectController"));
         Type effectType = GetRequiredType("EnemyStatusEffectType");
         Type floatingTextStyleType = GetRequiredType("DamageFloatingTextStyle");
-        object firstSpec = CreateStatusSpec(Enum.Parse(effectType, "Burn"), 5f, 1f, 4, Enum.Parse(floatingTextStyleType, "Burn"));
-        object secondSpec = CreateStatusSpec(Enum.Parse(effectType, "Burn"), 5f, 1f, 4, Enum.Parse(floatingTextStyleType, "Burn"));
+        object firstSpec = CreateStatusSpec(Enum.Parse(effectType, "Burn"), 5f, 1f, 0.04f, Enum.Parse(floatingTextStyleType, "Burn"));
+        object secondSpec = CreateStatusSpec(Enum.Parse(effectType, "Burn"), 5f, 1f, 0.04f, Enum.Parse(floatingTextStyleType, "Burn"));
 
         controller.GetType().GetMethod("ApplyStatus")!.Invoke(controller, new[] { firstSpec });
         TickStatuses(controller, 0.5f);
         controller.GetType().GetMethod("ApplyStatus")!.Invoke(controller, new[] { secondSpec });
         TickStatuses(controller, 0.5f);
 
-        Assert.AreEqual(16, GetEnemyCurrentHealth(enemy));
+        Assert.AreEqual(19, GetEnemyCurrentHealth(enemy));
 
         UnityEngine.Object.DestroyImmediate(enemy.gameObject);
     }
@@ -116,7 +134,7 @@ public class CombatStatusEffectTests
         Component controller = enemy.GetComponent(GetRequiredType("EnemyStatusEffectController"));
         Type effectType = GetRequiredType("EnemyStatusEffectType");
         Type floatingTextStyleType = GetRequiredType("DamageFloatingTextStyle");
-        object burnSpec = CreateStatusSpec(Enum.Parse(effectType, "Burn"), 0.5f, 1f, 4, Enum.Parse(floatingTextStyleType, "Burn"));
+        object burnSpec = CreateStatusSpec(Enum.Parse(effectType, "Burn"), 0.5f, 1f, 0.04f, Enum.Parse(floatingTextStyleType, "Burn"));
 
         controller.GetType().GetMethod("ApplyStatus")!.Invoke(controller, new[] { burnSpec });
         TickStatuses(controller, 1f);
@@ -127,10 +145,10 @@ public class CombatStatusEffectTests
     }
 
     // 创建状态配置实例。
-    private static object CreateStatusSpec(object effectType, float duration, float tickInterval, int tickDamage, object floatingTextStyle)
+    private static object CreateStatusSpec(object effectType, float duration, float tickInterval, float tickDamagePercent, object floatingTextStyle)
     {
         Type specType = GetRequiredType("EnemyStatusEffectSpec");
-        return Activator.CreateInstance(specType, effectType, duration, tickInterval, tickDamage, null, floatingTextStyle);
+        return Activator.CreateInstance(specType, effectType, duration, tickInterval, tickDamagePercent, null, floatingTextStyle);
     }
 
     // 从生产程序集取得指定类型。

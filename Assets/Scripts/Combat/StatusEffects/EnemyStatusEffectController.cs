@@ -41,7 +41,7 @@ public class EnemyStatusEffectController : MonoBehaviour
     // 应用一个持续状态；同类状态已存在时刷新持续时间和参数。
     public void ApplyStatus(EnemyStatusEffectSpec spec)
     {
-        if (spec.Duration <= 0f || spec.TickDamage <= 0)
+        if (spec.Duration <= 0f || spec.TickDamagePercent <= 0f)
         {
             return;
         }
@@ -250,9 +250,9 @@ public class EnemyStatusEffectController : MonoBehaviour
             }
 
             _tickTimer += _spec.TickInterval;
-            ArrowHitDamageApplier.ApplyRawDamage(
+            ArrowHitDamageApplier.ApplyMaxHealthPercentDamage(
                 enemy,
-                _spec.TickDamage,
+                _spec.TickDamagePercent,
                 _spec.FloatingTextStyle,
                 _spec.SourceDefenseTowerCombatSystem);
         }

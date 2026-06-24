@@ -34,5 +34,5 @@ MonoBehaviour:
       value: 1
       displayImpactOverride: 0
     - parameterId: TickDamage
-      value: 4
+      value: 0.04
       displayImpactOverride: 0

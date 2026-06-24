@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
   displayName: 防御塔中毒箭
   useCustomDescription: 0
-  descriptionTemplate: "每支箭有 {TriggerChance} 概率使敌人中毒，持续 {StatusDuration} 秒，每 {TickInterval} 秒造成 {TickDamage} 伤害"
+  descriptionTemplate: "每支箭有 {TriggerChance} 概率使敌人中毒，持续 {StatusDuration} 秒，每 {TickInterval} 秒造成最大生命值 {TickDamage} 的伤害"
   autoImpactRule: 2
   applier: {fileID: 11400000, guid: a0100000000000000000000000000001, type: 2}
   parameterDisplayDefinitionList:
@@ -34,7 +34,7 @@ MonoBehaviour:
     valueFormat: 4
     autoImpactRule: 4
   - parameterId: TickDamage
-    displayName: 跳伤伤害
+    displayName: 跳伤百分比
     templateToken: 
-    valueFormat: 3
+    valueFormat: 1
     autoImpactRule: 0

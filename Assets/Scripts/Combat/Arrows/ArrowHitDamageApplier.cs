@@ -8,14 +8,14 @@ public static class ArrowHitDamageApplier
     // 对指定敌人应用箭矢伤害，并返回实际扣除的生命值。
     public static int ApplyDamage(Enemy enemy, int rawDamage, float armorIgnorePercent, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
     {
-        if (!IsEnemyValid(enemy) || !enemy.gameObject.TryGetComponent(out HealthSystem healthSystem))
+        if (!IsEnemyValid(enemy) || !enemy.HealthSystem)
         {
             return 0;
         }
 
         bool wasAlive = enemy.IsAlive;
         int adjustedDamage = ArmorDamageCalculator.CalculateDamage(rawDamage, enemy.Armor, armorIgnorePercent);
-        int actualDamage = healthSystem.TakeDamage(adjustedDamage);
+        int actualDamage = enemy.HealthSystem.TakeDamage(adjustedDamage);
         DamageFloatingTextEvent.ShowDamage(enemy.DamageFloatingTextPosition, actualDamage);
 
         if (actualDamage > 0 && sourceDefenseTowerCombatSystem)
@@ -34,13 +34,33 @@ public static class ArrowHitDamageApplier
     // 对指定敌人应用不经过护甲的固定伤害，并返回实际扣除的生命值。
     public static int ApplyRawDamage(Enemy enemy, int damage, DamageFloatingTextStyle floatingTextStyle, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
     {
-        if (!IsEnemyValid(enemy) || !enemy.gameObject.TryGetComponent(out HealthSystem healthSystem))
+        if (!IsEnemyValid(enemy) || !enemy.HealthSystem)
         {
             return 0;
         }
 
         bool wasAlive = enemy.IsAlive;
-        int actualDamage = healthSystem.LoseHealth(Mathf.Max(0, damage));
+        int actualDamage = enemy.HealthSystem.LoseHealth(Mathf.Max(0, damage));
+        DamageFloatingTextEvent.ShowDamage(enemy.DamageFloatingTextPosition, actualDamage, floatingTextStyle);
+
+        if (wasAlive && !enemy.IsAlive && sourceDefenseTowerCombatSystem)
+        {
+            sourceDefenseTowerCombatSystem.NotifyEnemyKilled(enemy);
+        }
+
+        return actualDamage;
+    }
+
+    // 对指定敌人应用最大生命值百分比伤害，并返回实际扣除的生命值。
+    public static int ApplyMaxHealthPercentDamage(Enemy enemy, float damagePercent, DamageFloatingTextStyle floatingTextStyle, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+    {
+        if (!IsEnemyValid(enemy) || !enemy.HealthSystem)
+        {
+            return 0;
+        }
+
+        bool wasAlive = enemy.IsAlive;
+        int actualDamage = enemy.HealthSystem.LoseMaxHealthPercent(damagePercent);
         DamageFloatingTextEvent.ShowDamage(enemy.DamageFloatingTextPosition, actualDamage, floatingTextStyle);
 
         if (wasAlive && !enemy.IsAlive && sourceDefenseTowerCombatSystem)

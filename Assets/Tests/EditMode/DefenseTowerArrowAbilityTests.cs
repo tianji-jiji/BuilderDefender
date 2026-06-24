@@ -16,8 +16,8 @@ public class DefenseTowerArrowAbilityTests
     {
         Type contextType = GetRequiredType("DefenseTowerArrowContext");
         object context = Activator.CreateInstance(contextType, null, null, 10, 0f, false, 0f, 0f, null, false);
-        object poisonSpec = CreateStatusSpec("Poison", 5f, 1f, 3, "Poison");
-        object burnSpec = CreateStatusSpec("Burn", 4f, 1f, 4, "Burn");
+        object poisonSpec = CreateStatusSpec("Poison", 5f, 1f, 0.03f, "Poison");
+        object burnSpec = CreateStatusSpec("Burn", 4f, 1f, 0.04f, "Burn");
 
         contextType.GetMethod("AddStatusEffect")!.Invoke(context, new[] { poisonSpec });
         contextType.GetMethod("AddStatusEffect")!.Invoke(context, new[] { burnSpec });
@@ -68,7 +68,7 @@ public class DefenseTowerArrowAbilityTests
     }
 
     // 创建状态配置实例。
-    private static object CreateStatusSpec(string effectTypeName, float duration, float tickInterval, int tickDamage, string floatingTextStyleName)
+    private static object CreateStatusSpec(string effectTypeName, float duration, float tickInterval, float tickDamagePercent, string floatingTextStyleName)
     {
         Type effectType = GetRequiredType("EnemyStatusEffectType");
         Type floatingTextStyle = GetRequiredType("DamageFloatingTextStyle");
@@ -78,7 +78,7 @@ public class DefenseTowerArrowAbilityTests
             Enum.Parse(effectType, effectTypeName),
             duration,
             tickInterval,
-            tickDamage,
+            tickDamagePercent,
             null,
             Enum.Parse(floatingTextStyle, floatingTextStyleName));
     }

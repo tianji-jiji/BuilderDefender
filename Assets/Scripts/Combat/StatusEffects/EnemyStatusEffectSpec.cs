@@ -8,7 +8,7 @@ public readonly struct EnemyStatusEffectSpec
     public EnemyStatusEffectType EffectType { get; }
     public float Duration { get; }
     public float TickInterval { get; }
-    public int TickDamage { get; }
+    public float TickDamagePercent { get; }
     public DefenseTowerCombatSystem SourceDefenseTowerCombatSystem { get; }
     public DamageFloatingTextStyle FloatingTextStyle { get; }
 
@@ -16,14 +16,14 @@ public readonly struct EnemyStatusEffectSpec
         EnemyStatusEffectType effectType,
         float duration,
         float tickInterval,
-        int tickDamage,
+        float tickDamagePercent,
         DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
         DamageFloatingTextStyle floatingTextStyle)
     {
         EffectType = effectType;
         Duration = Mathf.Max(0f, duration);
         TickInterval = Mathf.Max(0.01f, tickInterval);
-        TickDamage = Mathf.Max(0, tickDamage);
+        TickDamagePercent = Mathf.Max(0f, tickDamagePercent);
         SourceDefenseTowerCombatSystem = sourceDefenseTowerCombatSystem;
         FloatingTextStyle = floatingTextStyle;
     }

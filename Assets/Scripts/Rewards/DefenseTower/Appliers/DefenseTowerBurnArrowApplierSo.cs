@@ -18,7 +18,7 @@ public class DefenseTowerBurnArrowApplierSo : DefenseTowerRuntimeRewardApplierSo
             EnemyStatusEffectType.Burn,
             GetStatusDuration(instance.Config),
             GetTickInterval(instance.Config),
-            GetTickDamage(instance.Config),
+            GetTickDamagePercent(instance.Config),
             context.SourceDefenseTowerCombatSystem,
             DamageFloatingTextStyle.Burn);
 
@@ -44,9 +44,9 @@ public class DefenseTowerBurnArrowApplierSo : DefenseTowerRuntimeRewardApplierSo
         return RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.TICK_INTERVAL, 0f, true);
     }
 
-    // 获取燃烧单次跳伤。
-    private int GetTickDamage(RewardCardEffectConfig config)
+    // 获取燃烧单次跳伤百分比。
+    private float GetTickDamagePercent(RewardCardEffectConfig config)
     {
-        return RewardEffectParameterReader.GetInt(config, RewardEffectParameterIds.TICK_DAMAGE, 0, true);
+        return RewardEffectParameterReader.GetFloat(config, RewardEffectParameterIds.TICK_DAMAGE, 0f, true);
     }
 }

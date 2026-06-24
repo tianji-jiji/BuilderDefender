@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour, IPoolable
     public bool IsAlive { get; private set; }
     public int Armor => _runtimeStats.Armor;
     public Vector3 DamageFloatingTextPosition => damageFloatingTextPoint ? damageFloatingTextPoint.position : transform.position;
+    public HealthSystem HealthSystem => healthSystem;
     public EnemyStatusEffectController StatusEffectController => statusEffectController;
 
     private void Awake()
