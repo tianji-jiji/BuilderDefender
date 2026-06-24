@@ -7,8 +7,6 @@ public class HomeRewardTriggerDispatcher
 {
     private readonly List<IHomeRewardTrigger> _effectList = new();
 
-    public int Count => _effectList.Count;
-
     // 注册一条基地类运行时奖励效果。
     public void RegisterEffect(IHomeRewardTrigger effect, RewardCardEffectConfig config)
     {

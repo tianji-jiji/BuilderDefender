@@ -17,7 +17,6 @@ public class DefenseTowerTargetSelector : MonoBehaviour
     private Enemy _currentTargetEnemy;
 
     public bool HasTarget => IsTargetValid(_currentTargetEnemy);
-    public Enemy CurrentTargetEnemy => _currentTargetEnemy;
 
     // 侦测范围内最近的有效敌人。
     public bool Detect(float radius)

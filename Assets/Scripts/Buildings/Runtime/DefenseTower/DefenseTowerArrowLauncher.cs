@@ -123,7 +123,11 @@ public class DefenseTowerArrowLauncher : MonoBehaviour
             arrowContext.ArmorIgnorePercent,
             arrowContext.IsExplosiveArrow,
             arrowContext.ExplosionRadius,
-            arrowContext.ExplosionDamageMultiplier);
+            arrowContext.ExplosionDamageMultiplier,
+            arrowContext.StatusEffectSpecList,
+            arrowContext.ChanceExplosionRadius,
+            arrowContext.ChanceExplosionDamage,
+            arrowContext.PierceCount);
         arrow.SetTarget(arrowContext.TargetEnemy);
     }
 

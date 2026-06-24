@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -46,6 +47,8 @@ public class DefenseTowerAttackContext
 /// </summary>
 public class DefenseTowerArrowContext
 {
+    private readonly List<EnemyStatusEffectSpec> _statusEffectSpecList = new();
+
     public DefenseTowerCombatSystem SourceDefenseTowerCombatSystem { get; }
     public Enemy TargetEnemy { get; }
     public int Damage { get; set; }
@@ -55,6 +58,11 @@ public class DefenseTowerArrowContext
     public float ExplosionDamageMultiplier { get; set; }
     public Material VisualMaterial { get; set; }
     public bool EnableTrail { get; set; }
+    public IReadOnlyList<EnemyStatusEffectSpec> StatusEffectSpecList => _statusEffectSpecList;
+    public float ChanceExplosionRadius { get; private set; }
+    public int ChanceExplosionDamage { get; private set; }
+    public int PierceCount { get; private set; }
+    public bool HasChanceExplosion => ChanceExplosionRadius > 0f && ChanceExplosionDamage > 0;
 
     public DefenseTowerArrowContext(
         DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
@@ -76,6 +84,25 @@ public class DefenseTowerArrowContext
         ExplosionDamageMultiplier = Mathf.Max(0f, explosionDamageMultiplier);
         VisualMaterial = visualMaterial;
         EnableTrail = enableTrail;
+    }
+
+    // 添加本支箭命中时要施加的敌人状态。
+    public void AddStatusEffect(EnemyStatusEffectSpec statusEffectSpec)
+    {
+        _statusEffectSpecList.Add(statusEffectSpec);
+    }
+
+    // 设置本支箭命中时触发的概率爆炸。
+    public void SetChanceExplosion(float radius, int damage)
+    {
+        ChanceExplosionRadius = Mathf.Max(0f, radius);
+        ChanceExplosionDamage = Mathf.Max(0, damage);
+    }
+
+    // 设置本支箭可额外穿透的敌人数量。
+    public void SetPierceCount(int pierceCount)
+    {
+        PierceCount = Mathf.Max(PierceCount, pierceCount);
     }
 }
 

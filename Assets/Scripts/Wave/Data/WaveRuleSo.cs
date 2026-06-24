@@ -33,51 +33,51 @@ public class WaveRuleSo : ScriptableObject
     private const float MIN_PLAYER_POWER_RESPONSE = 0f;
     private const float MAX_PLAYER_POWER_RESPONSE = 1f;
 
-    [Header("Wave Type")]
+    [Header("波次类型")]
     [SerializeField] private int bossInterval = 10;
     [SerializeField] private int hardInterval = 5;
 
-    [Header("Batch")]
+    [Header("每批敌人配置")]
     [SerializeField] private int minBatchSize = 3;
     [SerializeField] private int maxBatchSize = 20;
 
-    [Header("Enemy Weights")]
+    [Header("敌人权重")]
     [SerializeField] private WaveEnemyWeights normalWaveWeights = new(0.8f, 0.2f, 0f);
     [SerializeField] private WaveEnemyWeights hardWaveWeights = new(0.6f, 0.4f, 0f);
     [SerializeField] private WaveEnemyWeights bossWaveWeights = new(0.3f, 0.3f, 0.4f);
 
-    [Header("Roguelike Growth")]
-    [SerializeField] private AnimationCurve enemyCountByWave = new AnimationCurve(
+    [Header("敌人成长")]
+    [SerializeField] private AnimationCurve enemyCountByWave = new(
         new Keyframe(1, 10),
         new Keyframe(10, 18),
         new Keyframe(20, 40),
         new Keyframe(30, 65),
         new Keyframe(40, 80));
-    [SerializeField] private AnimationCurve spawnIntervalByWave = new AnimationCurve(
+    [SerializeField] private AnimationCurve spawnIntervalByWave = new(
         new Keyframe(1, 1.0f),
         new Keyframe(10, 0.65f),
         new Keyframe(20, 0.45f),
         new Keyframe(30, 0.32f),
         new Keyframe(40, 0.25f));
-    [SerializeField] private AnimationCurve healthMultiplierByWave = new AnimationCurve(
+    [SerializeField] private AnimationCurve healthMultiplierByWave = new(
         new Keyframe(1, 1f),
         new Keyframe(10, 1.8f),
         new Keyframe(20, 3.6f),
         new Keyframe(30, 6.5f),
         new Keyframe(40, 9f));
-    [SerializeField] private AnimationCurve armorBonusByWave = new AnimationCurve(
+    [SerializeField] private AnimationCurve armorBonusByWave = new(
         new Keyframe(1, 0),
         new Keyframe(10, 3),
         new Keyframe(20, 12),
         new Keyframe(30, 28),
         new Keyframe(40, 40));
-    [SerializeField] private AnimationCurve attackMultiplierByWave = new AnimationCurve(
+    [SerializeField] private AnimationCurve attackMultiplierByWave = new(
         new Keyframe(1, 1f),
         new Keyframe(10, 1.2f),
         new Keyframe(20, 1.6f),
         new Keyframe(30, 2.2f),
         new Keyframe(40, 2.8f));
-    [SerializeField] private AnimationCurve moveSpeedMultiplierByWave = new AnimationCurve(
+    [SerializeField] private AnimationCurve moveSpeedMultiplierByWave = new(
         new Keyframe(1, 1f),
         new Keyframe(10, 1.05f),
         new Keyframe(20, 1.15f),

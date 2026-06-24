@@ -14,7 +14,7 @@ public enum RewardEffectDisplayImpact
 }
 
 /// <summary>
-/// 奖励效果参数 ID 常量，用字符串和 Handler 约束参数名。
+/// 奖励效果参数 ID 常量
 /// </summary>
 public static class RewardEffectParameterIds
 {
@@ -34,10 +34,16 @@ public static class RewardEffectParameterIds
     public const string HOME_HEALTH_THRESHOLD = "HomeHealthThreshold";
     public const string EXPLOSION_RADIUS = "ExplosionRadius";
     public const string EXPLOSION_DAMAGE_MULTIPLIER = "ExplosionDamageMultiplier";
+    public const string TRIGGER_CHANCE = "TriggerChance";
+    public const string STATUS_DURATION = "StatusDuration";
+    public const string TICK_INTERVAL = "TickInterval";
+    public const string TICK_DAMAGE = "TickDamage";
+    public const string EXPLOSION_DAMAGE = "ExplosionDamage";
+    public const string PIERCE_COUNT = "PierceCount";
 }
 
 /// <summary>
-/// 单个奖励效果参数配置，保存参数 ID、数值和可选显示倾向覆盖。
+/// 单个奖励效果参数配置
 /// </summary>
 [Serializable]
 public class RewardEffectParameterConfig
@@ -54,18 +60,18 @@ public class RewardEffectParameterConfig
 /// <summary>
 /// 一张卡里的单个效果配置，保存效果定义和这张卡上的参数列表。
 /// </summary>
-    [Serializable]
-    public class RewardCardEffectConfig
+[Serializable]
+public class RewardCardEffectConfig
+{
+    [SerializeField] private RewardEffectDefinitionSo effectDefinition;
+    [SerializeField] private List<RewardEffectParameterConfig> parameterConfigList = new();
+
+    public RewardEffectDefinitionSo EffectDefinition => effectDefinition;
+    public IReadOnlyList<RewardEffectParameterConfig> ParameterConfigList => parameterConfigList;
+
+    // 判断当前效果是否已经迁移到参数列表配置。
+    public bool HasParameterList()
     {
-        [SerializeField] private RewardEffectDefinitionSo effectDefinition;
-        [SerializeField] private List<RewardEffectParameterConfig> parameterConfigList = new();
-
-        public RewardEffectDefinitionSo EffectDefinition => effectDefinition;
-        public IReadOnlyList<RewardEffectParameterConfig> ParameterConfigList => parameterConfigList;
-
-        // 判断当前效果是否已经迁移到参数列表配置。
-        public bool HasParameterList()
-        {
         return parameterConfigList is { Count: > 0 };
     }
 

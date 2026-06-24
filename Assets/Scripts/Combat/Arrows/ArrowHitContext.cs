@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -13,6 +14,10 @@ public class ArrowHitContext
     public float ExplosionRadius { get; }
     public float ExplosionDamageMultiplier { get; }
     public Collider2D[] EffectHitResults { get; }
+    public IReadOnlyList<EnemyStatusEffectSpec> StatusEffectSpecList { get; }
+    public float ChanceExplosionRadius { get; }
+    public int ChanceExplosionDamage { get; }
+    public bool HasChanceExplosion => ChanceExplosionRadius > 0f && ChanceExplosionDamage > 0;
 
     // 初始化本次箭矢命中的上下文数据。
     public ArrowHitContext(
@@ -23,7 +28,10 @@ public class ArrowHitContext
         DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
         float explosionRadius,
         float explosionDamageMultiplier,
-        Collider2D[] effectHitResults)
+        Collider2D[] effectHitResults,
+        IReadOnlyList<EnemyStatusEffectSpec> statusEffectSpecList,
+        float chanceExplosionRadius,
+        int chanceExplosionDamage)
     {
         DirectHitEnemy = directHitEnemy;
         HitPosition = hitPosition;
@@ -33,5 +41,8 @@ public class ArrowHitContext
         ExplosionRadius = Mathf.Max(0f, explosionRadius);
         ExplosionDamageMultiplier = Mathf.Max(0f, explosionDamageMultiplier);
         EffectHitResults = effectHitResults;
+        StatusEffectSpecList = statusEffectSpecList;
+        ChanceExplosionRadius = Mathf.Max(0f, chanceExplosionRadius);
+        ChanceExplosionDamage = Mathf.Max(0, chanceExplosionDamage);
     }
 }

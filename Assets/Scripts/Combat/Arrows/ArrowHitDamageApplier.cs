@@ -31,6 +31,26 @@ public static class ArrowHitDamageApplier
         return actualDamage;
     }
 
+    // 对指定敌人应用不经过护甲的固定伤害，并返回实际扣除的生命值。
+    public static int ApplyRawDamage(Enemy enemy, int damage, DamageFloatingTextStyle floatingTextStyle, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+    {
+        if (!IsEnemyValid(enemy) || !enemy.gameObject.TryGetComponent(out HealthSystem healthSystem))
+        {
+            return 0;
+        }
+
+        bool wasAlive = enemy.IsAlive;
+        int actualDamage = healthSystem.LoseHealth(Mathf.Max(0, damage));
+        DamageFloatingTextEvent.ShowDamage(enemy.DamageFloatingTextPosition, actualDamage, floatingTextStyle);
+
+        if (wasAlive && !enemy.IsAlive && sourceDefenseTowerCombatSystem)
+        {
+            sourceDefenseTowerCombatSystem.NotifyEnemyKilled(enemy);
+        }
+
+        return actualDamage;
+    }
+
     // 判断敌人当前是否仍然可以被箭矢命中。
     public static bool IsEnemyValid(Enemy enemy)
     {

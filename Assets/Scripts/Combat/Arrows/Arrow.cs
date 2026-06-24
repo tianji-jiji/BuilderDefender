@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -15,6 +16,8 @@ public class Arrow : MonoBehaviour, IPoolable
     [FormerlySerializedAs("explosiveArrowEffect")] [SerializeField] private ArrowHitEffectSo explosiveArrowHitEffect;
 
     private readonly Collider2D[] _effectHitResults = new Collider2D[MAX_EFFECT_HIT_COUNT];
+    private readonly List<EnemyStatusEffectSpec> _statusEffectSpecList = new();
+    private readonly List<Enemy> _hitEnemyList = new();
     
     private Rigidbody2D _rb2;
     private Collider2D _collider;
@@ -29,7 +32,10 @@ public class Arrow : MonoBehaviour, IPoolable
     private float _armorIgnorePercent;
     private float _explosionRadius;
     private float _explosionDamageMultiplier;
+    private float _chanceExplosionRadius;
     private int _damage;
+    private int _chanceExplosionDamage;
+    private int _remainingPierceCount;
     private bool _isExplosiveArrow;
     private bool _isReturning;
 
@@ -62,6 +68,11 @@ public class Arrow : MonoBehaviour, IPoolable
         _isExplosiveArrow = false;
         _explosionRadius = 0f;
         _explosionDamageMultiplier = 0f;
+        _chanceExplosionRadius = 0f;
+        _chanceExplosionDamage = 0;
+        _remainingPierceCount = 0;
+        _statusEffectSpecList.Clear();
+        _hitEnemyList.Clear();
         _isReturning = false;
         _rb2.linearVelocity = Vector2.zero;
     }
@@ -74,6 +85,8 @@ public class Arrow : MonoBehaviour, IPoolable
         _targetTransform = null;
         _moveDirection = Vector2.zero;
         _isReturning = true;
+        _statusEffectSpecList.Clear();
+        _hitEnemyList.Clear();
         _collider.enabled = false;
         arrowVisual?.ResetForDespawn();
         _rb2.linearVelocity = Vector2.zero;
@@ -117,11 +130,30 @@ public class Arrow : MonoBehaviour, IPoolable
     // 设置本次发射携带的攻击上下文。
     public void SetAttackContext(DefenseTowerCombatSystem sourceDefenseTowerCombatSystem, float armorIgnorePercent, bool isExplosiveArrow, float explosionRadius, float explosionDamageMultiplier)
     {
+        SetAttackContext(sourceDefenseTowerCombatSystem, armorIgnorePercent, isExplosiveArrow, explosionRadius, explosionDamageMultiplier, null, 0f, 0, 0);
+    }
+
+    // 设置本次发射携带的攻击上下文和能力数据。
+    public void SetAttackContext(
+        DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
+        float armorIgnorePercent,
+        bool isExplosiveArrow,
+        float explosionRadius,
+        float explosionDamageMultiplier,
+        IReadOnlyList<EnemyStatusEffectSpec> statusEffectSpecList,
+        float chanceExplosionRadius,
+        int chanceExplosionDamage,
+        int pierceCount)
+    {
         _sourceDefenseTowerCombatSystem = sourceDefenseTowerCombatSystem;
         _armorIgnorePercent = Mathf.Clamp01(armorIgnorePercent);
         _isExplosiveArrow = isExplosiveArrow;
         _explosionRadius = Mathf.Max(0f, explosionRadius);
         _explosionDamageMultiplier = Mathf.Max(0f, explosionDamageMultiplier);
+        _chanceExplosionRadius = Mathf.Max(0f, chanceExplosionRadius);
+        _chanceExplosionDamage = Mathf.Max(0, chanceExplosionDamage);
+        _remainingPierceCount = Mathf.Max(0, pierceCount);
+        CopyStatusEffects(statusEffectSpecList);
     }
 
     // 设置本次发射使用的箭头视觉材质和拖尾状态。
@@ -146,7 +178,17 @@ public class Arrow : MonoBehaviour, IPoolable
     // 处理箭头命中敌人后的命中流程和回收。
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (_isReturning)
+        {
+            return;
+        }
+
         if (!other.gameObject.TryGetComponent(out Enemy enemy) || !ArrowHitDamageApplier.IsEnemyValid(enemy))
+        {
+            return;
+        }
+
+        if (_hitEnemyList.Contains(enemy))
         {
             return;
         }
@@ -159,9 +201,22 @@ public class Arrow : MonoBehaviour, IPoolable
             _sourceDefenseTowerCombatSystem,
             _explosionRadius,
             _explosionDamageMultiplier,
-            _effectHitResults);
+            _effectHitResults,
+            _statusEffectSpecList,
+            _chanceExplosionRadius,
+            _chanceExplosionDamage);
         ArrowHitProcessor.ApplyHit(context, _isExplosiveArrow ? explosiveArrowHitEffect : null);
-        ReturnArrow();
+        _hitEnemyList.Add(enemy);
+
+        if (_remainingPierceCount <= 0)
+        {
+            ReturnArrow();
+            return;
+        }
+
+        _remainingPierceCount--;
+        _targetEnemy = null;
+        _targetTransform = null;
     }
 
     // 目标失效后保持当前方向继续飞行。
@@ -207,5 +262,20 @@ public class Arrow : MonoBehaviour, IPoolable
         }
 
         Destroy(gameObject);
+    }
+
+    // 复制本支箭命中时要施加的状态效果。
+    private void CopyStatusEffects(IReadOnlyList<EnemyStatusEffectSpec> statusEffectSpecList)
+    {
+        _statusEffectSpecList.Clear();
+        if (statusEffectSpecList == null)
+        {
+            return;
+        }
+
+        foreach (EnemyStatusEffectSpec statusEffectSpec in statusEffectSpecList)
+        {
+            _statusEffectSpecList.Add(statusEffectSpec);
+        }
     }
 }

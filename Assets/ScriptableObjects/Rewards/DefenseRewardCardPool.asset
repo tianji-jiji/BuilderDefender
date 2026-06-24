@@ -22,10 +22,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e24d4ae5af4f4a7298277df79dd437f6, type: 2}
   - {fileID: 11400000, guid: 3465abf6a9304c2e8c65d958f4ddc8e8, type: 2}
   - {fileID: 11400000, guid: 73e75eac1914bea4abbeffd29d58f55c, type: 2}
+  - {fileID: 11400000, guid: c0100000000000000000000000000001, type: 2}
+  - {fileID: 11400000, guid: c0200000000000000000000000000002, type: 2}
   - {fileID: 11400000, guid: 4f5cfa49f7874d8ca427f2d0b9427511, type: 2}
   - {fileID: 11400000, guid: 494763044c5161e4cb11a0e4d5d06f82, type: 2}
   - {fileID: 11400000, guid: 73663ffd8de4edd4a972e1241a28bb8e, type: 2}
   - {fileID: 11400000, guid: 095c076aabaf7ca4abae027389b4e6dc, type: 2}
+  - {fileID: 11400000, guid: c0300000000000000000000000000003, type: 2}
+  - {fileID: 11400000, guid: c0400000000000000000000000000004, type: 2}
   - {fileID: 11400000, guid: 3465abf6a9304c2e8c65d958f4ddc8e8, type: 2}
   - {fileID: 11400000, guid: 77bd55fef832e1d4f9211d72ecd68c32, type: 2}
   choiceCount: 3

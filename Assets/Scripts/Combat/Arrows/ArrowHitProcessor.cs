@@ -17,6 +17,8 @@ public static class ArrowHitProcessor
             context.ArmorIgnorePercent,
             context.SourceDefenseTowerCombatSystem);
 
+        ArrowAbilityEffectExecutor.ApplyAbilities(context);
+
         if (arrowHitEffect)
         {
             arrowHitEffect.Apply(context);

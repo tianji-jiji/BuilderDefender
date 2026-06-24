@@ -7,8 +7,6 @@ public class DefenseTowerRewardTriggerDispatcher
 {
     private readonly List<DefenseTowerRewardTriggerInstance> _effectInstanceList = new();
 
-    public int Count => _effectInstanceList.Count;
-
     // 注册一条可运行时生效的防御塔卡牌效果。
     public void RegisterEffect(IDefenseTowerRewardTrigger effect, RewardCardEffectConfig config)
     {

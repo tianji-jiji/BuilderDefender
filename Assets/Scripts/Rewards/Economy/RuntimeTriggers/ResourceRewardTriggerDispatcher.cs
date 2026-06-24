@@ -7,8 +7,6 @@ public class ResourceRewardTriggerDispatcher
 {
     private readonly List<IResourceRewardTrigger> _effectList = new();
 
-    public int Count => _effectList.Count;
-
     // 注册一条资源类运行时奖励效果。
     public void RegisterEffect(IResourceRewardTrigger effect, RewardCardEffectConfig config)
     {

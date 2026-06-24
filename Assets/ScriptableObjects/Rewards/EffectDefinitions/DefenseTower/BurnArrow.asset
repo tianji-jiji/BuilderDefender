@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e58e51899de4f4aa4e301aa45d9332f, type: 3}
+  m_Name: BurnArrow
+  m_EditorClassIdentifier: Assembly-CSharp::RewardEffectDefinitionSo
+  displayName: 防御塔燃烧箭
+  useCustomDescription: 0
+  descriptionTemplate: "每支箭有 {TriggerChance} 概率使敌人燃烧，持续 {StatusDuration} 秒，每 {TickInterval} 秒造成 {TickDamage} 伤害"
+  autoImpactRule: 2
+  applier: {fileID: 11400000, guid: a0200000000000000000000000000002, type: 2}
+  parameterDisplayDefinitionList:
+  - parameterId: TriggerChance
+    displayName: 触发概率
+    templateToken: 
+    valueFormat: 1
+    autoImpactRule: 0
+  - parameterId: StatusDuration
+    displayName: 状态持续时间
+    templateToken: 
+    valueFormat: 4
+    autoImpactRule: 4
+  - parameterId: TickInterval
+    displayName: 跳伤间隔
+    templateToken: 
+    valueFormat: 4
+    autoImpactRule: 4
+  - parameterId: TickDamage
+    displayName: 跳伤伤害
+    templateToken: 
+    valueFormat: 3
+    autoImpactRule: 0

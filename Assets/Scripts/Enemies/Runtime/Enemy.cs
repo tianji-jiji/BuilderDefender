@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, IPoolable
     [SerializeField] private EnemySo enemySo;
     [SerializeField] private LayerMask detectLayer;
     [SerializeField] private HealthSystem healthSystem;
+    [SerializeField] private EnemyStatusEffectController statusEffectController;
     [SerializeField] private Transform damageFloatingTextPoint;
 
     public static event Action OnEnemyDead;
@@ -29,6 +30,7 @@ public class Enemy : MonoBehaviour, IPoolable
     public bool IsAlive { get; private set; }
     public int Armor => _runtimeStats.Armor;
     public Vector3 DamageFloatingTextPosition => damageFloatingTextPoint ? damageFloatingTextPoint.position : transform.position;
+    public EnemyStatusEffectController StatusEffectController => statusEffectController;
 
     private void Awake()
     {
@@ -36,6 +38,7 @@ public class Enemy : MonoBehaviour, IPoolable
         
         TryGetComponent(out _rb2);
         TryGetComponent(out _pooledObject);
+        CacheStatusEffectController();
         
         _targetContactFilter = new ContactFilter2D
         {
@@ -96,6 +99,8 @@ public class Enemy : MonoBehaviour, IPoolable
             healthSystem.Init(_runtimeStats.MaxHealth);
         }
 
+        statusEffectController?.ClearAll();
+
         if (_rb2)
         {
             _rb2.linearVelocity = Vector2.zero;
@@ -109,6 +114,7 @@ public class Enemy : MonoBehaviour, IPoolable
         IsAlive = false;
         _timer = 0f;
         _currentTarget = _defaultTarget;
+        statusEffectController?.ClearAll();
 
         if (_rb2)
         {
@@ -121,6 +127,7 @@ public class Enemy : MonoBehaviour, IPoolable
     {
         IsAlive = false;
         _currentTarget = null;
+        statusEffectController?.ClearAll();
 
         if (_rb2)
         {
@@ -211,6 +218,20 @@ public class Enemy : MonoBehaviour, IPoolable
         _targetContactFilter.useLayerMask = true;
         _targetContactFilter.useTriggers = false;
         _targetContactFilter.layerMask = detectLayer;
+    }
+
+    // 缓存或创建敌人状态控制器。
+    private void CacheStatusEffectController()
+    {
+        if (statusEffectController)
+        {
+            return;
+        }
+
+        if (!TryGetComponent(out statusEffectController))
+        {
+            statusEffectController = gameObject.AddComponent<EnemyStatusEffectController>();
+        }
     }
 
     // 碰到建筑时造成伤害并销毁自身。

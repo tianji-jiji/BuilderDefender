@@ -51,12 +51,12 @@ public class RewardCardSoEditor : Editor
     {
         EditorGUILayout.LabelField("基础信息", EditorStyles.boldLabel);
 
-        EditorGUILayout.PropertyField(_cardNameProp, new GUIContent("卡牌名称"));
-        EditorGUILayout.PropertyField(_cardPrefabProp, new GUIContent("卡牌预制体"));
+        EditorGUILayout.PropertyField(_cardNameProp, new GUIContent("名称"));
+        EditorGUILayout.PropertyField(_cardPrefabProp, new GUIContent("预制体"));
         EditorGUILayout.PropertyField(_weightProp, new GUIContent("权重"));
         EditorGUILayout.PropertyField(_rarityProp, new GUIContent("稀有度"));
         EditorGUILayout.PropertyField(_categoryProp, new GUIContent("分类"));
-        EditorGUILayout.PropertyField(_minWaveIndexProp, new GUIContent("最小波次"));
+        EditorGUILayout.PropertyField(_minWaveIndexProp, new GUIContent("出现最小波次"));
         EditorGUILayout.PropertyField(_isUniqueProp, new GUIContent("唯一卡牌"));
 
         if (!_isUniqueProp.boolValue)

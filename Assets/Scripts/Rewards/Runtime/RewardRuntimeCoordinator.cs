@@ -59,16 +59,13 @@ public class RewardRuntimeCoordinator : MonoBehaviour
         OnActiveRewardsChanged?.Invoke();
     }
 
-    // 记录本次奖励选择，缺少历史组件时只输出警告而不阻断数值生效。
+    // 记录本次奖励选择
     private void RecordRewardCardSelection(RewardCardSo rewardCard)
     {
         if (RewardCardAcquiredHistory.Instance)
         {
             RewardCardAcquiredHistory.Instance.RecordRewardCard(rewardCard);
-            return;
         }
-
-        Debug.LogWarning("RewardCardSelectionHistory is missing in scene. Reward bonus applied, but visible reward history was not recorded.");
     }
 
     // 绑定当前场景中的波次管理器。

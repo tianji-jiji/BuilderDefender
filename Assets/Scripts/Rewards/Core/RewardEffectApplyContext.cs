@@ -30,24 +30,4 @@ public sealed class RewardEffectApplyContext
         EnemyWaveManager = enemyWaveManager;
         BuildingPlacementManager = buildingPlacementManager;
     }
-    
-
-    // 使用旧防御塔账本和触发器参数创建 Reward 效果应用上下文。
-    public RewardEffectApplyContext(
-        RewardRuntimeCoordinator rewardRuntimeCoordinator,
-        DefenseTowerActiveRewards defenseTowerActiveRewards,
-        ResourceManager resourceManager,
-        EnemyWaveManager enemyWaveManager,
-        BuildingPlacementManager buildingPlacementManager,
-        DefenseTowerRewardTriggerDispatcher defenseTowerRewardTriggerDispatcher)
-        : this(
-            rewardRuntimeCoordinator,
-            new DefenseTowerRewardRuntime(defenseTowerActiveRewards, defenseTowerRewardTriggerDispatcher),
-            new ResourceRewardRuntime(),
-            new HomeRewardRuntime(),
-            resourceManager,
-            enemyWaveManager,
-            buildingPlacementManager)
-    {
-    }
 }

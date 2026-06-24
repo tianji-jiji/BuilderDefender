@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0473efc885525fe4f9c6e7493b5e5079, type: 3}
+  m_Name: Rare_BurnArrow
+  m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
+  cardId: RewardCard_c0200000000000000000000000000002
+  cardName: 火油箭头
+  cardPrefab: {fileID: 1471311803384588315, guid: 7d02feb8006761348bc6554da2cfdebc, type: 3}
+  weight: 1
+  rarity: 1
+  category: 0
+  minWaveIndex: 0
+  maxPickCount: 0
+  isUnique: 0
+  effectConfigList:
+  - effectDefinition: {fileID: 11400000, guid: b0200000000000000000000000000002, type: 2}
+    parameterConfigList:
+    - parameterId: TriggerChance
+      value: 0.2
+      displayImpactOverride: 0
+    - parameterId: StatusDuration
+      value: 4
+      displayImpactOverride: 0
+    - parameterId: TickInterval
+      value: 1
+      displayImpactOverride: 0
+    - parameterId: TickDamage
+      value: 4
+      displayImpactOverride: 0

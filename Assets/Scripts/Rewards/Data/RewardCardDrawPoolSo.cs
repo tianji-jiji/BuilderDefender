@@ -10,21 +10,7 @@ public class RewardCardDrawPoolSo : ScriptableObject
     [SerializeField] private int choiceCount = DEFAULT_CHOICE_COUNT;
     [SerializeField] private bool allowDuplicate;
 
-    public int ChoiceCount => Mathf.Max(1, choiceCount);
-    public bool AllowDuplicate => allowDuplicate;
-    public IReadOnlyList<RewardCardSo> RewardCardList => rewardCardList;
-
-    // 按权重从卡池中抽取本次可以展示的奖励卡。
-    public List<RewardCardSo> DrawCards()
-    {
-        return DrawCards(ChoiceCount, RewardCardDrawContext.Default(0));
-    }
-
-    // 按指定数量从卡池中抽取奖励卡。
-    public List<RewardCardSo> DrawCards(int count)
-    {
-        return DrawCards(count, RewardCardDrawContext.Default(0));
-    }
+    private int ChoiceCount => Mathf.Max(1, choiceCount);
 
     // 根据抽卡上下文按指定数量从卡池中抽取奖励卡。
     public List<RewardCardSo> DrawCards(RewardCardDrawContext context)

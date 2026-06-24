@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// 奖励卡牌稀有度。
+/// 卡牌稀有度
 /// </summary>
 public enum RewardCardRarity
 {
@@ -17,7 +17,7 @@ public enum RewardCardRarity
 }
 
 /// <summary>
-/// 奖励卡牌所属类别。
+/// 卡牌分类
 /// </summary>
 public enum RewardCardCategory
 {
@@ -35,6 +35,7 @@ public class RewardCardSo : ScriptableObject
 {
     private const string CARD_ID_PREFIX = "RewardCard_";
 
+    // 基础信息
     [HideInInspector] [SerializeField] private string cardId;
     [SerializeField] private string cardName;
     [SerializeField] private GameObject cardPrefab;
@@ -44,6 +45,8 @@ public class RewardCardSo : ScriptableObject
     [SerializeField] private int minWaveIndex;
     [SerializeField] private int maxPickCount;
     [SerializeField] private bool isUnique;
+    
+    //奖励效果列表
     [SerializeField] private List<RewardCardEffectConfig> effectConfigList = new();
 
     public string CardId => cardId;

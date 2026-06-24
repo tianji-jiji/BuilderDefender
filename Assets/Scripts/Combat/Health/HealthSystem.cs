@@ -9,33 +9,31 @@ public class HealthSystem : MonoBehaviour
     private const float DEFAULT_DAMAGE_TAKEN_MULTIPLIER = 1f;
 
     [SerializeField] private int maxHealth;
-    [SerializeField] private int currentHealth;
 
     public event Action OnDied;
-    public event Action<int> OnDamaged;
     public event Action OnHealthChanged;
 
     private float _damageTakenMultiplier = DEFAULT_DAMAGE_TAKEN_MULTIPLIER;
     public int MaxHealth => maxHealth;
-    public int CurrentHealth => currentHealth;
+    public int CurrentHealth { get; private set; }
     public float CurrentHealthNormalized => MaxHealth > 0 ? (float)CurrentHealth / MaxHealth : 0f;
 
     // 初始化生命值并通知显示层刷新到满血状态。
     public void Init(int h)
     {
         maxHealth = Mathf.Max(1, h);
-        currentHealth = maxHealth;
+        CurrentHealth = maxHealth;
         OnHealthChanged?.Invoke();
     }
 
     // 调整最大生命值，并按需要将当前生命恢复到新的上限。
-    public void SetMaxHealth(int maxHealth, bool healToFull)
+    public void SetMaxHealth(int health, bool healToFull)
     {
-        bool wasFullHealth = this.maxHealth > 0 && currentHealth >= this.maxHealth;
-        this.maxHealth = Mathf.Max(1, maxHealth);
-        currentHealth = healToFull || wasFullHealth
-            ? this.maxHealth
-            : Mathf.Clamp(currentHealth, 0, this.maxHealth);
+        bool wasFullHealth = maxHealth > 0 && CurrentHealth >= maxHealth;
+        maxHealth = Mathf.Max(1, health);
+        CurrentHealth = healToFull || wasFullHealth
+            ? maxHealth
+            : Mathf.Clamp(CurrentHealth, 0, maxHealth);
         OnHealthChanged?.Invoke();
     }
 
@@ -61,19 +59,18 @@ public class HealthSystem : MonoBehaviour
             return 0;
         }
 
-        int previousHealth = currentHealth;
-        currentHealth -= healthLoss;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        int actualHealthLoss = previousHealth - currentHealth;
+        int previousHealth = CurrentHealth;
+        CurrentHealth -= healthLoss;
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, maxHealth);
+        int actualHealthLoss = previousHealth - CurrentHealth;
         if (actualHealthLoss <= 0)
         {
             return 0;
         }
 
         OnHealthChanged?.Invoke();
-        OnDamaged?.Invoke(actualHealthLoss);
 
-        if (currentHealth <= 0)
+        if (CurrentHealth <= 0)
         {
             OnDied?.Invoke();
         }
@@ -92,12 +89,12 @@ public class HealthSystem : MonoBehaviour
     private void Heal(int amount)
     {
         int healAmount = Mathf.Max(0, amount);
-        if (healAmount <= 0 || currentHealth <= 0)
+        if (healAmount <= 0 || CurrentHealth <= 0)
         {
             return;
         }
 
-        currentHealth = Mathf.Clamp(currentHealth + healAmount, 0, maxHealth);
+        CurrentHealth = Mathf.Clamp(CurrentHealth + healAmount, 0, maxHealth);
         OnHealthChanged?.Invoke();
     }
 }

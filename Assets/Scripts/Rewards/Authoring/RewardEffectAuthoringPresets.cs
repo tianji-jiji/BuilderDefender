@@ -40,7 +40,13 @@ public static class RewardEffectAuthoringPresets
         { RewardEffectParameterIds.INITIAL_STAR_BONUS, "初始星级加成" },
         { RewardEffectParameterIds.HOME_HEALTH_THRESHOLD, "基地血量阈值" },
         { RewardEffectParameterIds.EXPLOSION_RADIUS, "爆炸半径" },
-        { RewardEffectParameterIds.EXPLOSION_DAMAGE_MULTIPLIER, "爆炸伤害倍率" }
+        { RewardEffectParameterIds.EXPLOSION_DAMAGE_MULTIPLIER, "爆炸伤害倍率" },
+        { RewardEffectParameterIds.TRIGGER_CHANCE, "触发概率" },
+        { RewardEffectParameterIds.STATUS_DURATION, "状态持续时间" },
+        { RewardEffectParameterIds.TICK_INTERVAL, "跳伤间隔" },
+        { RewardEffectParameterIds.TICK_DAMAGE, "跳伤伤害" },
+        { RewardEffectParameterIds.EXPLOSION_DAMAGE, "爆炸伤害" },
+        { RewardEffectParameterIds.PIERCE_COUNT, "穿透数量" }
     };
 
     // 获取参数 ID 的中文显示名。
@@ -67,11 +73,15 @@ public static class RewardEffectAuthoringPresets
             case RewardEffectParameterIds.DOUBLE_DAMAGE_CHANCE:
             case RewardEffectParameterIds.HOME_HEALTH_THRESHOLD:
             case RewardEffectParameterIds.EXPLOSION_DAMAGE_MULTIPLIER:
+            case RewardEffectParameterIds.TRIGGER_CHANCE:
                 return RewardEffectValueFormat.PercentWithoutSign;
             case RewardEffectParameterIds.TRIGGER_ATTACK_COUNT:
             case RewardEffectParameterIds.EXTRA_ATTACK_COUNT:
             case RewardEffectParameterIds.KILL_COUNT_TO_UPGRADE:
             case RewardEffectParameterIds.ATTACK_HEALTH_COST:
+            case RewardEffectParameterIds.TICK_DAMAGE:
+            case RewardEffectParameterIds.EXPLOSION_DAMAGE:
+            case RewardEffectParameterIds.PIERCE_COUNT:
                 return RewardEffectValueFormat.IntegerWithoutSign;
             case RewardEffectParameterIds.INITIAL_STAR_BONUS:
                 return RewardEffectValueFormat.IntegerWithSign;
@@ -93,6 +103,8 @@ public static class RewardEffectAuthoringPresets
             case RewardEffectParameterIds.LINK_RADIUS:
             case RewardEffectParameterIds.HOME_HEALTH_THRESHOLD:
             case RewardEffectParameterIds.EXPLOSION_RADIUS:
+            case RewardEffectParameterIds.STATUS_DURATION:
+            case RewardEffectParameterIds.TICK_INTERVAL:
                 return RewardEffectAutoImpactRule.AlwaysNeutral;
             default:
                 return RewardEffectAutoImpactRule.GreaterThanZeroIsPositive;
@@ -106,6 +118,7 @@ public static class RewardEffectAuthoringPresets
         {
             case RewardEffectParameterIds.DOUBLE_DAMAGE_CHANCE:
             case RewardEffectParameterIds.HOME_HEALTH_THRESHOLD:
+            case RewardEffectParameterIds.TRIGGER_CHANCE:
                 return true;
             default:
                 return false;
@@ -121,6 +134,9 @@ public static class RewardEffectAuthoringPresets
             case RewardEffectParameterIds.EXTRA_ATTACK_COUNT:
             case RewardEffectParameterIds.KILL_COUNT_TO_UPGRADE:
             case RewardEffectParameterIds.ATTACK_HEALTH_COST:
+            case RewardEffectParameterIds.TICK_DAMAGE:
+            case RewardEffectParameterIds.EXPLOSION_DAMAGE:
+            case RewardEffectParameterIds.PIERCE_COUNT:
                 return true;
             default:
                 return false;
@@ -140,6 +156,8 @@ public static class RewardEffectAuthoringPresets
         {
             case RewardEffectParameterIds.LINK_RADIUS:
             case RewardEffectParameterIds.EXPLOSION_RADIUS:
+            case RewardEffectParameterIds.STATUS_DURATION:
+            case RewardEffectParameterIds.TICK_INTERVAL:
                 return true;
             default:
                 return false;
