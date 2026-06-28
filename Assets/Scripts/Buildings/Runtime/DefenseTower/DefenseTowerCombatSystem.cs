@@ -11,12 +11,12 @@ public class DefenseTowerCombatSystem : MonoBehaviour
     [SerializeField] private DefenseTowerTargetSelector targetSelector;
     [SerializeField] private DefenseTowerArrowLauncher arrowLauncher;
 
-    private HealthSystem _healthSystem;
-    private float _timer;
-    private bool _hasEnemy;
     private DefenseTowerStatCalculator _statCalculator;
     private DefenseTowerCombatStats _currentStats;
+    private HealthSystem _healthSystem;
 
+    private float _timer;
+    private bool _hasEnemy;
     public int CurrentStarLevel => _statCalculator?.CurrentStarLevel ?? 1;
     private DefenseTowerRewardTriggerDispatcher ActiveDefenseTowerRewardTriggerDispatcher => RewardRuntimeCoordinator.Instance
         ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.TriggerDispatcher
@@ -27,7 +27,7 @@ public class DefenseTowerCombatSystem : MonoBehaviour
         TryGetComponent(out _healthSystem);
         CacheCombatComponents();
         _statCalculator = new DefenseTowerStatCalculator(this, attackDamage, arrowGenerateRate, detectRadius);
-        _currentStats = _statCalculator.RefreshStats(null);
+        _currentStats = _statCalculator.RefreshStats();
     }
 
     private void OnEnable()
@@ -39,6 +39,7 @@ public class DefenseTowerCombatSystem : MonoBehaviour
     private void OnDisable()
     {
         RewardRuntimeCoordinator.OnActiveRewardsChanged -= RefreshRewardBonuses;
+        ActiveDefenseTowerRewardTriggerDispatcher?.ClearSource(this);
         DefenseTowerRegistry.UnregisterDefenseTowerSystem(this);
         CancelInvoke();
         _hasEnemy = false;
@@ -78,17 +79,11 @@ public class DefenseTowerCombatSystem : MonoBehaviour
         _statCalculator?.ApplyUpgradeLevel(upgradeLevel);
         RefreshRewardBonuses();
     }
-    
-    // 通知运行时卡牌效果本防御塔命中了敌人。
-    public void NotifyEnemyHit(Enemy hitEnemy, int actualDamage)
-    {
-        ActiveDefenseTowerRewardTriggerDispatcher?.OnEnemyHit(new DefenseTowerEnemyHitContext(this, hitEnemy, actualDamage));
-    }
 
     // 通知运行时卡牌效果本防御塔击杀了敌人。
-    public void NotifyEnemyKilled(Enemy killedEnemy)
+    public void NotifyEnemyKilled()
     {
-        ActiveDefenseTowerRewardTriggerDispatcher?.OnEnemyKilled(new DefenseTowerEnemyKillContext(this, killedEnemy));
+        ActiveDefenseTowerRewardTriggerDispatcher?.OnEnemyKilled(new DefenseTowerEnemyKilledContext(this));
     }
 
     // 缓存防御塔战斗子组件。
@@ -108,7 +103,7 @@ public class DefenseTowerCombatSystem : MonoBehaviour
     // 侦测范围内最近的有效敌人并设置为当前攻击目标。
     private void DetectEnemy()
     {
-        _hasEnemy = targetSelector && targetSelector.Detect(_currentStats.DetectRadius);
+        _hasEnemy = targetSelector && targetSelector.HasTargetInRadius(_currentStats.DetectRadius);
     }
 
     // 执行一次主动攻击并处理攻击触发型奖励。
@@ -120,7 +115,6 @@ public class DefenseTowerCombatSystem : MonoBehaviour
             return;
         }
 
-        ActiveDefenseTowerRewardTriggerDispatcher?.OnBeforeAttack(new DefenseTowerAttackContext(this, _healthSystem));
         bool hasFired = arrowLauncher.FirePrimaryShotGroup(this, targetSelector, _statCalculator, ActiveDefenseTowerRewardTriggerDispatcher);
         if (!hasFired && TryRefreshTargetsForImmediateShot())
         {
@@ -147,8 +141,8 @@ public class DefenseTowerCombatSystem : MonoBehaviour
     // 处理一次主动攻击触发后的奖励效果。
     private void HandleAttackTriggeredRewards()
     {
-        DefenseTowerAttackContext attackContext = new(this, _healthSystem);
-        ActiveDefenseTowerRewardTriggerDispatcher?.OnAfterAttack(attackContext);
+        DefenseTowerAttackCompletedContext attackContext = new(this, _healthSystem);
+        ActiveDefenseTowerRewardTriggerDispatcher?.OnAttackCompleted(attackContext);
         arrowLauncher.FireExtraAttackArrows(attackContext.ExtraAttackCount, this, targetSelector, _statCalculator, ActiveDefenseTowerRewardTriggerDispatcher);
     }
 
@@ -160,7 +154,7 @@ public class DefenseTowerCombatSystem : MonoBehaviour
             return;
         }
 
-        _currentStats = _statCalculator.RefreshStats(ActiveDefenseTowerRewardTriggerDispatcher);
+        _currentStats = _statCalculator.RefreshStats();
         attackDamage = _currentStats.AttackDamage;
         arrowGenerateRate = _currentStats.ArrowGenerateRate;
         detectRadius = _currentStats.DetectRadius;

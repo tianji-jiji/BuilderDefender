@@ -51,8 +51,22 @@ public class Arrow : MonoBehaviour, IPoolable
             TryGetComponent(out arrowVisual);
         }
     }
+    
+    private void Update()
+    {
+        _lifeTimer += Time.deltaTime;
 
-    // 重置箭头从对象池取出后的运行状态。
+        if (_lifeTimer >= lifetime)
+        {
+            ReturnArrow();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        FlyToEnemy();
+    }
+    
     public void OnSpawned()
     {
         TryGetComponent(out _pooledObject);
@@ -77,7 +91,6 @@ public class Arrow : MonoBehaviour, IPoolable
         _rb2.linearVelocity = Vector2.zero;
     }
 
-    // 清理箭头回池前的运行状态。
     public void OnDespawned()
     {
         _sourceDefenseTowerCombatSystem = null;
@@ -90,21 +103,6 @@ public class Arrow : MonoBehaviour, IPoolable
         _collider.enabled = false;
         arrowVisual?.ResetForDespawn();
         _rb2.linearVelocity = Vector2.zero;
-    }
-
-    private void Update()
-    {
-        _lifeTimer += Time.deltaTime;
-
-        if (_lifeTimer >= lifetime)
-        {
-            ReturnArrow();
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        FlyToEnemy();
     }
 
     // 设置箭头追踪目标。
@@ -125,12 +123,6 @@ public class Arrow : MonoBehaviour, IPoolable
     public void SetDamage(int damage)
     {
         _damage = Mathf.Max(1, damage);
-    }
-
-    // 设置本次发射携带的攻击上下文。
-    public void SetAttackContext(DefenseTowerCombatSystem sourceDefenseTowerCombatSystem, float armorIgnorePercent, bool isExplosiveArrow, float explosionRadius, float explosionDamageMultiplier)
-    {
-        SetAttackContext(sourceDefenseTowerCombatSystem, armorIgnorePercent, isExplosiveArrow, explosionRadius, explosionDamageMultiplier, null, 0f, 0, 0);
     }
 
     // 设置本次发射携带的攻击上下文和能力数据。

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Epic_PiercingArrow
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: RewardCard_c0400000000000000000000000000004
-  cardName: "\u7A7F\u7532\u7BAD\u5934"
-  cardPrefab: {fileID: 238558288862614153, guid: 17f4c7fb7895b0a4bb64ebfbd53101df, type: 3}
+  cardName: "\u7A7F\u900F\u7BAD\u5934"
+  cardPrefab: {fileID: 9144360420907329764, guid: 0637150ec4b6ba144a06cbd27da658d2, type: 3}
   weight: 1
   rarity: 2
   category: 0

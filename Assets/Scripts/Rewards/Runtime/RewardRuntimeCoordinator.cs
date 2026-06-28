@@ -41,7 +41,7 @@ public class RewardRuntimeCoordinator : MonoBehaviour
         {
             return;
         }
-        
+
         // 创建上下文
         RewardEffectApplyContext applyContext = new(
             this,
@@ -95,6 +95,6 @@ public class RewardRuntimeCoordinator : MonoBehaviour
     // 波次结束时应用波次结算型奖励。
     private void HandleWaveCompleted(int waveIndex)
     {
-        _defenseTowerRewards.OnWaveCompleted(waveIndex);
+        _defenseTowerRewards.OnWaveCompleted();
     }
 }

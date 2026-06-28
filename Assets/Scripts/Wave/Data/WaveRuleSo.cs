@@ -1,10 +1,10 @@
+using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// 单种波次中普通、精英和 Boss 敌人的生成权重配置。
 /// </summary>
-[System.Serializable]
+[Serializable]
 public class WaveEnemyWeights
 {
     [SerializeField] private float normalWeight;

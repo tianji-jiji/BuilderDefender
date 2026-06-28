@@ -1,66 +1,53 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// 防御塔卡牌效果分发器，持有那些需要在运行时特定时机被执行的防御塔卡牌效果
+/// 防御塔奖励触发分发器，按运行时能力保存并调用对应奖励效果。
 /// </summary>
 public class DefenseTowerRewardTriggerDispatcher
 {
-    private readonly List<DefenseTowerRewardTriggerInstance> _effectInstanceList = new();
+    private readonly List<DefenseTowerRewardRuntimeState> _runtimeStateList = new();
+    private readonly List<TriggerRegistration<IDefenseTowerAttackCompletedRewardTrigger>> _attackCompletedTriggerList = new();
+    private readonly List<TriggerRegistration<IDefenseTowerArrowModifier>> _arrowModifierList = new();
+    private readonly List<TriggerRegistration<IDefenseTowerEnemyKilledRewardTrigger>> _enemyKilledTriggerList = new();
+    private readonly List<TriggerRegistration<IDefenseTowerWaveCompletedRewardTrigger>> _waveCompletedTriggerList = new();
 
-    // 注册一条可运行时生效的防御塔卡牌效果。
-    public void RegisterEffect(IDefenseTowerRewardTrigger effect, RewardCardEffectConfig config)
+    // 按奖励实际支持的运行时能力注册触发器。
+    public void RegisterEffect(IDefenseTowerRuntimeReward runtimeReward, RewardCardEffectConfig config)
     {
-        if (effect == null || !effect.ShouldRegisterRuntimeEffect)
+        if (runtimeReward == null)
         {
             return;
         }
 
-        _effectInstanceList.Add(new DefenseTowerRewardTriggerInstance(effect, config));
-    }
+        DefenseTowerRewardRuntimeState runtimeState = new(config);
+        bool hasRegistered = false;
 
-    // 依次修改防御塔当前战斗属性。
-    public void ModifyStats(DefenseTowerStatsContext context)
-    {
-        if (context == null)
-        {
-            return;
-        }
+        hasRegistered |= TryRegister(runtimeReward, runtimeState, _attackCompletedTriggerList);
+        hasRegistered |= TryRegister(runtimeReward, runtimeState, _arrowModifierList);
+        hasRegistered |= TryRegister(runtimeReward, runtimeState, _enemyKilledTriggerList);
+        hasRegistered |= TryRegister(runtimeReward, runtimeState, _waveCompletedTriggerList);
 
-        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
+        if (hasRegistered)
         {
-            instance.Effect.ModifyStats(instance, context);
+            _runtimeStateList.Add(runtimeState);
         }
     }
 
-    // 依次处理攻击前逻辑。
-    public void OnBeforeAttack(DefenseTowerAttackContext context)
-    {
-        if (context == null)
-        {
-            return;
-        }
-
-        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
-        {
-            instance.Effect.OnBeforeAttack(instance, context);
-        }
-    }
-
-    // 依次处理攻击后逻辑。
-    public void OnAfterAttack(DefenseTowerAttackContext context)
+    // 处理一次成功完成的防御塔主动攻击。
+    public void OnAttackCompleted(DefenseTowerAttackCompletedContext context)
     {
         if (context == null)
         {
             return;
         }
 
-        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
+        foreach (TriggerRegistration<IDefenseTowerAttackCompletedRewardTrigger> registration in _attackCompletedTriggerList)
         {
-            instance.Effect.OnAfterAttack(instance, context);
+            registration.Trigger.OnAttackCompleted(registration.RuntimeState, context);
         }
     }
 
-    // 依次修改单支箭发射上下文。
+    // 修改单支待发射箭矢的奖励能力配置。
     public void ModifyArrow(DefenseTowerArrowContext context)
     {
         if (context == null)
@@ -68,51 +55,77 @@ public class DefenseTowerRewardTriggerDispatcher
             return;
         }
 
-        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
+        foreach (TriggerRegistration<IDefenseTowerArrowModifier> registration in _arrowModifierList)
         {
-            instance.Effect.ModifyArrow(instance, context);
+            registration.Trigger.ModifyArrow(registration.RuntimeState, context);
         }
     }
 
-    // 依次处理敌人命中逻辑。
-    public void OnEnemyHit(DefenseTowerEnemyHitContext context)
+    // 处理一次由防御塔造成的敌人击杀。
+    public void OnEnemyKilled(DefenseTowerEnemyKilledContext context)
     {
         if (context == null)
         {
             return;
         }
 
-        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
+        foreach (TriggerRegistration<IDefenseTowerEnemyKilledRewardTrigger> registration in _enemyKilledTriggerList)
         {
-            instance.Effect.OnEnemyHit(instance, context);
+            registration.Trigger.OnEnemyKilled(registration.RuntimeState, context);
         }
     }
 
-    // 依次处理敌人击杀逻辑。
-    public void OnEnemyKilled(DefenseTowerEnemyKillContext context)
+    // 处理一次波次完成结算。
+    public void OnWaveCompleted()
     {
-        if (context == null)
+        foreach (TriggerRegistration<IDefenseTowerWaveCompletedRewardTrigger> registration in _waveCompletedTriggerList)
+        {
+            registration.Trigger.OnWaveCompleted(registration.RuntimeState);
+        }
+    }
+
+    // 清理指定防御塔在全部运行时奖励中的计数状态。
+    public void ClearSource(DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+    {
+        if (!sourceDefenseTowerCombatSystem)
         {
             return;
         }
 
-        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
+        foreach (DefenseTowerRewardRuntimeState runtimeState in _runtimeStateList)
         {
-            instance.Effect.OnEnemyKilled(instance, context);
+            runtimeState.ClearCounters(sourceDefenseTowerCombatSystem);
         }
     }
 
-    // 依次处理波次结束逻辑。
-    public void OnWaveCompleted(DefenseTowerWaveContext context)
+    // 将奖励按指定能力加入对应触发列表。
+    private static bool TryRegister<TTrigger>(
+        IDefenseTowerRuntimeReward runtimeReward,
+        DefenseTowerRewardRuntimeState runtimeState,
+        List<TriggerRegistration<TTrigger>> triggerRegistrationList)
+        where TTrigger : class, IDefenseTowerRuntimeReward
     {
-        if (context == null)
+        if (runtimeReward is not TTrigger trigger)
         {
-            return;
+            return false;
         }
 
-        foreach (DefenseTowerRewardTriggerInstance instance in _effectInstanceList)
+        triggerRegistrationList.Add(new TriggerRegistration<TTrigger>(trigger, runtimeState));
+        return true;
+    }
+
+    /// <summary>
+    /// 单项触发能力注册记录，关联具体处理器和共享运行时状态。
+    /// </summary>
+    private class TriggerRegistration<TTrigger> where TTrigger : class, IDefenseTowerRuntimeReward
+    {
+        public TTrigger Trigger { get; }
+        public DefenseTowerRewardRuntimeState RuntimeState { get; }
+
+        public TriggerRegistration(TTrigger trigger, DefenseTowerRewardRuntimeState runtimeState)
         {
-            instance.Effect.OnWaveCompleted(instance, context);
+            Trigger = trigger;
+            RuntimeState = runtimeState;
         }
     }
 }

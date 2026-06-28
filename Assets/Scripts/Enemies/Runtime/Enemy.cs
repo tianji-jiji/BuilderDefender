@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour, IPoolable
 {
@@ -93,7 +93,7 @@ public class Enemy : MonoBehaviour, IPoolable
         IsAlive = true;
         _timer = 0f;
         _currentTarget = _defaultTarget;
-        _randomMoveSpeed = _runtimeStats.MoveSpeed * UnityEngine.Random.Range(0.9f, 1.1f);
+        _randomMoveSpeed = _runtimeStats.MoveSpeed * Random.Range(0.9f, 1.1f);
 
         if (healthSystem)
         {

@@ -18,14 +18,9 @@ public static class ArrowHitDamageApplier
         int actualDamage = enemy.HealthSystem.TakeDamage(adjustedDamage);
         DamageFloatingTextEvent.ShowDamage(enemy.DamageFloatingTextPosition, actualDamage);
 
-        if (actualDamage > 0 && sourceDefenseTowerCombatSystem)
-        {
-            sourceDefenseTowerCombatSystem.NotifyEnemyHit(enemy, actualDamage);
-        }
-
         if (wasAlive && !enemy.IsAlive && sourceDefenseTowerCombatSystem)
         {
-            sourceDefenseTowerCombatSystem.NotifyEnemyKilled(enemy);
+            sourceDefenseTowerCombatSystem.NotifyEnemyKilled();
         }
 
         return actualDamage;
@@ -45,7 +40,7 @@ public static class ArrowHitDamageApplier
 
         if (wasAlive && !enemy.IsAlive && sourceDefenseTowerCombatSystem)
         {
-            sourceDefenseTowerCombatSystem.NotifyEnemyKilled(enemy);
+            sourceDefenseTowerCombatSystem.NotifyEnemyKilled();
         }
 
         return actualDamage;
@@ -65,7 +60,7 @@ public static class ArrowHitDamageApplier
 
         if (wasAlive && !enemy.IsAlive && sourceDefenseTowerCombatSystem)
         {
-            sourceDefenseTowerCombatSystem.NotifyEnemyKilled(enemy);
+            sourceDefenseTowerCombatSystem.NotifyEnemyKilled();
         }
 
         return actualDamage;

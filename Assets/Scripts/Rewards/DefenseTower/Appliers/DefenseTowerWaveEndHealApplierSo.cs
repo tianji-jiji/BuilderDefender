@@ -4,7 +4,7 @@ using UnityEngine;
 /// 防御塔波末回血奖励应用器，负责在波次结束时治疗所有防御塔。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Wave End Heal Applier")]
-public class DefenseTowerWaveEndHealApplierSo : DefenseTowerRuntimeRewardApplierSo
+public class DefenseTowerWaveEndHealApplierSo : DefenseTowerRewardApplierSo, IDefenseTowerWaveCompletedRewardTrigger
 {
     // 应用波末回血比例。
     public override void Apply(RewardEffectApplyContext applyContext, RewardCardEffectConfig config)
@@ -17,9 +17,9 @@ public class DefenseTowerWaveEndHealApplierSo : DefenseTowerRuntimeRewardApplier
     }
 
     // 在波次结束时治疗所有防御塔。
-    public override void OnWaveCompleted(DefenseTowerRewardTriggerInstance instance, DefenseTowerWaveContext context)
+    public void OnWaveCompleted(DefenseTowerRewardRuntimeState runtimeState)
     {
-        float healPercent = RewardEffectParameterReader.GetFloat(instance.Config, RewardEffectParameterIds.WAVE_END_HEAL_PERCENT, GetValue(instance.Config));
+        float healPercent = RewardEffectParameterReader.GetFloat(runtimeState.Config, RewardEffectParameterIds.WAVE_END_HEAL_PERCENT, GetValue(runtimeState.Config));
         DefenseTowerWaveEndRewardEffectApplier.ApplyWaveEndHeal(healPercent);
     }
 }

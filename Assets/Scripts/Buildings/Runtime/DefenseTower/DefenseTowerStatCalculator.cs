@@ -47,27 +47,20 @@ public class DefenseTowerStatCalculator
         CurrentStarLevel = upgradeLevel.StarLevel;
     }
 
-    // 重新计算当前防御塔属性并允许卡牌运行时修改结果。
-    public DefenseTowerCombatStats RefreshStats(DefenseTowerRewardTriggerDispatcher activeDispatcher)
+    // 重新计算当前防御塔属性。
+    public DefenseTowerCombatStats RefreshStats()
     {
-        DefenseTowerStatsContext statsContext = new(
-            _sourceDefenseTowerCombatSystem,
+        return new DefenseTowerCombatStats(
             GetCurrentAttackDamage(false),
             GetCurrentArrowGenerateRate(),
             GetCurrentDetectRadius());
-        activeDispatcher?.ModifyStats(statsContext);
-
-        return new DefenseTowerCombatStats(
-            statsContext.AttackDamage,
-            Mathf.Max(MIN_ARROW_GENERATE_RATE, statsContext.ArrowGenerateRate),
-            statsContext.DetectRadius);
     }
 
     // 计算当前攻击伤害。
     public int GetCurrentAttackDamage(bool includeRandomDoubleDamage = true)
     {
         DefenseTowerActiveRewards activeRewards = ActiveRewards;
-        float rewardAttackDamageMultiplier = activeRewards != null ? activeRewards.AttackDamageMultiplier : 1f;
+        float rewardAttackDamageMultiplier = activeRewards?.AttackDamageMultiplier ?? 1f;
         float damage = _baseAttackDamage
                        * _upgradeAttackDamageMultiplier
                        * rewardAttackDamageMultiplier
@@ -86,8 +79,8 @@ public class DefenseTowerStatCalculator
     private float GetCurrentArrowGenerateRate()
     {
         DefenseTowerActiveRewards activeRewards = ActiveRewards;
-        float rewardAttackIntervalMultiplier = activeRewards != null ? activeRewards.AttackIntervalMultiplier : 1f;
-        float overloadAttackIntervalMultiplier = activeRewards != null ? activeRewards.OverloadAttackIntervalMultiplier : 1f;
+        float rewardAttackIntervalMultiplier = activeRewards?.AttackIntervalMultiplier ?? 1f;
+        float overloadAttackIntervalMultiplier = activeRewards?.OverloadAttackIntervalMultiplier ?? 1f;
         float linkedAttackIntervalMultiplier = ShouldApplyLinkedAttackSpeed() && activeRewards != null
             ? activeRewards.LinkedAttackIntervalMultiplier
             : 1f;
@@ -104,7 +97,7 @@ public class DefenseTowerStatCalculator
     // 获取本次箭矢护甲穿透比例。
     public float GetArmorIgnorePercent()
     {
-        return ActiveRewards != null ? ActiveRewards.ArmorIgnorePercent : 0f;
+        return ActiveRewards?.ArmorIgnorePercent ?? 0f;
     }
 
     // 判断本次箭矢是否启用三星爆裂箭。
@@ -119,20 +112,20 @@ public class DefenseTowerStatCalculator
     // 获取爆裂箭爆炸半径。
     public float GetExplosionRadius()
     {
-        return ActiveRewards != null ? ActiveRewards.ExplosionRadius : 0f;
+        return ActiveRewards?.ExplosionRadius ?? 0f;
     }
 
     // 获取爆裂箭范围伤害倍率。
     public float GetExplosionDamageMultiplier()
     {
-        return ActiveRewards != null ? ActiveRewards.ExplosionDamageMultiplier : 0f;
+        return ActiveRewards?.ExplosionDamageMultiplier ?? 0f;
     }
 
     // 计算当前索敌半径。
     private float GetCurrentDetectRadius()
     {
         DefenseTowerActiveRewards activeRewards = ActiveRewards;
-        float rewardDetectRadiusMultiplier = activeRewards != null ? activeRewards.DetectRadiusMultiplier : 1f;
+        float rewardDetectRadiusMultiplier = activeRewards?.DetectRadiusMultiplier ?? 1f;
 
         return Mathf.Max(0.01f, _baseDetectRadius * _upgradeDetectRadiusMultiplier * rewardDetectRadiusMultiplier);
     }
@@ -163,8 +156,7 @@ public class DefenseTowerStatCalculator
     {
         DefenseTowerActiveRewards activeRewards = ActiveRewards;
         return _sourceDefenseTowerCombatSystem
-               && activeRewards != null
-               && activeRewards.LinkRadius > 0f
+               && activeRewards is { LinkRadius: > 0f }
                && DefenseTowerRegistry.HasNearbyDefenseTower(_sourceDefenseTowerCombatSystem, activeRewards.LinkRadius);
     }
 
@@ -172,8 +164,7 @@ public class DefenseTowerStatCalculator
     private bool ShouldApplyDoubleDamage()
     {
         DefenseTowerActiveRewards activeRewards = ActiveRewards;
-        return activeRewards != null
-               && activeRewards.DoubleDamageChance > 0f
+        return activeRewards is { DoubleDamageChance: > 0f }
                && Random.value < activeRewards.DoubleDamageChance;
     }
 }

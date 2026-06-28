@@ -6,7 +6,6 @@ using UnityEngine;
 public class DefenseTowerTargetSelector : MonoBehaviour
 {
     public const float DETECT_INTERVAL = 0.2f;
-
     private const int MAX_DETECTED_ENEMIES = 10;
 
     [SerializeField] private Transform detectPoint;
@@ -16,10 +15,28 @@ public class DefenseTowerTargetSelector : MonoBehaviour
     private int _detectedEnemyCount;
     private Enemy _currentTargetEnemy;
 
-    public bool HasTarget => IsTargetValid(_currentTargetEnemy);
-
-    // 侦测范围内最近的有效敌人。
-    public bool Detect(float radius)
+    // 判断敌人是否仍然可以被防御塔攻击。
+    public static bool IsTargetValid(Enemy enemy)
+    {
+        return enemy && enemy.gameObject.activeInHierarchy && enemy.IsAlive;
+    }
+    
+    // 判断敌人是否属于指定的上下半区目标范围。
+    private bool IsEnemyInTargetLane(Enemy enemy, DefenseTowerTargetLane targetLane)
+    {
+        switch (targetLane)
+        {
+            case DefenseTowerTargetLane.Upper:
+                return enemy.transform.position.y >= transform.position.y;
+            case DefenseTowerTargetLane.Lower:
+                return enemy.transform.position.y < transform.position.y;
+            default:
+                return true;
+        }
+    }
+    
+    // 侦测范围内是否有敌人
+    public bool HasTargetInRadius(float radius)
     {
         Transform detectionPoint = detectPoint ? detectPoint : transform;
         float detectRadius = Mathf.Max(0.01f, radius);
@@ -32,24 +49,7 @@ public class DefenseTowerTargetSelector : MonoBehaviour
         }
 
         _currentTargetEnemy = FindClosestTarget(DefenseTowerTargetLane.Any);
-        return HasTarget;
-    }
-
-    // 当前目标失效时从缓存中重锁，缓存无效时重新侦测。
-    public bool RefreshCurrentTarget(float radius)
-    {
-        if (HasTarget)
-        {
-            return true;
-        }
-
-        _currentTargetEnemy = FindClosestTarget(DefenseTowerTargetLane.Any);
-        if (HasTarget)
-        {
-            return true;
-        }
-
-        return Detect(radius);
+        return IsTargetValid(_currentTargetEnemy);
     }
 
     // 优先查找指定区域目标，区域内没有敌人时回退到全局索敌。
@@ -63,20 +63,7 @@ public class DefenseTowerTargetSelector : MonoBehaviour
 
         return FindClosestTarget(DefenseTowerTargetLane.Any);
     }
-
-    // 清空当前目标和检测缓存数量。
-    public void ClearTarget()
-    {
-        _currentTargetEnemy = null;
-        _detectedEnemyCount = 0;
-    }
-
-    // 判断敌人是否仍然可以被防御塔攻击。
-    public static bool IsTargetValid(Enemy enemy)
-    {
-        return enemy && enemy.gameObject.activeInHierarchy && enemy.IsAlive;
-    }
-
+    
     // 查找指定区域内距离防御塔最近的有效敌人。
     private Enemy FindClosestTarget(DefenseTowerTargetLane targetLane)
     {
@@ -101,18 +88,29 @@ public class DefenseTowerTargetSelector : MonoBehaviour
 
         return closestTarget;
     }
-
-    // 判断敌人是否属于指定的上下半区目标范围。
-    private bool IsEnemyInTargetLane(Enemy enemy, DefenseTowerTargetLane targetLane)
+    
+    // 当前目标失效时从缓存中重锁，缓存无效时重新侦测。
+    public bool RefreshCurrentTarget(float radius)
     {
-        switch (targetLane)
+        if (IsTargetValid(_currentTargetEnemy))
         {
-            case DefenseTowerTargetLane.Upper:
-                return enemy.transform.position.y >= transform.position.y;
-            case DefenseTowerTargetLane.Lower:
-                return enemy.transform.position.y < transform.position.y;
-            default:
-                return true;
+            return true;
         }
+
+        _currentTargetEnemy = FindClosestTarget(DefenseTowerTargetLane.Any);
+        
+        if (IsTargetValid(_currentTargetEnemy))
+        {
+            return true;
+        }
+
+        return HasTargetInRadius(radius);
+    }
+    
+    // 清空当前目标和检测缓存数量。
+    public void ClearTarget()
+    {
+        _currentTargetEnemy = null;
+        _detectedEnemyCount = 0;
     }
 }

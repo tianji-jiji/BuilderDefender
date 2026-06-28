@@ -4,21 +4,21 @@ using UnityEngine;
 /// 防御塔燃烧箭奖励应用器，负责让箭矢概率施加燃烧状态。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Burn Arrow Applier")]
-public class DefenseTowerBurnArrowApplierSo : DefenseTowerRuntimeRewardApplierSo
+public class DefenseTowerBurnArrowApplierSo : DefenseTowerRewardApplierSo, IDefenseTowerArrowModifier
 {
     // 修改单支箭的燃烧能力。
-    public override void ModifyArrow(DefenseTowerRewardTriggerInstance instance, DefenseTowerArrowContext context)
+    public void ModifyArrow(DefenseTowerRewardRuntimeState runtimeState, DefenseTowerArrowContext context)
     {
-        if (context == null || !ShouldTrigger(instance.Config))
+        if (context == null || !ShouldTrigger(runtimeState.Config))
         {
             return;
         }
 
         EnemyStatusEffectSpec statusEffectSpec = new(
             EnemyStatusEffectType.Burn,
-            GetStatusDuration(instance.Config),
-            GetTickInterval(instance.Config),
-            GetTickDamagePercent(instance.Config),
+            GetStatusDuration(runtimeState.Config),
+            GetTickInterval(runtimeState.Config),
+            GetTickDamagePercent(runtimeState.Config),
             context.SourceDefenseTowerCombatSystem,
             DamageFloatingTextStyle.Burn);
 

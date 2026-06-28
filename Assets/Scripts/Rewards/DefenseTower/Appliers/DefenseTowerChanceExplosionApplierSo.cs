@@ -4,18 +4,18 @@ using UnityEngine;
 /// 防御塔概率爆炸箭奖励应用器，负责让箭矢概率造成固定范围伤害。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Chance Explosion Applier")]
-public class DefenseTowerChanceExplosionApplierSo : DefenseTowerRuntimeRewardApplierSo
+public class DefenseTowerChanceExplosionApplierSo : DefenseTowerRewardApplierSo, IDefenseTowerArrowModifier
 {
     // 修改单支箭的概率爆炸能力。
-    public override void ModifyArrow(DefenseTowerRewardTriggerInstance instance, DefenseTowerArrowContext context)
+    public void ModifyArrow(DefenseTowerRewardRuntimeState runtimeState, DefenseTowerArrowContext context)
     {
-        if (context == null || !ShouldTrigger(instance.Config))
+        if (context == null || !ShouldTrigger(runtimeState.Config))
         {
             return;
         }
 
-        float explosionRadius = RewardEffectParameterReader.GetFloat(instance.Config, RewardEffectParameterIds.EXPLOSION_RADIUS, 0f, true);
-        int explosionDamage = RewardEffectParameterReader.GetInt(instance.Config, RewardEffectParameterIds.EXPLOSION_DAMAGE, 0, true);
+        float explosionRadius = RewardEffectParameterReader.GetFloat(runtimeState.Config, RewardEffectParameterIds.EXPLOSION_RADIUS, 0f, true);
+        int explosionDamage = RewardEffectParameterReader.GetInt(runtimeState.Config, RewardEffectParameterIds.EXPLOSION_DAMAGE, 0, true);
         context.SetChanceExplosion(explosionRadius, explosionDamage);
     }
 

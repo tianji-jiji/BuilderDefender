@@ -1,4 +1,6 @@
-[System.Serializable]
+using System;
+
+[Serializable]
 public class ResourceCost
 {
     public ResourceSo resourceSo;

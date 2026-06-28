@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public class BuildingUpgradeConfigSo : ScriptableObject
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class BuildingUpgradeLevel
 {
     [SerializeField] private int starLevel = 2;

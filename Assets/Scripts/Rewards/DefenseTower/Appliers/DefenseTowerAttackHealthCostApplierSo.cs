@@ -4,7 +4,7 @@ using UnityEngine;
 /// 防御塔攻击扣血奖励应用器，负责记录并执行攻击若干次后损失生命的规则。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Attack Health Cost Applier")]
-public class DefenseTowerAttackHealthCostApplierSo : DefenseTowerRuntimeRewardApplierSo
+public class DefenseTowerAttackHealthCostApplierSo : DefenseTowerRewardApplierSo, IDefenseTowerAttackCompletedRewardTrigger
 {
     private const string ATTACK_COUNTER_ID = "AttackHealthCost";
 
@@ -22,27 +22,28 @@ public class DefenseTowerAttackHealthCostApplierSo : DefenseTowerRuntimeRewardAp
     }
 
     // 按攻击次数扣除防御塔生命。
-    public override void OnAfterAttack(DefenseTowerRewardTriggerInstance instance, DefenseTowerAttackContext context)
+    public void OnAttackCompleted(DefenseTowerRewardRuntimeState runtimeState, DefenseTowerAttackCompletedContext context)
     {
         if (context.SourceHealthSystem == null)
         {
             return;
         }
 
-        int triggerAttackCount = RewardEffectParameterReader.GetInt(instance.Config, RewardEffectParameterIds.TRIGGER_ATTACK_COUNT, 1);
-        int healthCost = RewardEffectParameterReader.GetInt(instance.Config, RewardEffectParameterIds.ATTACK_HEALTH_COST, Mathf.RoundToInt(GetValue(instance.Config)));
+        int triggerAttackCount = RewardEffectParameterReader.GetInt(runtimeState.Config, RewardEffectParameterIds.TRIGGER_ATTACK_COUNT, 1);
+        int healthCost = RewardEffectParameterReader.GetInt(runtimeState.Config, RewardEffectParameterIds.ATTACK_HEALTH_COST, Mathf.RoundToInt(GetValue(runtimeState.Config)));
         if (triggerAttackCount <= 0 || healthCost <= 0)
         {
             return;
         }
 
-        int attackCount = instance.IncrementCounter(ATTACK_COUNTER_ID);
+        DefenseTowerCombatSystem sourceDefenseTowerCombatSystem = context.SourceDefenseTowerCombatSystem;
+        int attackCount = runtimeState.IncrementCounter(sourceDefenseTowerCombatSystem, ATTACK_COUNTER_ID);
         if (attackCount < triggerAttackCount)
         {
             return;
         }
 
-        instance.ResetCounter(ATTACK_COUNTER_ID);
+        runtimeState.ResetCounter(sourceDefenseTowerCombatSystem, ATTACK_COUNTER_ID);
         context.SourceHealthSystem.LoseHealth(healthCost);
     }
 }

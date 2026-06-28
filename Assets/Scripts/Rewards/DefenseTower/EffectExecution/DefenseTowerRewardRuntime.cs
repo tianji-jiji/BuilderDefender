@@ -43,8 +43,8 @@ public class DefenseTowerRewardRuntime
     }
 
     // 波次结束时转发给防御塔奖励触发器。
-    public void OnWaveCompleted(int waveIndex)
+    public void OnWaveCompleted()
     {
-        TriggerDispatcher.OnWaveCompleted(new DefenseTowerWaveContext(waveIndex));
+        TriggerDispatcher.OnWaveCompleted();
     }
 }

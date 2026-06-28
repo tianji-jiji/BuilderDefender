@@ -4,17 +4,17 @@ using UnityEngine;
 /// 防御塔穿透箭奖励应用器，负责让箭矢概率获得穿透次数。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Piercing Arrow Applier")]
-public class DefenseTowerPiercingArrowApplierSo : DefenseTowerRuntimeRewardApplierSo
+public class DefenseTowerPiercingArrowApplierSo : DefenseTowerRewardApplierSo, IDefenseTowerArrowModifier
 {
     // 修改单支箭的穿透能力。
-    public override void ModifyArrow(DefenseTowerRewardTriggerInstance instance, DefenseTowerArrowContext context)
+    public void ModifyArrow(DefenseTowerRewardRuntimeState runtimeState, DefenseTowerArrowContext context)
     {
-        if (context == null || !ShouldTrigger(instance.Config))
+        if (context == null || !ShouldTrigger(runtimeState.Config))
         {
             return;
         }
 
-        int pierceCount = RewardEffectParameterReader.GetInt(instance.Config, RewardEffectParameterIds.PIERCE_COUNT, 0, true);
+        int pierceCount = RewardEffectParameterReader.GetInt(runtimeState.Config, RewardEffectParameterIds.PIERCE_COUNT, 0, true);
         context.SetPierceCount(pierceCount);
     }
 

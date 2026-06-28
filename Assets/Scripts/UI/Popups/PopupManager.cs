@@ -3,7 +3,6 @@ using System.Text;
 using MoreMountains.Feedbacks;
 using UnityEngine;
 
-
 public class PopupManager : MonoBehaviour
 {
     private const float SCREEN_CENTER_RATIO = 0.5f;

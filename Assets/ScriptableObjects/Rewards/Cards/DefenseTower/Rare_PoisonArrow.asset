@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RewardCardSo
   cardId: RewardCard_c0100000000000000000000000000001
   cardName: "\u6DEC\u6BD2\u7BAD\u5934"
-  cardPrefab: {fileID: 1471311803384588315, guid: 7d02feb8006761348bc6554da2cfdebc, type: 3}
+  cardPrefab: {fileID: 211415702305041782, guid: 8f0d503978640694e851513a87d7840f, type: 3}
   weight: 1
   rarity: 1
   category: 0

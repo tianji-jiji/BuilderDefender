@@ -4,21 +4,21 @@ using UnityEngine;
 /// 防御塔中毒箭奖励应用器，负责让箭矢概率施加中毒状态。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Defense Tower Poison Arrow Applier")]
-public class DefenseTowerPoisonArrowApplierSo : DefenseTowerRuntimeRewardApplierSo
+public class DefenseTowerPoisonArrowApplierSo : DefenseTowerRewardApplierSo, IDefenseTowerArrowModifier
 {
     // 修改单支箭的中毒能力。
-    public override void ModifyArrow(DefenseTowerRewardTriggerInstance instance, DefenseTowerArrowContext context)
+    public void ModifyArrow(DefenseTowerRewardRuntimeState runtimeState, DefenseTowerArrowContext context)
     {
-        if (context == null || !ShouldTrigger(instance.Config))
+        if (context == null || !ShouldTrigger(runtimeState.Config))
         {
             return;
         }
 
         EnemyStatusEffectSpec statusEffectSpec = new(
             EnemyStatusEffectType.Poison,
-            GetStatusDuration(instance.Config),
-            GetTickInterval(instance.Config),
-            GetTickDamagePercent(instance.Config),
+            GetStatusDuration(runtimeState.Config),
+            GetTickInterval(runtimeState.Config),
+            GetTickDamagePercent(runtimeState.Config),
             context.SourceDefenseTowerCombatSystem,
             DamageFloatingTextStyle.Poison);
 

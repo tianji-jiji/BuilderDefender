@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-[System.Serializable]
+[Serializable]
 public class PoolConfig
 {
     [SerializeField] private GameObject prefab;

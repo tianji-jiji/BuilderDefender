@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -203,7 +205,7 @@ public class RewardSummaryPanel : MonoBehaviour
             return new[] { EMPTY_BONUS_TEXT };
         }
 
-        return summaryText.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.None);
+        return summaryText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
     }
 
     // 确保总加成文本列数量足够。
@@ -250,7 +252,7 @@ public class RewardSummaryPanel : MonoBehaviour
     // 构建单列总加成文本。
     private string BuildColumnText(IReadOnlyList<string> summaryLineList, int startIndex, int maxLineCount)
     {
-        System.Text.StringBuilder columnBuilder = new();
+        StringBuilder columnBuilder = new();
         int endIndex = Mathf.Min(summaryLineList.Count, startIndex + maxLineCount);
 
         for (int i = startIndex; i < endIndex; i++)

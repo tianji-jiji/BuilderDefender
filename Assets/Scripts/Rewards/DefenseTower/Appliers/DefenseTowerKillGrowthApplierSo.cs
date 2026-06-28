@@ -4,7 +4,7 @@ using UnityEngine;
 /// 防御塔击杀成长奖励应用器，负责按击杀次数自动提升防御塔星级。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/Appliers/Tower Kill Growth Applier")]
-public class DefenseTowerKillGrowthApplierSo : DefenseTowerRuntimeRewardApplierSo
+public class DefenseTowerKillGrowthApplierSo : DefenseTowerRewardApplierSo, IDefenseTowerEnemyKilledRewardTrigger
 {
     private const string KILL_COUNTER_ID = "KillAutoUpgrade";
 
@@ -21,22 +21,23 @@ public class DefenseTowerKillGrowthApplierSo : DefenseTowerRuntimeRewardApplierS
     }
 
     // 按击杀次数自动提升防御塔星级。
-    public override void OnEnemyKilled(DefenseTowerRewardTriggerInstance instance, DefenseTowerEnemyKillContext context)
+    public void OnEnemyKilled(DefenseTowerRewardRuntimeState runtimeState, DefenseTowerEnemyKilledContext context)
     {
-        int killCountToUpgrade = RewardEffectParameterReader.GetInt(instance.Config, RewardEffectParameterIds.KILL_COUNT_TO_UPGRADE, 0);
+        int killCountToUpgrade = RewardEffectParameterReader.GetInt(runtimeState.Config, RewardEffectParameterIds.KILL_COUNT_TO_UPGRADE, 0);
         if (killCountToUpgrade <= 0 || !context.SourceDefenseTowerCombatSystem)
         {
             return;
         }
 
-        int killCount = instance.IncrementCounter(KILL_COUNTER_ID);
+        DefenseTowerCombatSystem sourceDefenseTowerCombatSystem = context.SourceDefenseTowerCombatSystem;
+        int killCount = runtimeState.IncrementCounter(sourceDefenseTowerCombatSystem, KILL_COUNTER_ID);
         if (killCount < killCountToUpgrade)
         {
             return;
         }
 
-        instance.ResetCounter(KILL_COUNTER_ID);
-        BuildingUpgradeButton upgradeButton = DefenseTowerRegistry.GetUpgradeButton(context.SourceDefenseTowerCombatSystem);
+        runtimeState.ResetCounter(sourceDefenseTowerCombatSystem, KILL_COUNTER_ID);
+        BuildingUpgradeButton upgradeButton = DefenseTowerRegistry.GetUpgradeButton(sourceDefenseTowerCombatSystem);
         if (upgradeButton)
         {
             upgradeButton.UpgradeOneLevelWithoutCost();
