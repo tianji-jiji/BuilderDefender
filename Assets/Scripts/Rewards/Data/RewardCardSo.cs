@@ -57,7 +57,6 @@ public class RewardCardSo : ScriptableObject
     public RewardCardCategory Category => category;
     public int MinWaveIndex => Mathf.Max(0, minWaveIndex);
     public int MaxPickCount => isUnique ? 1 : maxPickCount <= 0 ? int.MaxValue : maxPickCount;
-    public bool IsUnique => isUnique;
     public IReadOnlyList<RewardCardEffectConfig> EffectConfigList => effectConfigList;
 
 #if UNITY_EDITOR

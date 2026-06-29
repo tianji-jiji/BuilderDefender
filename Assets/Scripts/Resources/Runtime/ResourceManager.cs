@@ -140,7 +140,7 @@ public class ResourceManager : MonoBehaviour
     private int GetAdjustedBuildCostAmount(BuildingSo buildingSo, ResourceCost resourceCost)
     {
         return RewardRuntimeCoordinator.Instance
-            ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.GetAdjustedBuildCostAmount(buildingSo, resourceCost)
+            ? RewardRuntimeCoordinator.Instance.TowerRewards.GetAdjustedBuildCostAmount(buildingSo, resourceCost)
             : resourceCost.amount;
     }
 }

@@ -156,7 +156,7 @@ public class Building : MonoBehaviour
     // 计算当前建筑应该拥有的最大生命值。
     private int CalculateMaxHealth()
     {
-        DefenseTowerActiveRewards activeRewards = GetDefenseTowerActiveRewards();
+        TowerActiveRewards activeRewards = GetDefenseTowerActiveRewards();
         float rewardMaxHealthMultiplier = activeRewards != null ? activeRewards.MaxHealthMultiplier : 1f;
 
         if (!IsDefenseBuilding)
@@ -175,15 +175,15 @@ public class Building : MonoBehaviour
             return 1f;
         }
 
-        DefenseTowerActiveRewards activeRewards = GetDefenseTowerActiveRewards();
+        TowerActiveRewards activeRewards = GetDefenseTowerActiveRewards();
         return activeRewards != null ? activeRewards.DamageTakenMultiplier : 1f;
     }
 
     // 获取当前防御塔奖励状态。
-    private DefenseTowerActiveRewards GetDefenseTowerActiveRewards()
+    private TowerActiveRewards GetDefenseTowerActiveRewards()
     {
         return RewardRuntimeCoordinator.Instance
-            ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.ActiveRewards
+            ? RewardRuntimeCoordinator.Instance.TowerRewards.ActiveRewards
             : null;
     }
 
@@ -245,12 +245,12 @@ public class Building : MonoBehaviour
 
         if (IsDefenseBuilding)
         {
-            DefenseTowerRegistry.RegisterDefenseBuilding(this);
+            TowerRegistry.RegisterDefenseBuilding(this);
         }
 
         if (IsHomeBuilding && _healthSystem)
         {
-            DefenseTowerRegistry.RegisterHomeHealthSystem(_healthSystem);
+            TowerRegistry.RegisterHomeHealthSystem(_healthSystem);
         }
 
         _isRegisteredToRuntimeRegistry = true;
@@ -266,12 +266,12 @@ public class Building : MonoBehaviour
 
         if (IsDefenseBuilding)
         {
-            DefenseTowerRegistry.UnregisterDefenseBuilding(this);
+            TowerRegistry.UnregisterDefenseBuilding(this);
         }
 
         if (IsHomeBuilding && _healthSystem)
         {
-            DefenseTowerRegistry.UnregisterHomeHealthSystem(_healthSystem);
+            TowerRegistry.UnregisterHomeHealthSystem(_healthSystem);
         }
 
         _isRegisteredToRuntimeRegistry = false;

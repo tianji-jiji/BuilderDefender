@@ -135,7 +135,7 @@ public class RewardSummaryPanel : MonoBehaviour
         }
 
         string summaryText = RewardRuntimeCoordinator.Instance
-            ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.BuildSummaryText()
+            ? RewardRuntimeCoordinator.Instance.TowerRewards.BuildSummaryText()
             : EMPTY_BONUS_TEXT;
 
         RefreshTotalBonusColumns(summaryText);

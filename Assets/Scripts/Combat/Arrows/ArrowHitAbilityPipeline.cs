@@ -10,7 +10,7 @@ public class ArrowHitAbilityPipeline : MonoBehaviour
     private readonly List<ArrowHitEffect> _hitEffectList = new();
     private readonly List<ArrowHitContinuation> _hitContinuationList = new();
 
-    private DefenseTowerCombatSystem _sourceDefenseTowerCombatSystem;
+    private TowerCombatSystem sourceTowerCombatSystem;
     private int _damage;
     private float _armorIgnorePercent;
     private bool _isConfigured;
@@ -24,7 +24,7 @@ public class ArrowHitAbilityPipeline : MonoBehaviour
     public void Configure(ArrowLaunchData launchData)
     {
         ResetState();
-        _sourceDefenseTowerCombatSystem = launchData.SourceDefenseTowerCombatSystem;
+        sourceTowerCombatSystem = launchData.SourceTowerCombatSystem;
         _damage = launchData.Damage;
         _armorIgnorePercent = launchData.ArmorIgnorePercent;
 
@@ -62,7 +62,7 @@ public class ArrowHitAbilityPipeline : MonoBehaviour
             hitPosition,
             _damage,
             _armorIgnorePercent,
-            _sourceDefenseTowerCombatSystem);
+            sourceTowerCombatSystem);
         ApplyHitEffects(hitContext);
         _hitEnemyList.Add(enemy);
         hitResolution = new ArrowHitResolution(ResolveContinuation(hitContext));
@@ -72,7 +72,7 @@ public class ArrowHitAbilityPipeline : MonoBehaviour
     // 清理本次发射的命中记录和能力状态。
     public void ResetState()
     {
-        _sourceDefenseTowerCombatSystem = null;
+        sourceTowerCombatSystem = null;
         _damage = 0;
         _armorIgnorePercent = 0f;
         _isConfigured = false;
@@ -107,7 +107,7 @@ public class ArrowHitAbilityPipeline : MonoBehaviour
             hitContext.DirectHitEnemy,
             hitContext.Damage,
             hitContext.ArmorIgnorePercent,
-            hitContext.SourceDefenseTowerCombatSystem);
+            hitContext.SourceTowerCombatSystem);
 
         foreach (ArrowHitEffect hitEffect in _hitEffectList)
         {

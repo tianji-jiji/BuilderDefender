@@ -92,16 +92,13 @@ public class RewardEffectDefinitionSo : ScriptableObject
     private const string DEFAULT_DESCRIPTION_TEMPLATE = "{displayName} {value}";
 
     [SerializeField] private string displayName;
-    [SerializeField] private bool useCustomDescription;
     [SerializeField] private string descriptionTemplate = DEFAULT_DESCRIPTION_TEMPLATE;
     [SerializeField] private RewardEffectAutoImpactRule autoImpactRule = RewardEffectAutoImpactRule.GreaterThanZeroIsPositive;
     [SerializeField] private RewardEffectApplierSo applier;
     [SerializeField] private List<RewardEffectParameterDisplayDefinition> parameterDisplayDefinitionList = new();
 
     public string DisplayName => displayName;
-    public bool UseCustomDescription => useCustomDescription;
     public RewardEffectApplierSo Applier => applier;
-    public IReadOnlyList<RewardEffectParameterDisplayDefinition> ParameterDisplayDefinitionList => parameterDisplayDefinitionList;
 
     // 根据参数富文本构建完整效果描述。
     public string BuildDescription(IReadOnlyDictionary<string, string> parameterTextDic)

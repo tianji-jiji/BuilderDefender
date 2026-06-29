@@ -36,19 +36,10 @@ public static class RewardEffectApplicationService
     // 有些奖励不是选中卡牌后马上一次性完成，而是要在后续游戏过程中触发
     private static void RegisterRuntimeTrigger(RewardEffectApplierSo applier, RewardCardEffectConfig effectConfig, RewardEffectApplyContext applyContext)
     {
-        if (applier is IDefenseTowerRuntimeReward defenseTowerRuntimeReward)
+        if (applier is ITowerRuntimeReward defenseTowerRuntimeReward)
         {
-            applyContext.DefenseTowerRewardRuntime?.TriggerDispatcher.RegisterEffect(defenseTowerRuntimeReward, effectConfig);
+            applyContext.TowerRewardRuntime?.TriggerDispatcher.RegisterEffect(defenseTowerRuntimeReward, effectConfig);
         }
-
-        if (applier is IResourceRewardTrigger resourceRewardTrigger)
-        {
-            applyContext.ResourceRewardRuntime?.TriggerDispatcher.RegisterEffect(resourceRewardTrigger, effectConfig);
-        }
-
-        if (applier is IHomeRewardTrigger homeRewardTrigger)
-        {
-            applyContext.HomeRewardRuntime?.TriggerDispatcher.RegisterEffect(homeRewardTrigger, effectConfig);
-        }
+       
     }
 }

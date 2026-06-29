@@ -11,13 +11,11 @@ public class RewardRuntimeCoordinator : MonoBehaviour
     // 当前生效奖励发生变化时通知所有需要刷新属性的对象。
     public static event Action OnActiveRewardsChanged;
 
-    private readonly DefenseTowerRewardRuntime _defenseTowerRewards = new();
-    private readonly ResourceRewardRuntime _resourceRewards = new();
-    private readonly HomeRewardRuntime _homeRewards = new();
+    private readonly TowerRewardRuntime towerRewards = new();
 
     private WaveManager _waveManager;
 
-    public DefenseTowerRewardRuntime DefenseTowerRewards => _defenseTowerRewards;
+    public TowerRewardRuntime TowerRewards => towerRewards;
 
     private void Awake()
     {
@@ -45,9 +43,7 @@ public class RewardRuntimeCoordinator : MonoBehaviour
         // 创建上下文
         RewardEffectApplyContext applyContext = new(
             this,
-            _defenseTowerRewards,
-            _resourceRewards,
-            _homeRewards,
+            towerRewards,
             ResourceManager.Instance,
             WaveManager.Instance,
             BuildingPlacementManager.Instance);
@@ -95,6 +91,6 @@ public class RewardRuntimeCoordinator : MonoBehaviour
     // 波次结束时应用波次结算型奖励。
     private void HandleWaveCompleted(int waveIndex)
     {
-        _defenseTowerRewards.OnWaveCompleted();
+        towerRewards.OnWaveCompleted();
     }
 }

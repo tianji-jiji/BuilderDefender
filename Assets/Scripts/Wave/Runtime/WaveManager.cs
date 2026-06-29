@@ -256,10 +256,10 @@ public class WaveManager : MonoBehaviour
     }
 
     // 获取当前玩家防御体系战力快照。
-    private DefenseTowerPowerSnapshot GetPlayerPowerSnapshot()
+    private TowerPowerSnapshot GetPlayerPowerSnapshot()
     {
         return RewardRuntimeCoordinator.Instance
-            ? RewardRuntimeCoordinator.Instance.DefenseTowerRewards.CreatePowerSnapshot()
-            : DefenseTowerPowerSnapshot.Default();
+            ? RewardRuntimeCoordinator.Instance.TowerRewards.CreatePowerSnapshot()
+            : TowerPowerSnapshot.Default();
     }
 }

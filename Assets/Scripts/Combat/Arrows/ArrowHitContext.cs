@@ -9,7 +9,7 @@ public readonly struct ArrowHitContext
     public Vector3 HitPosition { get; }
     public int Damage { get; }
     public float ArmorIgnorePercent { get; }
-    public DefenseTowerCombatSystem SourceDefenseTowerCombatSystem { get; }
+    public TowerCombatSystem SourceTowerCombatSystem { get; }
 
     // 创建本次箭矢命中的公共上下文。
     public ArrowHitContext(
@@ -17,12 +17,12 @@ public readonly struct ArrowHitContext
         Vector3 hitPosition,
         int damage,
         float armorIgnorePercent,
-        DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+        TowerCombatSystem sourceTowerCombatSystem)
     {
         DirectHitEnemy = directHitEnemy;
         HitPosition = hitPosition;
         Damage = Mathf.Max(1, damage);
         ArmorIgnorePercent = Mathf.Clamp01(armorIgnorePercent);
-        SourceDefenseTowerCombatSystem = sourceDefenseTowerCombatSystem;
+        SourceTowerCombatSystem = sourceTowerCombatSystem;
     }
 }

@@ -254,7 +254,7 @@ public class EnemyStatusEffectController : MonoBehaviour
                 enemy,
                 _spec.TickDamagePercent,
                 _spec.FloatingTextStyle,
-                _spec.SourceDefenseTowerCombatSystem);
+                _spec.SourceTowerCombatSystem);
         }
     }
 }

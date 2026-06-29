@@ -6,7 +6,7 @@ using UnityEngine;
 public static class ArrowHitDamageApplier
 {
     // 对指定敌人应用经过护甲修正的箭矢伤害。
-    public static void ApplyDamage(Enemy enemy, int rawDamage, float armorIgnorePercent, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+    public static void ApplyDamage(Enemy enemy, int rawDamage, float armorIgnorePercent, TowerCombatSystem sourceTowerCombatSystem)
     {
         if (!IsEnemyValid(enemy) || !enemy.HealthSystem)
         {
@@ -18,14 +18,14 @@ public static class ArrowHitDamageApplier
         int actualDamage = enemy.HealthSystem.TakeDamage(adjustedDamage);
         DamageFloatingTextEvent.ShowDamage(enemy.DamageFloatingTextPosition, actualDamage);
 
-        if (wasAlive && !enemy.IsAlive && sourceDefenseTowerCombatSystem)
+        if (wasAlive && !enemy.IsAlive && sourceTowerCombatSystem)
         {
-            sourceDefenseTowerCombatSystem.NotifyEnemyKilled();
+            sourceTowerCombatSystem.NotifyEnemyKilled();
         }
     }
 
     // 对指定敌人应用不经过护甲的固定伤害。
-    public static void ApplyRawDamage(Enemy enemy, int damage, DamageFloatingTextStyle floatingTextStyle, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+    public static void ApplyRawDamage(Enemy enemy, int damage, DamageFloatingTextStyle floatingTextStyle, TowerCombatSystem sourceTowerCombatSystem)
     {
         if (!IsEnemyValid(enemy) || !enemy.HealthSystem)
         {
@@ -36,14 +36,14 @@ public static class ArrowHitDamageApplier
         int actualDamage = enemy.HealthSystem.LoseHealth(Mathf.Max(0, damage));
         DamageFloatingTextEvent.ShowDamage(enemy.DamageFloatingTextPosition, actualDamage, floatingTextStyle);
 
-        if (wasAlive && !enemy.IsAlive && sourceDefenseTowerCombatSystem)
+        if (wasAlive && !enemy.IsAlive && sourceTowerCombatSystem)
         {
-            sourceDefenseTowerCombatSystem.NotifyEnemyKilled();
+            sourceTowerCombatSystem.NotifyEnemyKilled();
         }
     }
 
     // 对指定敌人应用最大生命值百分比伤害。
-    public static void ApplyMaxHealthPercentDamage(Enemy enemy, float damagePercent, DamageFloatingTextStyle floatingTextStyle, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+    public static void ApplyMaxHealthPercentDamage(Enemy enemy, float damagePercent, DamageFloatingTextStyle floatingTextStyle, TowerCombatSystem sourceTowerCombatSystem)
     {
         if (!IsEnemyValid(enemy) || !enemy.HealthSystem)
         {
@@ -54,9 +54,9 @@ public static class ArrowHitDamageApplier
         int actualDamage = enemy.HealthSystem.LoseMaxHealthPercent(damagePercent);
         DamageFloatingTextEvent.ShowDamage(enemy.DamageFloatingTextPosition, actualDamage, floatingTextStyle);
 
-        if (wasAlive && !enemy.IsAlive && sourceDefenseTowerCombatSystem)
+        if (wasAlive && !enemy.IsAlive && sourceTowerCombatSystem)
         {
-            sourceDefenseTowerCombatSystem.NotifyEnemyKilled();
+            sourceTowerCombatSystem.NotifyEnemyKilled();
         }
     }
 

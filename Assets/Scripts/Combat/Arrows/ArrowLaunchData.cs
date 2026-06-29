@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public readonly struct ArrowLaunchData
 {
-    public DefenseTowerCombatSystem SourceDefenseTowerCombatSystem { get; }
+    public TowerCombatSystem SourceTowerCombatSystem { get; }
     public Enemy TargetEnemy { get; }
     public int Damage { get; }
     public float ArmorIgnorePercent { get; }
@@ -17,7 +17,7 @@ public readonly struct ArrowLaunchData
 
     // 创建单次箭矢发射数据快照。
     public ArrowLaunchData(
-        DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
+        TowerCombatSystem sourceTowerCombatSystem,
         Enemy targetEnemy,
         int damage,
         float armorIgnorePercent,
@@ -26,7 +26,7 @@ public readonly struct ArrowLaunchData
         int pierceCount,
         ArrowFlightBehaviorType flightBehaviorType)
     {
-        SourceDefenseTowerCombatSystem = sourceDefenseTowerCombatSystem;
+        SourceTowerCombatSystem = sourceTowerCombatSystem;
         TargetEnemy = targetEnemy;
         Damage = Mathf.Max(1, damage);
         ArmorIgnorePercent = Mathf.Clamp01(armorIgnorePercent);

@@ -83,7 +83,7 @@ public class ArrowAreaDamageHitEffect : ArrowHitEffect
                 enemy,
                 areaDamageSpec.FixedDamage,
                 areaDamageSpec.FloatingTextStyle,
-                context.SourceDefenseTowerCombatSystem);
+                context.SourceTowerCombatSystem);
             return;
         }
 
@@ -92,6 +92,6 @@ public class ArrowAreaDamageHitEffect : ArrowHitEffect
             enemy,
             damage,
             context.ArmorIgnorePercent,
-            context.SourceDefenseTowerCombatSystem);
+            context.SourceTowerCombatSystem);
     }
 }

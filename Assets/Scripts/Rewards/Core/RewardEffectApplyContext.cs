@@ -4,28 +4,22 @@
 public sealed class RewardEffectApplyContext
 {
     public RewardRuntimeCoordinator RewardRuntimeCoordinator { get; }
-    public DefenseTowerRewardRuntime DefenseTowerRewardRuntime { get; }
-    public ResourceRewardRuntime ResourceRewardRuntime { get; }
-    public HomeRewardRuntime HomeRewardRuntime { get; }
+    public TowerRewardRuntime TowerRewardRuntime { get; }
     public ResourceManager ResourceManager { get; }
     public WaveManager WaveManager { get; }
     public BuildingPlacementManager BuildingPlacementManager { get; }
-    public DefenseTowerActiveRewards DefenseTowerActiveRewards => DefenseTowerRewardRuntime?.ActiveRewards;
+    public TowerActiveRewards TowerActiveRewards => TowerRewardRuntime?.ActiveRewards;
 
     // 创建 Reward 效果应用上下文。
     public RewardEffectApplyContext(
         RewardRuntimeCoordinator rewardRuntimeCoordinator,
-        DefenseTowerRewardRuntime defenseTowerRewardRuntime,
-        ResourceRewardRuntime resourceRewardRuntime,
-        HomeRewardRuntime homeRewardRuntime,
+        TowerRewardRuntime towerRewardRuntime,
         ResourceManager resourceManager,
         WaveManager waveManager,
         BuildingPlacementManager buildingPlacementManager)
     {
         RewardRuntimeCoordinator = rewardRuntimeCoordinator;
-        DefenseTowerRewardRuntime = defenseTowerRewardRuntime;
-        ResourceRewardRuntime = resourceRewardRuntime;
-        HomeRewardRuntime = homeRewardRuntime;
+        TowerRewardRuntime = towerRewardRuntime;
         ResourceManager = resourceManager;
         WaveManager = waveManager;
         BuildingPlacementManager = buildingPlacementManager;
