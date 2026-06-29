@@ -10,10 +10,15 @@ GameObject:
   m_Component:
   - component: {fileID: 4917164657916411714}
   - component: {fileID: 5012835431581906492}
-  - component: {fileID: 8489479532261054745}
   - component: {fileID: 976708685597598724}
   - component: {fileID: 9158055646236183539}
-  - component: {fileID: 3052970490853070858}
+  - component: {fileID: 73789972895592148}
+  - component: {fileID: 1977284836573566682}
+  - component: {fileID: 2247716416858077392}
+  - component: {fileID: 584632339798229724}
+  - component: {fileID: 7869411234475115420}
+  - component: {fileID: 497316002529331110}
+  - component: {fileID: 4091491506263370333}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -51,27 +56,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flySpeed: 30
   lifetime: 3
-  defaultDamage: 10
-  arrowVisual: {fileID: 8489479532261054745}
-  explosiveArrowHitEffect: {fileID: 11400000, guid: 49f3899c598440acbfaad97949f5ac91, type: 2}
---- !u!114 &8489479532261054745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4085518841194330122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d69f0ad56d1646b79ba1a67b80dcf092, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visualRoot: {fileID: 7837650507774576102}
-  spriteRenderers:
-  - {fileID: 7090830185295996579}
-  trailRenderers:
-  - {fileID: 3052970490853070858}
-  defaultVisualMaterial: {fileID: 2100000, guid: 015b10d665e638b4db822336e456f491, type: 2}
 --- !u!50 &976708685597598724
 Rigidbody2D:
   serializedVersion: 5
@@ -145,125 +129,90 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.9951375, y: 0.25794822}
   m_EdgeRadius: 0
---- !u!96 &3052970490853070858
-TrailRenderer:
-  serializedVersion: 4
+--- !u!114 &73789972895592148
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4085518841194330122}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 0
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 0f1511dca6c5a9d46a96ccab2ad33cfb, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 868273065
-  m_SortingLayer: 1
-  m_SortingOrder: -1
-  m_MaskInteraction: 0
-  m_Time: 0.12
-  m_PreviewTimeScale: 1
-  m_Parameters:
-    serializedVersion: 3
-    widthMultiplier: 1
-    widthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.055
-        inSlope: -0.055
-        outSlope: -0.055
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: -0.055
-        outSlope: -0.055
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    colorGradient:
-      serializedVersion: 2
-      key0: {r: 0.12, g: 1.65, b: 4, a: 0.75}
-      key1: {r: 0.05, g: 0.45, b: 1.5, a: 0}
-      key2: {r: 0, g: 0, b: 0, a: 0}
-      key3: {r: 0, g: 0, b: 0, a: 0}
-      key4: {r: 0, g: 0, b: 0, a: 0}
-      key5: {r: 0, g: 0, b: 0, a: 0}
-      key6: {r: 0, g: 0, b: 0, a: 0}
-      key7: {r: 0, g: 0, b: 0, a: 0}
-      ctime0: 0
-      ctime1: 65535
-      ctime2: 0
-      ctime3: 0
-      ctime4: 0
-      ctime5: 0
-      ctime6: 0
-      ctime7: 0
-      atime0: 0
-      atime1: 65535
-      atime2: 0
-      atime3: 0
-      atime4: 0
-      atime5: 0
-      atime6: 0
-      atime7: 0
-      m_Mode: 0
-      m_ColorSpace: -1
-      m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
-    numCornerVertices: 2
-    numCapVertices: 2
-    alignment: 0
-    textureMode: 0
-    textureScale: {x: 1, y: 1}
-    shadowBias: 0.5
-    generateLightingData: 0
-  m_MinVertexDistance: 0.02
-  m_Autodestruct: 0
-  m_Emitting: 1
-  m_ApplyActiveColorSpace: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be1b038735a3ea409b37091cbc930dd, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::HomingArrowFlightBehavior
+--- !u!114 &1977284836573566682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4085518841194330122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa94942ffee68b44b80c3713651535c2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ArrowFlightController
+--- !u!114 &2247716416858077392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4085518841194330122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b358cdbc3fa8904c92f98bab44ac368, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ArrowStatusHitEffect
+--- !u!114 &584632339798229724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4085518841194330122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8c3bd91f7b159846ba2bcc148d8c454, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ArrowAreaDamageHitEffect
+--- !u!114 &7869411234475115420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4085518841194330122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53105740c52bf5b44b05fbc114463ffb, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ArrowPierceContinuation
+--- !u!114 &497316002529331110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4085518841194330122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1d9fc4d58d7c4341b008f11455f0c55, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ArrowHitAbilityPipeline
+--- !u!114 &4091491506263370333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4085518841194330122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48ceec715208e6489b5adff5fb08598, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PooledObject
 --- !u!1 &7837650507774576102
 GameObject:
   m_ObjectHideFlags: 0

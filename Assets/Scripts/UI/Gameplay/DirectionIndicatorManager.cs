@@ -78,24 +78,24 @@ public class DirectionIndicatorManager : MonoBehaviour
     // 订阅每批敌人生成事件。
     private void SubscribeWaveManager()
     {
-        if (_isSubscribed || EnemyWaveManager.Instance == null)
+        if (_isSubscribed || WaveManager.Instance == null)
         {
             return;
         }
 
-        EnemyWaveManager.Instance.OnEnemyBatchSpawned += AddEnemyBatchIndicator;
+        WaveManager.Instance.OnEnemyBatchSpawned += AddEnemyBatchIndicator;
         _isSubscribed = true;
     }
 
     // 取消订阅每批敌人生成事件。
     private void UnsubscribeWaveManager()
     {
-        if (!_isSubscribed || EnemyWaveManager.Instance == null)
+        if (!_isSubscribed || WaveManager.Instance == null)
         {
             return;
         }
 
-        EnemyWaveManager.Instance.OnEnemyBatchSpawned -= AddEnemyBatchIndicator;
+        WaveManager.Instance.OnEnemyBatchSpawned -= AddEnemyBatchIndicator;
         _isSubscribed = false;
     }
 

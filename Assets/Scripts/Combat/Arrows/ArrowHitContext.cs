@@ -1,48 +1,28 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 箭矢命中时的一次性数据上下文，负责传递本次命中需要的运行时数据。
+/// 箭矢命中时的只读公共上下文，负责向组合能力传递本次命中的基础数据。
 /// </summary>
-public class ArrowHitContext
+public readonly struct ArrowHitContext
 {
     public Enemy DirectHitEnemy { get; }
     public Vector3 HitPosition { get; }
     public int Damage { get; }
     public float ArmorIgnorePercent { get; }
     public DefenseTowerCombatSystem SourceDefenseTowerCombatSystem { get; }
-    public float ExplosionRadius { get; }
-    public float ExplosionDamageMultiplier { get; }
-    public Collider2D[] EffectHitResults { get; }
-    public IReadOnlyList<EnemyStatusEffectSpec> StatusEffectSpecList { get; }
-    public float ChanceExplosionRadius { get; }
-    public int ChanceExplosionDamage { get; }
-    public bool HasChanceExplosion => ChanceExplosionRadius > 0f && ChanceExplosionDamage > 0;
 
-    // 初始化本次箭矢命中的上下文数据。
+    // 创建本次箭矢命中的公共上下文。
     public ArrowHitContext(
         Enemy directHitEnemy,
         Vector3 hitPosition,
         int damage,
         float armorIgnorePercent,
-        DefenseTowerCombatSystem sourceDefenseTowerCombatSystem,
-        float explosionRadius,
-        float explosionDamageMultiplier,
-        Collider2D[] effectHitResults,
-        IReadOnlyList<EnemyStatusEffectSpec> statusEffectSpecList,
-        float chanceExplosionRadius,
-        int chanceExplosionDamage)
+        DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
     {
         DirectHitEnemy = directHitEnemy;
         HitPosition = hitPosition;
         Damage = Mathf.Max(1, damage);
         ArmorIgnorePercent = Mathf.Clamp01(armorIgnorePercent);
         SourceDefenseTowerCombatSystem = sourceDefenseTowerCombatSystem;
-        ExplosionRadius = Mathf.Max(0f, explosionRadius);
-        ExplosionDamageMultiplier = Mathf.Max(0f, explosionDamageMultiplier);
-        EffectHitResults = effectHitResults;
-        StatusEffectSpecList = statusEffectSpecList;
-        ChanceExplosionRadius = Mathf.Max(0f, chanceExplosionRadius);
-        ChanceExplosionDamage = Mathf.Max(0, chanceExplosionDamage);
     }
 }

@@ -108,27 +108,13 @@ public class DefenseTowerArrowLauncher : MonoBehaviour
             statCalculator.GetArmorIgnorePercent(),
             statCalculator.ShouldUseExplosiveArrow(),
             statCalculator.GetExplosionRadius(),
-            statCalculator.GetExplosionDamageMultiplier(),
-            null,
-            false);
+            statCalculator.GetExplosionDamageMultiplier());
     }
 
     // 将箭矢上下文写入箭矢实例。
     private void ApplyArrowContext(Arrow arrow, DefenseTowerArrowContext arrowContext)
     {
-        arrow.SetVisualEffect(arrowContext.VisualMaterial, arrowContext.EnableTrail);
-        arrow.SetDamage(arrowContext.Damage);
-        arrow.SetAttackContext(
-            arrowContext.SourceDefenseTowerCombatSystem,
-            arrowContext.ArmorIgnorePercent,
-            arrowContext.IsExplosiveArrow,
-            arrowContext.ExplosionRadius,
-            arrowContext.ExplosionDamageMultiplier,
-            arrowContext.StatusEffectSpecList,
-            arrowContext.ChanceExplosionRadius,
-            arrowContext.ChanceExplosionDamage,
-            arrowContext.PierceCount);
-        arrow.SetTarget(arrowContext.TargetEnemy);
+        arrow.Launch(arrowContext.BuildLaunchData());
     }
 
 }

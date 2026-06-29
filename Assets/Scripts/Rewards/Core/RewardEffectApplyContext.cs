@@ -8,7 +8,7 @@ public sealed class RewardEffectApplyContext
     public ResourceRewardRuntime ResourceRewardRuntime { get; }
     public HomeRewardRuntime HomeRewardRuntime { get; }
     public ResourceManager ResourceManager { get; }
-    public EnemyWaveManager EnemyWaveManager { get; }
+    public WaveManager WaveManager { get; }
     public BuildingPlacementManager BuildingPlacementManager { get; }
     public DefenseTowerActiveRewards DefenseTowerActiveRewards => DefenseTowerRewardRuntime?.ActiveRewards;
 
@@ -19,7 +19,7 @@ public sealed class RewardEffectApplyContext
         ResourceRewardRuntime resourceRewardRuntime,
         HomeRewardRuntime homeRewardRuntime,
         ResourceManager resourceManager,
-        EnemyWaveManager enemyWaveManager,
+        WaveManager waveManager,
         BuildingPlacementManager buildingPlacementManager)
     {
         RewardRuntimeCoordinator = rewardRuntimeCoordinator;
@@ -27,7 +27,7 @@ public sealed class RewardEffectApplyContext
         ResourceRewardRuntime = resourceRewardRuntime;
         HomeRewardRuntime = homeRewardRuntime;
         ResourceManager = resourceManager;
-        EnemyWaveManager = enemyWaveManager;
+        WaveManager = waveManager;
         BuildingPlacementManager = buildingPlacementManager;
     }
 }

@@ -9,16 +9,16 @@ public class EnemyWaveUI : MonoBehaviour
 
     private void Start()
     {
-        EnemyWaveManager.Instance.OnAliveEnemyCountChanged += UpdateCurrentEnemyCountUI;
-        EnemyWaveManager.Instance.OnWaveStarted += UpdateCurrentWaveUI;
+        WaveManager.Instance.OnAliveEnemyCountChanged += UpdateCurrentEnemyCountUI;
+        WaveManager.Instance.OnWaveStarted += UpdateCurrentWaveUI;
     }
 
     private void OnDisable()
     {
-        if (EnemyWaveManager.Instance != null)
+        if (WaveManager.Instance != null)
         {
-            EnemyWaveManager.Instance.OnAliveEnemyCountChanged -= UpdateCurrentEnemyCountUI;
-            EnemyWaveManager.Instance.OnWaveStarted -= UpdateCurrentWaveUI;
+            WaveManager.Instance.OnAliveEnemyCountChanged -= UpdateCurrentEnemyCountUI;
+            WaveManager.Instance.OnWaveStarted -= UpdateCurrentWaveUI;
         }
     }
 
@@ -29,27 +29,27 @@ public class EnemyWaveUI : MonoBehaviour
 
     private void UpdateCurrentEnemyCountUI()
     {
-        currentEnemyCountText.text = "剩余敌人数量: " + EnemyWaveManager.Instance.aliveEnemyCount;
+        currentEnemyCountText.text = "剩余敌人数量: " + WaveManager.Instance.aliveEnemyCount;
     }
 
     private void UpdateCurrentWaveUI()
     {
-        currentWaveText.text = "当前波次: " + EnemyWaveManager.Instance.waveIndex;
+        currentWaveText.text = "当前波次: " + WaveManager.Instance.waveIndex;
     }
 
     private void UpdateWaveStateUI()
     {
-        var manager = EnemyWaveManager.Instance;
+        var manager = WaveManager.Instance;
 
         switch (manager.State)
         {
-            case EnemyWaveManager.WaveState.Preparing:
+            case WaveManager.WaveState.Preparing:
                 nextWaveTimeText.gameObject.SetActive(true);
                 nextWaveTimeText.text =
                     $"第一波倒计时: {manager.stateTimer:F1}s";
                 break;
 
-            case EnemyWaveManager.WaveState.WaitingNextWave:
+            case WaveManager.WaveState.WaitingNextWave:
                 nextWaveTimeText.gameObject.SetActive(true);
                 nextWaveTimeText.text =
                     $"下一波倒计时: {manager.stateTimer:F1}s";

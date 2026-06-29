@@ -5,12 +5,12 @@ using UnityEngine;
 /// </summary>
 public static class ArrowHitDamageApplier
 {
-    // 对指定敌人应用箭矢伤害，并返回实际扣除的生命值。
-    public static int ApplyDamage(Enemy enemy, int rawDamage, float armorIgnorePercent, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+    // 对指定敌人应用经过护甲修正的箭矢伤害。
+    public static void ApplyDamage(Enemy enemy, int rawDamage, float armorIgnorePercent, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
     {
         if (!IsEnemyValid(enemy) || !enemy.HealthSystem)
         {
-            return 0;
+            return;
         }
 
         bool wasAlive = enemy.IsAlive;
@@ -22,16 +22,14 @@ public static class ArrowHitDamageApplier
         {
             sourceDefenseTowerCombatSystem.NotifyEnemyKilled();
         }
-
-        return actualDamage;
     }
 
-    // 对指定敌人应用不经过护甲的固定伤害，并返回实际扣除的生命值。
-    public static int ApplyRawDamage(Enemy enemy, int damage, DamageFloatingTextStyle floatingTextStyle, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+    // 对指定敌人应用不经过护甲的固定伤害。
+    public static void ApplyRawDamage(Enemy enemy, int damage, DamageFloatingTextStyle floatingTextStyle, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
     {
         if (!IsEnemyValid(enemy) || !enemy.HealthSystem)
         {
-            return 0;
+            return;
         }
 
         bool wasAlive = enemy.IsAlive;
@@ -42,16 +40,14 @@ public static class ArrowHitDamageApplier
         {
             sourceDefenseTowerCombatSystem.NotifyEnemyKilled();
         }
-
-        return actualDamage;
     }
 
-    // 对指定敌人应用最大生命值百分比伤害，并返回实际扣除的生命值。
-    public static int ApplyMaxHealthPercentDamage(Enemy enemy, float damagePercent, DamageFloatingTextStyle floatingTextStyle, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
+    // 对指定敌人应用最大生命值百分比伤害。
+    public static void ApplyMaxHealthPercentDamage(Enemy enemy, float damagePercent, DamageFloatingTextStyle floatingTextStyle, DefenseTowerCombatSystem sourceDefenseTowerCombatSystem)
     {
         if (!IsEnemyValid(enemy) || !enemy.HealthSystem)
         {
-            return 0;
+            return;
         }
 
         bool wasAlive = enemy.IsAlive;
@@ -62,8 +58,6 @@ public static class ArrowHitDamageApplier
         {
             sourceDefenseTowerCombatSystem.NotifyEnemyKilled();
         }
-
-        return actualDamage;
     }
 
     // 判断敌人当前是否仍然可以被箭矢命中。

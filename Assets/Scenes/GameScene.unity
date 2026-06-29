@@ -9819,10 +9819,6 @@ MonoBehaviour:
     initialSize: 10
     maxSize: 30
     parent: {fileID: 2099843922}
-  - prefab: {fileID: 9094029841739368010, guid: 133c51a5bec78f74ead45ddfdf47bee9, type: 3}
-    initialSize: 80
-    maxSize: 240
-    parent: {fileID: 0}
   defaultPoolRoot: {fileID: 2099843922}
 --- !u!1 &814233622
 GameObject:

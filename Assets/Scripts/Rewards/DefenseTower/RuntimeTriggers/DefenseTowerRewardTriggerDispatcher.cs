@@ -117,12 +117,12 @@ public class DefenseTowerRewardTriggerDispatcher
     /// <summary>
     /// 单项触发能力注册记录，关联具体处理器和共享运行时状态。
     /// </summary>
-    private class TriggerRegistration<TTrigger> where TTrigger : class, IDefenseTowerRuntimeReward
+    private class TriggerRegistration<T> where T : class, IDefenseTowerRuntimeReward
     {
-        public TTrigger Trigger { get; }
+        public T Trigger { get; }
         public DefenseTowerRewardRuntimeState RuntimeState { get; }
 
-        public TriggerRegistration(TTrigger trigger, DefenseTowerRewardRuntimeState runtimeState)
+        public TriggerRegistration(T trigger, DefenseTowerRewardRuntimeState runtimeState)
         {
             Trigger = trigger;
             RuntimeState = runtimeState;

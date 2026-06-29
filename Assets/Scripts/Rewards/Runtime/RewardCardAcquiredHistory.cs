@@ -104,7 +104,7 @@ public class RewardCardAcquiredHistory : MonoBehaviour
     // 获取当前奖励获得时的波次。
     private int GetCurrentWaveIndex()
     {
-        return EnemyWaveManager.Instance ? EnemyWaveManager.Instance.waveIndex : 0;
+        return WaveManager.Instance ? WaveManager.Instance.waveIndex : 0;
     }
 
     // 构建每张卡牌已经被选择过的次数索引。

@@ -15,7 +15,7 @@ public class RewardRuntimeCoordinator : MonoBehaviour
     private readonly ResourceRewardRuntime _resourceRewards = new();
     private readonly HomeRewardRuntime _homeRewards = new();
 
-    private EnemyWaveManager _waveManager;
+    private WaveManager _waveManager;
 
     public DefenseTowerRewardRuntime DefenseTowerRewards => _defenseTowerRewards;
 
@@ -49,7 +49,7 @@ public class RewardRuntimeCoordinator : MonoBehaviour
             _resourceRewards,
             _homeRewards,
             ResourceManager.Instance,
-            EnemyWaveManager.Instance,
+            WaveManager.Instance,
             BuildingPlacementManager.Instance);
         // 应用卡牌效果
         RewardEffectApplicationService.ApplyEffects(rewardCard.EffectConfigList, applyContext);
@@ -71,12 +71,12 @@ public class RewardRuntimeCoordinator : MonoBehaviour
     // 绑定当前场景中的波次管理器。
     private void BindWaveManager()
     {
-        if (_waveManager || !EnemyWaveManager.Instance)
+        if (_waveManager || !WaveManager.Instance)
         {
             return;
         }
 
-        _waveManager = EnemyWaveManager.Instance;
+        _waveManager = WaveManager.Instance;
         _waveManager.OnWaveCompleted += HandleWaveCompleted;
     }
 

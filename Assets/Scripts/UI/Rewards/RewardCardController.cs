@@ -13,7 +13,7 @@ public class RewardCardController : MonoBehaviour
 
     private readonly List<RewardCardOption> _spawnedCardOptionList = new();
     private RewardCardSelectionPanel _selectionPanel;
-    private EnemyWaveManager _waveManager;
+    private WaveManager _waveManager;
     private float _previousTimeScale = 1f;
     private bool _isShowing;
     private bool _canSelectCard;
@@ -47,12 +47,12 @@ public class RewardCardController : MonoBehaviour
     // 订阅当前场景中的波次管理器。
     private void BindWaveManager()
     {
-        if (_waveManager || !EnemyWaveManager.Instance)
+        if (_waveManager || !WaveManager.Instance)
         {
             return;
         }
 
-        _waveManager = EnemyWaveManager.Instance;
+        _waveManager = WaveManager.Instance;
         _waveManager.OnWaveCompleted += HandleWaveCompleted;
     }
 

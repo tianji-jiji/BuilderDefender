@@ -84,9 +84,9 @@ public class GameManager : MonoBehaviour
         OnGameStart?.Invoke();
 
         // 启动波次系统（关键）
-        if (EnemyWaveManager.Instance)
+        if (WaveManager.Instance)
         {
-            EnemyWaveManager.Instance.Begin();
+            WaveManager.Instance.Begin();
         }
     }
 

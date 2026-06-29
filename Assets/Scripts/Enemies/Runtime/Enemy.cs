@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -6,6 +7,8 @@ public class Enemy : MonoBehaviour, IPoolable
 {
     private const float DETECTION_INTERVAL = 0.2f;
     private const int TARGET_DETECTION_BUFFER_SIZE = 16;
+
+    private static readonly Dictionary<Collider2D, Enemy> EnemyColliderDic = new();
 
     [SerializeField] private EnemySo enemySo;
     [SerializeField] private LayerMask detectLayer;
@@ -16,6 +19,7 @@ public class Enemy : MonoBehaviour, IPoolable
     public static event Action OnEnemyDead;
 
     private Rigidbody2D _rb2;
+    private Collider2D _collider2D;
     private PooledObject _pooledObject;
     private Transform _currentTarget;
     private Transform _defaultTarget;
@@ -38,6 +42,7 @@ public class Enemy : MonoBehaviour, IPoolable
         _enemyDiedParticles = Resources.Load<GameObject>("Particles/EnemyDieParticles");
         
         TryGetComponent(out _rb2);
+        TryGetComponent(out _collider2D);
         TryGetComponent(out _pooledObject);
         CacheStatusEffectController();
         
@@ -60,11 +65,13 @@ public class Enemy : MonoBehaviour, IPoolable
     
     private void OnEnable()
     {
+        RegisterCollider();
         SubscribeHealthSystem();
     }
     
     private void OnDisable()
     {
+        UnregisterCollider();
         UnsubscribeHealthSystem();
     }
     
@@ -81,6 +88,26 @@ public class Enemy : MonoBehaviour, IPoolable
     private void FixedUpdate()
     {
         HandleMovement();
+    }
+
+    // 通过启用中的敌人碰撞体缓存解析对应敌人。
+    public static bool TryGetFromCollider(Collider2D collider2D, out Enemy enemy)
+    {
+        if (!collider2D
+            || !EnemyColliderDic.TryGetValue(collider2D, out enemy)
+            || !enemy
+            || !enemy.gameObject.activeInHierarchy)
+        {
+            if (collider2D)
+            {
+                EnemyColliderDic.Remove(collider2D);
+            }
+
+            enemy = null;
+            return false;
+        }
+
+        return true;
     }
     
     // 使用成长后的运行时属性初始化敌人。
@@ -133,6 +160,26 @@ public class Enemy : MonoBehaviour, IPoolable
         if (_rb2)
         {
             _rb2.linearVelocity = Vector2.zero;
+        }
+    }
+
+    // 将当前敌人的碰撞体注册到命中查询缓存。
+    private void RegisterCollider()
+    {
+        if (_collider2D)
+        {
+            EnemyColliderDic[_collider2D] = this;
+        }
+    }
+
+    // 从命中查询缓存移除当前敌人的碰撞体。
+    private void UnregisterCollider()
+    {
+        if (_collider2D
+            && EnemyColliderDic.TryGetValue(_collider2D, out Enemy registeredEnemy)
+            && registeredEnemy == this)
+        {
+            EnemyColliderDic.Remove(_collider2D);
         }
     }
 

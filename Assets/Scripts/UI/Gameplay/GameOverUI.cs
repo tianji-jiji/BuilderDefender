@@ -55,12 +55,12 @@ public class GameOverUI : MonoBehaviour
     // 获取玩家本局坚持到的波数。
     private int GetResultWave()
     {
-        if (!EnemyWaveManager.Instance)
+        if (!WaveManager.Instance)
         {
             return 0;
         }
 
-        return EnemyWaveManager.Instance.waveIndex;
+        return WaveManager.Instance.waveIndex;
     }
 
     // 重新加载当前场景开始新一局。
