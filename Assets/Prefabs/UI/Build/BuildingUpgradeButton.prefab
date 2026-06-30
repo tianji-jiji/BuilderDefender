@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 1389002510209456289}
   - component: {fileID: 2160546774943801008}
   - component: {fileID: 7204668847238538609}
+  - component: {fileID: 8432197451122334455}
   m_Layer: 5
   m_Name: BuildingUpgradeButton
   m_TagString: Untagged
@@ -208,17 +209,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUpgradeButton
   button: {fileID: 3746663645315622532}
-  upgradeConfig: {fileID: 11400000, guid: f0e113b9086a9d7479dc4ad6d89adb3b, type: 2}
-  building: {fileID: 0}
-  defenseSystem: {fileID: 0}
-  upgradeVisual: {fileID: 0}
+  upgradeController: {fileID: 8432197451122334455}
   starVisuals:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   starSpacing: 1.5
-  currentStarLevel: 1
   hideButtonAtMaxStar: 1
+--- !u!114 &8432197451122334455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4957733183793931533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ff74331b7048d418cf2ea84808e23a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeController
+  upgradeConfig: {fileID: 11400000, guid: f0e113b9086a9d7479dc4ad6d89adb3b, type: 2}
+  building: {fileID: 0}
+  towerCombatSystem: {fileID: 0}
+  currentStarLevel: 1
 --- !u!1 &6534641334094312786
 GameObject:
   m_ObjectHideFlags: 0

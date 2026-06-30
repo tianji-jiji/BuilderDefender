@@ -55,8 +55,11 @@ public class TooltipManager : MonoBehaviour
         foreach (var resourceCost in buildingSo.resourceCost)
         {
             if (resourceCost.resourceSo == null) continue;
-            int adjustedAmount = RewardRuntimeCoordinator.Instance
-                ? RewardRuntimeCoordinator.Instance.TowerRewards.GetAdjustedBuildCostAmount(buildingSo, resourceCost)
+            TowerRewardRuntime towerRewardRuntime = RewardRuntimeCoordinator.Instance
+                ? RewardRuntimeCoordinator.Instance.TowerRewards
+                : null;
+            int adjustedAmount = towerRewardRuntime != null
+                ? towerRewardRuntime.GetAdjustedBuildCostAmount(buildingSo, resourceCost)
                 : resourceCost.amount;
             text += $"{resourceCost.resourceSo.resourceName}:{adjustedAmount} ";
         }

@@ -5,29 +5,6 @@ using UnityEditor;
 #endif
 
 /// <summary>
-/// 卡牌稀有度
-/// </summary>
-public enum RewardCardRarity
-{
-    Normal,
-    Rare,
-    Epic,
-    Legendary,
-    Mythic
-}
-
-/// <summary>
-/// 卡牌分类
-/// </summary>
-public enum RewardCardCategory
-{
-    Defense,
-    Resources,
-    Home,
-    Risk
-}
-
-/// <summary>
 /// 奖励卡牌数据资产，负责配置单张卡牌的基础信息、显示预制体和奖励效果。
 /// </summary>
 [CreateAssetMenu(menuName = "ScriptableObjects/RewardCard/RewardCardSo")]
@@ -54,7 +31,6 @@ public class RewardCardSo : ScriptableObject
     public GameObject CardPrefab => cardPrefab;
     public int Weight => Mathf.Max(0, weight);
     public RewardCardRarity Rarity => rarity;
-    public RewardCardCategory Category => category;
     public int MinWaveIndex => Mathf.Max(0, minWaveIndex);
     public int MaxPickCount => isUnique ? 1 : maxPickCount <= 0 ? int.MaxValue : maxPickCount;
     public IReadOnlyList<RewardCardEffectConfig> EffectConfigList => effectConfigList;

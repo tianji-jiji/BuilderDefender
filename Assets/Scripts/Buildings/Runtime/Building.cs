@@ -19,6 +19,8 @@ public class Building : MonoBehaviour
     private bool _isSubscribedToHealthSystem;
     private bool _isSubscribedToRewardBonuses;
     private bool _isRegisteredToRuntimeRegistry;
+    private BuildingRuntimeRegistry _buildingRegistry;
+    private RewardRuntimeCoordinator _rewardCoordinator;
 
     private bool IsDefenseBuilding => buildingSo && buildingSo.buildingType == BuildingSo.BuildingType.Defense;
     private bool IsHomeBuilding => buildingSo && buildingSo.buildingType == BuildingSo.BuildingType.Home;
@@ -37,17 +39,14 @@ public class Building : MonoBehaviour
         }
     }
 
-    // 启动时隐藏拆除按钮。
-    private void Start()
-    {
-        HideBuildingDemolitionButton();
-    }
-
     private void OnEnable()
     {
         TrySubscribeRewardBonuses();
         TrySubscribeHealthSystem();
-        RegisterToRuntimeRegistry();
+        if (_buildingRegistry != null)
+        {
+            RegisterToRuntimeRegistry();
+        }
     }
 
     private void OnDisable()
@@ -55,6 +54,15 @@ public class Building : MonoBehaviour
         TryUnsubscribeRewardBonuses();
         UnregisterFromRuntimeRegistry();
         TryUnsubscribeHealthSystem();
+    }
+
+    // 启动时缓存注册表、注册建筑并隐藏拆除按钮。
+    private void Start()
+    {
+        CacheBuildingRegistry();
+        RegisterToRuntimeRegistry();
+        TrySubscribeRewardBonuses();
+        HideBuildingDemolitionButton();
     }
     
     // 根据升星配置提升建筑生命值。
@@ -156,7 +164,7 @@ public class Building : MonoBehaviour
     // 计算当前建筑应该拥有的最大生命值。
     private int CalculateMaxHealth()
     {
-        TowerActiveRewards activeRewards = GetDefenseTowerActiveRewards();
+        TowerRewardState activeRewards = GetTowerRewardState();
         float rewardMaxHealthMultiplier = activeRewards != null ? activeRewards.MaxHealthMultiplier : 1f;
 
         if (!IsDefenseBuilding)
@@ -175,15 +183,18 @@ public class Building : MonoBehaviour
             return 1f;
         }
 
-        TowerActiveRewards activeRewards = GetDefenseTowerActiveRewards();
+        TowerRewardState activeRewards = GetTowerRewardState();
         return activeRewards != null ? activeRewards.DamageTakenMultiplier : 1f;
     }
 
     // 获取当前防御塔奖励状态。
-    private TowerActiveRewards GetDefenseTowerActiveRewards()
+    private TowerRewardState GetTowerRewardState()
     {
-        return RewardRuntimeCoordinator.Instance
-            ? RewardRuntimeCoordinator.Instance.TowerRewards.ActiveRewards
+        _rewardCoordinator = _rewardCoordinator
+            ? _rewardCoordinator
+            : RewardRuntimeCoordinator.Instance;
+        return _rewardCoordinator
+            ? _rewardCoordinator.TowerRewards?.State
             : null;
     }
 
@@ -219,7 +230,13 @@ public class Building : MonoBehaviour
             return;
         }
 
-        RewardRuntimeCoordinator.OnActiveRewardsChanged += RefreshRewardBonuses;
+        _rewardCoordinator = RewardRuntimeCoordinator.Instance;
+        if (!_rewardCoordinator)
+        {
+            return;
+        }
+
+        _rewardCoordinator.OnActiveRewardsChanged += RefreshRewardBonuses;
         _isSubscribedToRewardBonuses = true;
     }
 
@@ -231,26 +248,31 @@ public class Building : MonoBehaviour
             return;
         }
 
-        RewardRuntimeCoordinator.OnActiveRewardsChanged -= RefreshRewardBonuses;
+        if (_rewardCoordinator)
+        {
+            _rewardCoordinator.OnActiveRewardsChanged -= RefreshRewardBonuses;
+        }
+
+        _rewardCoordinator = null;
         _isSubscribedToRewardBonuses = false;
     }
 
     // 将建筑注册到运行时查询表。
     private void RegisterToRuntimeRegistry()
     {
-        if (_isRegisteredToRuntimeRegistry)
+        if (_isRegisteredToRuntimeRegistry || _buildingRegistry == null)
         {
             return;
         }
 
         if (IsDefenseBuilding)
         {
-            TowerRegistry.RegisterDefenseBuilding(this);
+            _buildingRegistry.RegisterBuilding(this);
         }
 
         if (IsHomeBuilding && _healthSystem)
         {
-            TowerRegistry.RegisterHomeHealthSystem(_healthSystem);
+            _buildingRegistry.RegisterHomeHealth(_healthSystem);
         }
 
         _isRegisteredToRuntimeRegistry = true;
@@ -266,14 +288,22 @@ public class Building : MonoBehaviour
 
         if (IsDefenseBuilding)
         {
-            TowerRegistry.UnregisterDefenseBuilding(this);
+            _buildingRegistry?.UnregisterBuilding(this);
         }
 
         if (IsHomeBuilding && _healthSystem)
         {
-            TowerRegistry.UnregisterHomeHealthSystem(_healthSystem);
+            _buildingRegistry?.UnregisterHomeHealth(_healthSystem);
         }
 
         _isRegisteredToRuntimeRegistry = false;
+    }
+
+    // 缓存场景建筑注册表。
+    private void CacheBuildingRegistry()
+    {
+        _buildingRegistry = BuildingPlacementManager.Instance
+            ? BuildingPlacementManager.Instance.BuildingRegistry
+            : null;
     }
 }

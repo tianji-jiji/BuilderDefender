@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// 建筑放置管理器，负责建造输入并持有当前场景的建筑运行时注册表。
+/// </summary>
 public class BuildingPlacementManager : MonoBehaviour
 {
     private const float RIGHT_CLICK_CANCEL_MAX_SQR_DISTANCE = 64f;
@@ -30,10 +33,14 @@ public class BuildingPlacementManager : MonoBehaviour
 
     private BuildingSo _currentBuildingSo;
     private readonly List<ConstructionSite> _constructionSites = new();
+    private readonly BuildingRuntimeRegistry _buildingRegistry = new();
     private Vector3 _rightClickStartMousePosition;
     private bool _isWaitingForRightClickCancel;
 
+    // 当前建造选择发生变化后触发。
     public event Action<BuildingSo> OnSelectedBuildingChanged;
+
+    public BuildingRuntimeRegistry BuildingRegistry => _buildingRegistry;
 
     // 初始化建造管理器单例。
     private void Awake()

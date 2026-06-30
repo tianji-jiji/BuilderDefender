@@ -14,33 +14,34 @@ public class TowerCombatSystem : MonoBehaviour
     private TowerStatCalculator _statCalculator;
     private TowerCombatStats _currentStats;
     private HealthSystem _healthSystem;
+    private BuildingRuntimeRegistry _buildingRegistry;
+    private TowerRewardRuntime _rewardRuntime;
+    private RewardRuntimeCoordinator _rewardCoordinator;
+    private bool _isSubscribedToRewardBonuses;
 
     private float _timer;
     private bool _hasEnemy;
     public int CurrentStarLevel => _statCalculator?.CurrentStarLevel ?? 1;
-    private TowerRewardTriggerDispatcher ActiveTowerRewardTriggerDispatcher => RewardRuntimeCoordinator.Instance
-        ? RewardRuntimeCoordinator.Instance.TowerRewards.TriggerDispatcher
-        : null;
+    private TowerRewardTriggerDispatcher ActiveTowerRewardTriggerDispatcher
+        => _rewardRuntime?.TriggerDispatcher;
 
     private void Awake()
     {
         TryGetComponent(out _healthSystem);
         CacheCombatComponents();
-        _statCalculator = new TowerStatCalculator(this, attackDamage, arrowGenerateRate, detectRadius);
-        _currentStats = _statCalculator.RefreshStats();
     }
 
     private void OnEnable()
     {
-        RewardRuntimeCoordinator.OnActiveRewardsChanged += RefreshRewardBonuses;
-        TowerRegistry.RegisterDefenseTowerSystem(this);
+        TrySubscribeRewardBonuses();
+        _buildingRegistry?.RegisterTower(this);
     }
 
     private void OnDisable()
     {
-        RewardRuntimeCoordinator.OnActiveRewardsChanged -= RefreshRewardBonuses;
+        TryUnsubscribeRewardBonuses();
         ActiveTowerRewardTriggerDispatcher?.ClearSource(this);
-        TowerRegistry.UnregisterDefenseTowerSystem(this);
+        _buildingRegistry?.UnregisterTower(this);
         CancelInvoke();
         _hasEnemy = false;
         targetSelector?.ClearTarget();
@@ -48,6 +49,16 @@ public class TowerCombatSystem : MonoBehaviour
 
     private void Start()
     {
+        CacheRuntimeDependencies();
+        _statCalculator = new TowerStatCalculator(
+            this,
+            attackDamage,
+            arrowGenerateRate,
+            detectRadius,
+            _rewardRuntime);
+        _currentStats = _statCalculator.RefreshStats();
+        _buildingRegistry?.RegisterTower(this);
+        TrySubscribeRewardBonuses();
         RefreshRewardBonuses();
         InvokeRepeating(nameof(DetectEnemy), 0f, TowerTargetSelector.DETECT_INTERVAL);
     }
@@ -98,6 +109,54 @@ public class TowerCombatSystem : MonoBehaviour
         {
             TryGetComponent(out arrowLauncher);
         }
+    }
+
+    // 缓存奖励运行时和场景建筑注册表。
+    private void CacheRuntimeDependencies()
+    {
+        _rewardCoordinator = RewardRuntimeCoordinator.Instance;
+        _rewardRuntime = _rewardCoordinator
+            ? _rewardCoordinator.TowerRewards
+            : null;
+        _buildingRegistry = BuildingPlacementManager.Instance
+            ? BuildingPlacementManager.Instance.BuildingRegistry
+            : null;
+    }
+
+    // 订阅奖励状态变化事件。
+    private void TrySubscribeRewardBonuses()
+    {
+        if (_isSubscribedToRewardBonuses)
+        {
+            return;
+        }
+
+        _rewardCoordinator = _rewardCoordinator
+            ? _rewardCoordinator
+            : RewardRuntimeCoordinator.Instance;
+        if (!_rewardCoordinator)
+        {
+            return;
+        }
+
+        _rewardCoordinator.OnActiveRewardsChanged += RefreshRewardBonuses;
+        _isSubscribedToRewardBonuses = true;
+    }
+
+    // 取消订阅奖励状态变化事件。
+    private void TryUnsubscribeRewardBonuses()
+    {
+        if (!_isSubscribedToRewardBonuses)
+        {
+            return;
+        }
+
+        if (_rewardCoordinator)
+        {
+            _rewardCoordinator.OnActiveRewardsChanged -= RefreshRewardBonuses;
+        }
+
+        _isSubscribedToRewardBonuses = false;
     }
 
     // 侦测范围内最近的有效敌人并设置为当前攻击目标。
